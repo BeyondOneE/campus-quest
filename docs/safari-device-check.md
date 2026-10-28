@@ -7,7 +7,7 @@
 1. 在电脑运行 `python3 scripts/serve_device_check.py`，保持进程运行。
 2. 用已配置的 HTTPS 入口转发到 `http://127.0.0.1:4174`。如使用 Cloudflare Quick Tunnel，运行 `cloudflared tunnel --url http://127.0.0.1:4174`。
 3. 在 iPhone **Safari** 中打开生成的 HTTPS 地址，路径 `/device-check/`。
-4. 确认显示“安全上下文”和“iPhone Safari · 目标环境”。不需要 USB 连接或开发者模式。
+4. 确认显示“安全上下文”；由用户确认实际打开的是系统 Safari。页面只根据 UA 判断 Safari 特征，不能将此标签视为浏览器身份的证明。不需要 USB 连接或开发者模式。
 
 临时隧道用于测试，无稳定可用性保证，停止隧道后链接失效。只有四个静态诊断文件会经入口提供；隧道服务可以看到普通页面访问的网络元数据，但页面不会上传坐标、传感器数据或相机画面。生产环境部署另行决定。
 

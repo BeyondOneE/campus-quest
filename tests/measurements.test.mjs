@@ -1,6 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { finite, angleDelta, frequency, channelHealth, locationForReport } from '../public/device-check/measurements.js';
+import { finite, angleDelta, frequency, channelHealth, locationForReport, isIPhoneSafariCandidate } from '../public/device-check/measurements.js';
+
+test('the supplied iPhone Brave UA is not counted as a Safari candidate', () => {
+  const ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Mobile/15E148 Safari/604.1 Brave';
+  assert.equal(isIPhoneSafariCandidate(ua), false);
+  assert.equal(isIPhoneSafariCandidate(ua.replace(' Brave','')), true);
+});
+test('known alternative iOS browser tokens and desktop Safari are excluded', () => {
+  const base = 'iPhone Version/27.2 Mobile Safari/604.1';
+  for (const token of ['CriOS','FxiOS','EdgiOS','MicroMessenger','OPiOS','DuckDuckGo']) assert.equal(isIPhoneSafariCandidate(`${base} ${token}`), false);
+  assert.equal(isIPhoneSafariCandidate('Macintosh Version/27.2 Safari/604.1'), false);
+  assert.equal(isIPhoneSafariCandidate('iPhone Mobile Safari/604.1'), false);
+});
 
 test('null sensor fields are not valid samples, zero rotation is valid', () => {
   for (const value of [null, undefined, NaN, Infinity, '0']) assert.equal(finite(value), false);

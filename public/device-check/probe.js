@@ -1,4 +1,4 @@
-import { finite, angleDelta, frequency, channelHealth, summary, locationForReport } from './measurements.js';
+import { finite, angleDelta, frequency, channelHealth, summary, locationForReport, isIPhoneSafariCandidate } from './measurements.js';
 
 const $ = id => document.getElementById(id);
 const createdAt = new Date().toISOString();
@@ -13,7 +13,7 @@ let stream = null, cameraToken = 0, sensorToken = 0, cameraPending = false;
 let locationWatch = null, locationToken = 0, frameCallback = null, lastVideoTime = -1;
 let renderTimer = null;
 const video = $('camera');
-const isTarget = /iPhone/.test(navigator.userAgent) && /Safari\//.test(navigator.userAgent) && !/CriOS|FxiOS|EdgiOS|MicroMessenger|OPiOS/.test(navigator.userAgent);
+const isTarget = isIPhoneSafariCandidate(navigator.userAgent);
 function log(event) { state.events.push({ at: new Date().toISOString(), event }); if (state.events.length > 80) state.events.shift(); }
 function status(id, text, tone = '') { $(id).textContent = text; $(id).dataset.tone = tone; }
 function degrees(value) { return finite(value) ? `${value.toFixed(1)}°` : '—'; }
@@ -28,7 +28,7 @@ function secure() {
 }
 status('context-badge', window.isSecureContext ? '安全上下文 ✓' : '需要 HTTPS');
 if (!window.isSecureContext) $('context-badge').classList.add('blocked');
-$('target-badge').textContent = isTarget ? 'iPhone Safari · 目标环境' : '当前为其他环境 · 仅作辅助检查';
+$('target-badge').textContent = isTarget ? 'iPhone Safari 特征 · 请确认浏览器' : '当前为其他或未确认环境 · 仅作辅助检查';
 $('context-note').textContent = window.isSecureContext ? '相机、运动、定位分别授权；页面不会自动申请权限。' : '普通局域网 HTTP 只能预览界面，请使用受信任的 HTTPS 链接测试硬件。';
 
 function cancelFrameCallback() {
@@ -242,13 +242,13 @@ $('download-report').addEventListener('click', () => {
   const now = performance.now();
   const report = {
     schemaVersion: 1, createdAt, exportedAt: new Date().toISOString(), target: 'iPhone Safari',
-    environment: { userAgent: navigator.userAgent, secureContext: window.isSecureContext, targetBrowserDetected: isTarget, viewport: { width: window.innerWidth, height: window.innerHeight }, visibility: document.visibilityState },
+    environment: { userAgent: navigator.userAgent, secureContext: window.isSecureContext, targetBrowserDetected: isTarget, browserIdentification: 'user-agent-heuristic-only', viewport: { width: window.innerWidth, height: window.innerHeight }, visibility: document.visibilityState },
     camera: { ...state.camera, running: Boolean(stream), pending: cameraPending, firstFrameAt: undefined, lastFrameAt: undefined, lastFrameAgeMs: state.camera.lastFrameAt === null ? null : Math.round(now - state.camera.lastFrameAt), observation: state.camera.frames > 0 ? 'frames-observed' : 'no-frames-observed' },
     orientation: { ...summary(state.orientation, now), latest: state.latestOrientation }, motion: { ...summary(state.motion, now), latestRotationRate: state.latestRotation },
     location: { status: state.locationStatus, running: locationWatch !== null, receivedSamples: state.locationSamples, errorCode: state.locationError, includesCoordinates: $('include-location').checked, lastReading: locationForReport(state.location, $('include-location').checked) },
     manualChecks: { rearCameraSmooth: $('check-camera').checked, relativeClueResponds: $('check-motion').checked, locationAcceptable: $('check-location').checked, restartAfterBackgroundWorks: $('check-resume').checked },
     notes: $('notes').value, backgroundVisits: state.backgroundVisits, events: state.events,
-    limitations: ['Camera and motion access do not establish spatial AR tracking.', 'Orientation is relative unless explicitly reported otherwise.', 'Location accuracy is provider-reported, not a measured error.', 'A desktop run does not validate iPhone hardware.'],
+    limitations: ['Camera and motion access do not establish spatial AR tracking.', 'Orientation is relative unless explicitly reported otherwise.', 'Location accuracy is provider-reported, not a measured error.', 'A desktop run does not validate iPhone hardware.', 'User-agent detection is a heuristic and does not prove the browser app is Safari.'],
   };
   const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' }));
   const link = document.createElement('a'); link.href = url; link.download = `campus-quest-safari-${new Date().toISOString().replace(/[:.]/g,'-')}.json`;
