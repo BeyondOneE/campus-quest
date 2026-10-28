@@ -1,0 +1,41 @@
+XJTLU AR Campus Quest — 完整前端源码交接
+整理日期：2026-10-28
+
+一、推荐运行方式（Windows / macOS 均可）
+1. 安装 Node.js 22.12 或以上兼容版本（原项目使用 Node.js 24）。
+2. 解压整个压缩包，在 XJTLU-AR-Quest 文件夹打开终端。
+3. 首次运行执行：npm ci
+4. 启动执行：npm run dev
+5. 在浏览器打开终端显示的 Local 地址，通常为 http://localhost:5173/
+6. 使用时保持终端运行；停止按 Ctrl+C。重启电脑后需要重新执行 npm run dev。
+
+二、修改与构建
+修改 src 中的代码后，开发预览会自动更新。
+主流程与状态：src/App.tsx
+六个页面：src/screens/Lobby.tsx、Routes.tsx、Hunt.tsx、Clue.tsx、Puzzle.tsx、Results.tsx
+统一样式：src/style.css
+原始图片及图标：public/assets/
+依赖和锁定版本：package.json、package-lock.json
+生产构建：npm run build
+检查生产版本：npm run preview
+部署时上传 dist 文件夹到静态网站根目录，不能直接双击 dist/index.html。
+
+三、演示流程
+大厅 → 选择路线 → Confirm & Enter AR Hunt → Inspect AR Clue → 收集线索
+→ Collaborate on Puzzle → 选择 ACTION → 解锁宝藏 → 查看结果 / Play Again。
+房间码支持四位字母或数字，昵称可以修改。
+
+四、功能边界
+此项目是可点击的前端演示。AR/GPS、队友、语音、投票、排行榜及 AI 提示均为模拟或预设。
+尚未接入真实登录、数据库、跨设备同步、摄像头识别、语音服务或 AI 服务。
+同一个房间码不会让两台设备真正联机，进度只存于当前浏览器。
+三条路线共用示例线索，奖励分数不同。
+
+五、手机访问
+电脑和手机连接同一 Wi-Fi，电脑运行：npm run dev -- --host 0.0.0.0
+在手机打开终端显示的 Network 地址。不要使用发送者原来的 172.20.10.2 地址。
+
+六、文件说明
+本包包含源码、素材、依赖锁文件和本次重新生成的 dist。
+没有打包 node_modules（依赖由 npm ci 自动安装），也不包含个人配置或运行缓存。
+原先的单文件 HTML 是独立快照，修改源码不会自动更新它，因此本交接包以源码和 dist 为准。
