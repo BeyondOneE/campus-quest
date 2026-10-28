@@ -41,11 +41,11 @@ test('empty events do not show success; valid zero rotation does; stale samples 
   const h=harness();await h.node('start-sensors').click();
   h.windowListeners.get('deviceorientation')({alpha:null,beta:null,gamma:null});
   h.windowListeners.get('devicemotion')({rotationRate:{alpha:null,beta:null,gamma:null}});h.advance(100);
-  assert.equal(h.node('sensor-status').textContent,'等待有效数据');
+  assert.equal(h.node('sensor-status').textContent,'Waiting for valid data');
   h.windowListeners.get('deviceorientation')({alpha:0,beta:0,gamma:0});
   h.windowListeners.get('devicemotion')({rotationRate:{alpha:0,beta:0,gamma:0}});h.advance(100);
-  assert.equal(h.node('sensor-status').textContent,'姿态与运动有效');
-  h.advance(3000);assert.equal(h.node('sensor-status').textContent,'等待有效数据');
+  assert.equal(h.node('sensor-status').textContent,'Motion & orientation live');
+  h.advance(3000);assert.equal(h.node('sensor-status').textContent,'Waiting for valid data');
 });
 test('a camera stream arriving after cancellation is released',async()=>{
   let resolve,stops=0;const h=harness({getUserMedia:()=>new Promise(r=>{resolve=r;})});
@@ -66,7 +66,7 @@ test('permission requests completing in the background cannot restart sensors',a
 });
 test('camera denial is recoverable and does not claim a live picture',async()=>{
   const h=harness();await h.node('start-camera').click();
-  assert.equal(h.node('camera-status').textContent,'未开启');
+  assert.equal(h.node('camera-status').textContent,'Not enabled');
   assert.equal(h.node('start-camera').disabled,false);
   assert.equal(h.node('stop-camera').disabled,true);
 });

@@ -1,56 +1,57 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#102c29">
   <meta name="referrer" content="no-referrer">
-  <title>Campus Quest · Safari 真机验证</title>
+  <title>Campus Quest · Live Explorer</title>
   <link rel="stylesheet" href="./style.css">
   <script type="module" src="./probe.js"></script>
 </head>
-<body>
+<body class="capture-view" data-capture="camera">
   <main>
-    <header><a class="brand" href="../..">C<span>Q</span> <b>CAMPUS QUEST</b></a><span class="edition">DEVICE LAB / 01</span></header>
-    <section class="intro"><p class="eyebrow">第一站 · 你的 iPhone Safari</p><h1>先让现实，<br>接入我们的旅程。</h1><p class="lead">验证相机、手机姿态与定位。每项都收到真实数据后，再开始校园探索。</p><div class="environment"><span id="context-badge">检查连接中</span><span id="target-badge">目标：iPhone Safari</span></div><p id="context-note" class="hint"></p></section>
+    <header><a class="brand" href="../..">C<span>Q</span> <b>CAMPUS QUEST</b></a><span class="edition">LIVE FIELD EXPLORER</span></header>
+    <section class="intro"><p class="eyebrow">EXPLORE · CONNECT · DISCOVER</p><h1>Explore your campus.</h1><p class="lead">Explore your surroundings with live camera, motion and location.</p><div class="environment"><span id="context-badge">Checking connection</span><span id="target-badge">Target: iPhone Safari</span></div><p id="context-note" class="hint"></p></section>
+    <nav class="capture-tabs" aria-label="Explorer features"><button type="button" data-view="camera" class="active">01 Camera</button><button type="button" data-view="motion">02 Motion</button><button type="button" data-view="location">03 Location</button><button type="button" data-view="notes">Notes</button></nav>
 
     <section class="card camera-card" aria-labelledby="camera-title">
-      <div class="section-heading"><div><span class="number">01 / CAMERA</span><h2 id="camera-title">看见校园</h2></div><span id="camera-status" class="status" aria-live="polite">未开始</span></div>
-      <div class="viewfinder"><video id="camera" autoplay muted playsinline aria-label="实时相机画面"></video><div id="camera-placeholder" class="placeholder"><span class="view-icon">⌖</span><p>点击下方按钮开启后置相机</p></div><div id="artifact" class="artifact" hidden><div class="diamond">◇</div><span>线索 01</span></div><span class="camera-label">LIVE VIEW · 相对视角演示</span></div>
-      <p id="camera-detail" class="detail">尚未申请相机权限</p>
-      <div class="actions"><button id="start-camera" class="primary">开启相机</button><button id="stop-camera" disabled>停止相机</button></div>
-      <button id="retry-playback" class="text-button" hidden>点击恢复画面播放</button>
+      <div class="section-heading"><div><span class="number">01 / CAMERA</span><h2 id="camera-title">Live camera</h2></div><span id="camera-status" class="status" aria-live="polite">Not started</span></div>
+      <div class="viewfinder"><video id="camera" autoplay muted playsinline aria-label="Live camera feed"></video><div id="camera-placeholder" class="placeholder"><span class="view-icon">⌖</span><p>Start the camera to see your surroundings</p></div><div id="artifact" class="artifact" hidden><div class="diamond">◇</div><span>CLUE 01</span></div><span class="camera-label">LIVE CAMERA · RELATIVE-VIEW OVERLAY</span></div>
+      <p id="camera-detail" class="detail">Camera permission has not been requested.</p>
+      <div class="actions"><button id="start-camera" class="primary">Start camera</button><button id="stop-camera" disabled>Stop camera</button></div>
+      <button id="retry-playback" class="text-button" hidden>Tap to resume video</button>
     </section>
 
     <section class="card" aria-labelledby="sensor-title">
-      <div class="section-heading"><div><span class="number">02 / MOTION</span><h2 id="sensor-title">转动，寻找线索</h2></div><span id="sensor-status" class="status" aria-live="polite">未开始</span></div>
-      <p class="description">点击授权，缓慢左右转动、前后倾斜手机；姿态有效后可校准，让画面中的线索随相对视角移动。</p>
-      <div class="metrics"><div><span>方向 α</span><strong id="alpha">—</strong></div><div><span>倾斜 β</span><strong id="beta">—</strong></div><div><span>侧倾 γ</span><strong id="gamma">—</strong></div></div>
-      <dl class="readings"><div><dt>姿态采样</dt><dd id="orientation-rate">—</dd></div><div><dt>旋转速率</dt><dd id="rotation">—</dd></div><div><dt>运动采样</dt><dd id="motion-rate">—</dd></div><div><dt>指南针航向</dt><dd id="heading">—</dd></div></dl>
-      <p id="sensor-detail" class="detail">接口存在不等于传感器已经工作</p>
-      <div class="actions"><button id="start-sensors" class="primary">授权并开启感应</button><button id="calibrate" disabled>校准当前视角</button></div>
-      <p class="hint">这是相对旋转演示，不是空间定位；线索没有锚定在真实建筑上。</p>
+      <div class="section-heading"><div><span class="number">02 / MOTION</span><h2 id="sensor-title">Follow your perspective</h2></div><span id="sensor-status" class="status" aria-live="polite">Not started</span></div>
+      <p class="description">Enable motion, then gently turn and tilt your phone. Calibrate the current view to explore the relative clue overlay.</p>
+      <div class="metrics"><div><span>Orientation α</span><strong id="alpha">—</strong></div><div><span>Tilt β</span><strong id="beta">—</strong></div><div><span>Roll γ</span><strong id="gamma">—</strong></div></div>
+      <dl class="readings"><div><dt>Orientation sampling</dt><dd id="orientation-rate">—</dd></div><div><dt>Rotation rate</dt><dd id="rotation">—</dd></div><div><dt>Motion sampling</dt><dd id="motion-rate">—</dd></div><div><dt>Compass heading</dt><dd id="heading">—</dd></div></dl>
+      <p id="sensor-detail" class="detail">Waiting for live sensor readings.</p>
+      <div class="actions"><button id="start-sensors" class="primary">Enable motion</button><button id="calibrate" disabled>Calibrate view</button></div>
+      <p class="hint">Relative-view demonstration. The overlay is not anchored to a real building.</p>
     </section>
 
     <section class="card" aria-labelledby="location-title">
-      <div class="section-heading"><div><span class="number">03 / LOCATION</span><h2 id="location-title">找到此刻的位置</h2></div><span id="location-status" class="status" aria-live="polite">未开始</span></div>
-      <div class="metrics location-metrics"><div><span>纬度</span><strong id="latitude">—</strong></div><div><span>经度</span><strong id="longitude">—</strong></div><div><span>报告精度</span><strong id="accuracy">—</strong></div></div>
-      <p id="location-detail" class="detail">室内定位可能较慢或不够准确，可在室外开阔处重试</p>
-      <div class="actions"><button id="start-location" class="primary">开启定位</button><button id="stop-location" disabled>停止定位</button></div>
-      <p class="hint">精度是系统报告的误差半径，不代表实际误差已测量，也不保证由 GPS 提供。</p>
+      <div class="section-heading"><div><span class="number">03 / LOCATION</span><h2 id="location-title">Find your position</h2></div><span id="location-status" class="status" aria-live="polite">Not started</span></div>
+      <div class="metrics location-metrics"><div><span>Latitude</span><strong id="latitude">—</strong></div><div><span>Longitude</span><strong id="longitude">—</strong></div><div><span>Reported accuracy</span><strong id="accuracy">—</strong></div></div>
+      <p id="location-detail" class="detail">For a better location reading, try an open outdoor space.</p>
+      <div class="actions"><button id="start-location" class="primary">Enable location</button><button id="stop-location" disabled>Stop location</button></div>
+      <p class="hint">Accuracy is a system-reported radius, not a measured position error.</p>
     </section>
 
     <section class="card" aria-labelledby="checklist-title">
-      <div class="section-heading"><div><span class="number">04 / FIELD NOTES</span><h2 id="checklist-title">把体验留作证据</h2></div></div>
-      <p class="description">开启三项功能后，再进行下面的人工检查。自动检测与人工观察会分别记录。</p>
-      <fieldset><legend class="sr-only">人工检查</legend><label><input type="checkbox" id="check-camera">相机画面来自后置镜头，持续流畅</label><label><input type="checkbox" id="check-motion">转动手机时数值与虚拟线索有对应变化</label><label><input type="checkbox" id="check-location">定位精度适合当前测试，位置符合实际地点</label><label><input type="checkbox" id="check-resume">切后台或锁屏后，返回并重新开启功能正常</label></fieldset>
-      <label class="notes-label" for="notes">观察与问题</label><textarea id="notes" rows="3" maxlength="2000" placeholder="例如：定位需等待约 10 秒；拒绝相机权限后，在 Safari 设置中允许再重试。"></textarea>
-      <div class="privacy"><b>数据留在此页面</b><p>不上传相机画面、坐标或传感器数据。默认报告不含精确坐标；刷新会清空本次记录。</p></div>
-      <label class="coordinate-choice"><input type="checkbox" id="include-location">导出时包含精确坐标（可选）</label>
-      <div class="actions"><button id="download-report" class="primary">导出测试报告</button><button id="stop-all">停止全部</button></div>
-      <p id="export-status" class="detail" role="status"></p><p id="lifecycle" class="hint">离开页面会停止硬件采集；返回后请重新点击开启。</p>
+      <div class="section-heading"><div><span class="number">04 / FIELD NOTES</span><h2 id="checklist-title">Capture your field notes</h2></div></div>
+      <p class="description">Check each item after testing it on your phone. Observations are saved separately from automatic readings.</p>
+      <fieldset><legend class="sr-only">Manual checks</legend><label><input type="checkbox" id="check-camera">The rear camera shows a smooth, live picture.</label><label><input type="checkbox" id="check-motion">Readings and the relative clue respond to phone movement.</label><label><input type="checkbox" id="check-location">The position and reported accuracy are suitable for this test.</label><label><input type="checkbox" id="check-resume">Features restart correctly after returning from another app.</label></fieldset>
+      <label class="notes-label" for="notes">Observations</label><textarea id="notes" rows="3" maxlength="2000" placeholder="Record what worked and anything that needs improvement."></textarea>
+      <div class="privacy"><b>Your data stays on this page</b><p>Camera, location and sensor data are not uploaded. Exact coordinates are excluded from reports by default. Refreshing clears this session.</p></div>
+      <label class="coordinate-choice"><input type="checkbox" id="include-location">Include exact coordinates in the report (optional)</label>
+      <div class="actions"><button id="download-report" class="primary">Export test report</button><button id="stop-all">Stop all</button></div>
+      <p id="export-status" class="detail" role="status"></p><p id="lifecycle" class="hint">Leaving the page stops capture. Tap the controls to restart when you return.</p>
     </section>
-    <footer><span>CAMPUS QUEST / SAFARI FIELD CHECK</span><p>先验证，再出发。</p></footer>
+    <footer><span>CAMPUS QUEST / SAFARI FIELD CHECK</span><p>Explore with real device data.</p></footer>
   </main>
 </body>
 </html>
