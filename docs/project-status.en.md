@@ -2,7 +2,7 @@
 
 [中文](project-status.md)
 
-Updated: 2026-11-03 (Asia/Shanghai). This update adopts bilingual process rules; hardware and code-test results remain from 2026-10-28. No new Safari physical-device test has been recorded.
+Updated: 2026-11-03 (Asia/Shanghai). The English treasure experiment uses the shared computer backend and has direct LAN HTTPS prepared. Automation, HTTP and computer-side TLS were checked; hardware evidence remains from 2026-10-28. Phone certificate trust and actual reachability await user action, with no new Safari field acceptance.
 
 ## Confirmed decisions
 
@@ -10,6 +10,10 @@ Updated: 2026-11-03 (Asia/Shanghai). This update adopts bilingual process rules;
 - Development primarily uses the user's Ubuntu computer.
 - Delivery is mobile web. First-stage acceptance targets the user's iPhone Safari only; Android, other iOS browsers, WeChat's browser, Mini Programs and native apps are outside current acceptance scope.
 - Validate camera, orientation and location before planning the full application. Preserve the original handoff in the course workspace.
+- The current phase tests the feasibility of phone-location treasure triggers, camera presentation and collection before using field results to define first-release scope, three core features and final acceptance goals. Only the minimal experiment is authorized; road alignment and ground anchoring are not prerequisites for it.
+- The user assigns frontend visual design to Claude and backend, interfaces and functional logic to Codex. Build product UI directly in English from now on; maintained prose remains in separate Chinese and English files. See the [handoff and logic contract](frontend-handoff.en.md).
+- The user requires the computer-hosted backend and phone-browser structure from this stage onward to prepare for multiplayer. Phones handle location and camera interaction; the backend owns sessions, shared placement, eligibility and receipts. The page explains sharing after location is started.
+- The user proposed direct LAN access. The current setup prepares same-network phone access without Cloudflare, using a separate development certificate. Phone installation and trust must be performed by the user; no trust store was modified automatically and no certificate warning was bypassed.
 
 ## Existing work
 
@@ -17,6 +21,9 @@ Updated: 2026-11-03 (Asia/Shanghai). This update adopts bilingual process rules;
 - The source ZIP matched extracted files and passed bundled SHA256 checks.
 - The original `dist` completed the desktop six-screen flow, including wrong answers, completion and reload restoration.
 - Added standalone Safari hardware diagnostics and a local static server.
+- Added the English `/treasure-lab/` view, remote API adapter and Node / SQLite backend. Guests create or join a session with one shared treasure; the backend checks departure and return and persists one receipt per player. These are experimental rules, not finalized multiplayer gameplay.
+- Added a development-certificate generator, HTTPS proxy bound only to the Wi-Fi address, and certificate setup page. The backend remains on loopback; no router or firewall changes were made. See [LAN access](lan-access.en.md).
+- Added local account registration / login / logout, cross-device membership and receipt restoration, guest adoption at registration and independent location gates per login session. The running database was privately backed up before migration; original room / player / receipt counts were preserved. See [account API](backend-api.en.md) and CQ-20261103-010.
 - Fixed seven incomplete Rollup lock entries containing only `optional: true`; npm restored optional dependency metadata.
 
 ## Validation status
@@ -24,8 +31,8 @@ Updated: 2026-11-03 (Asia/Shanghai). This update adopts bilingual process rules;
 | Check | Status | Evidence / limits |
 | --- | --- | --- |
 | USB basic fields | Physically read | `iPhone18,1` / iOS `27.2` / `24B5089g`, with no serial or UDID |
-| Diagnostic logic tests | Passed | 15 cases covering browser misclassification, null and zero data, angle wrap, stale samples, permissions, asynchronous cancellation, background stopping and coordinate export |
-| Clean install and build | Passed | Node.js 22.23.2 / npm 10.9.8; npm ci, TypeScript and Vite passed. Prototype JS chunk around 520 kB produced a size warning |
+| Automated logic tests | Passed | 48 cases rerun on 2026-11-03: 15 original diagnostic cases and 33 treasure / account / client / backend / static-server / certificate cases. Isolated fixtures do not enter the live page or running database and do not establish physical acceptance |
+| Clean install and build | Passed | 2026-11-03, Node.js 24.19.0 / npm 11.17.0; npm ci, TypeScript and Vite passed. The prototype JS chunk remains around 520 kB with a size warning |
 | New diagnostics on desktop | Passed | Page loading, status and controls; not phone acceptance |
 | Supporting iPhone Brave run | User-tested evidence | Camera at 1280 × 720 with 1896 updates; orientation and rotation recently around 60 Hz; reported location radius around 17.49 m; manual restart after backgrounding worked. User confirmed Brave; not Safari acceptance |
 | iPhone Safari camera | Pending user test | Current report came from Brave; Safari must be retested |
@@ -33,14 +40,35 @@ Updated: 2026-11-03 (Asia/Shanghai). This update adopts bilingual process rules;
 | iPhone Safari location | Pending user test | Current report came from Brave; Safari must be retested |
 | Concurrent operation, denial recovery, background return | Partial supporting evidence | Brave restart has events and user checks; denial recovery has no explicit physical evidence; all remain pending on Safari |
 | Relative clue interaction | Needs improvement | User reported response with poor effect. No spatial anchor exists; not AR acceptance |
+| English treasure page on desktop | Passed | English initial state, 320 / 390 pixel widths, page loading and allowlisted HTTP serving checked; no phone-location or camera acceptance |
+| Shared backend HTTP and recovery | Passed | Two independent cookie clients joined the same room; browser guest creation and reload recovery checked. Restart persistence of claims is covered by isolated tests, not multiple real phones |
+| Local accounts | Automated and desktop checks passed; phone pending | Registration, login / logout, guest migration, cross-device identity / receipts, CSRF and rate limits passed; 320 / 390 px desktop view checked with an isolated temporary database. See E-20261103-007 |
+| Location trigger and camera collection in the field | Pending user test | No Safari field evidence exists for this gameplay; radius, accuracy and trigger timing need physical validation |
+| Current user experience feedback | Interaction flow accepted; field test deferred | The user understood unlocking and found no obvious logic problem, but deferred testing because the dormitory lacks space. Retain the flow; this does not establish location or camera acceptance. Screenshot's Not Secure state, camera permission and live video remain unverified. See CQ-20261103-008, CQ-20261103-009 |
+| LAN HTTPS entry | Computer checks passed; phone pending | TLS verified with the explicit test CA, Secure cookies and two-session API passed. The phone still needs same-network access and manual trust of the development certificate. Cloudflare remains off |
 
 See the [2026-10-28 device review](2026-10-28-device-check-review.en.md) for sources and limits.
 
 ## Next work
 
-After phone validation, select a real route and scope authentication, multiplayer state, split clues, persistent scores and AR. User-testing, course-report and demonstration-evidence plans follow that decision.
+The minimal experiment follows the user's authorized “location-based treasure with camera presentation” approach. Road markers, surveyed road coordinates and continuous spatial alignment remain previously discussed candidates, not prerequisites for this experiment. Final product goals have not been promised.
 
-Rooms, teammates, AR, voice, AI hints, leaderboards and badges remain simulated or preset; they do not prove those real features are complete.
+- Run `npm start` on the computer to serve the English page and [business API](backend-api.en.md) at `http://127.0.0.1:4180/treasure-lab/`. The creator places the shared point; other phones join with its session code. Follow the [field procedure](treasure-lab.en.md) for departure / return, camera and collection.
+- Initial values are a 30 metre collection radius, a 20 metre reported-accuracy threshold, a 10 metre exit buffer, a 15 second fix lifetime and at least 2 seconds of entry observation. These are experimental defaults awaiting field tests, not accepted performance metrics.
+- This turn tests one shared point only. Full campus zones, maps, scheduled spawns, student verification and complete scoring remain unimplemented. Local password accounts and temporary guest mode are available; password recovery and student SSO are not implemented. The experiment allows an independent claim per player per round, without competitive depletion.
+- Shared coordinates and claims persist in ignored SQLite; each player's latest position is evaluated in backend memory without a stored movement history. Video is not uploaded. Client position and camera status are not trusted hardware evidence or anti-cheat protection.
+- Current Wi-Fi address: `192.168.50.136`. Certificate setup is at `http://192.168.50.136:4181/`; after trusting the certificate, use `https://192.168.50.136:4443/treasure-lab/`. Backend port 4180 remains loopback-only; `PUBLIC_ORIGIN` matches LAN HTTPS. The address was read in this run and must be rechecked after network changes.
+- The user must install and trust the development certificate on a phone in the same reachable network before testing. Computer-side certificate checks do not establish phone operation. The previously rejected Cloudflare relay remains off and is no longer a prerequisite for this experiment.
+- Claude can begin frontend work against the existing backend. The updated [handoff](frontend-handoff.en.md), [starting brief](claude-frontend-brief.en.md), [API contract](backend-api.en.md) and [DOM contract](frontend-dom-contract.json) describe the live `/treasure-lab/` route, account / room states, hardware lifecycle and acceptance. The old React demo is separate; working-tree changes are not yet a remote Git baseline. Delivery to Claude and its implementation remain pending. See CQ-20261103-011.
+- Use field results to define product scope, actual backend interfaces, three core features, user testing and course delivery. Course requirements remain constraints.
+
+See [CQ-20261103-004](../progress/en/daily/2026-11-03.md#cq-20261103-004--minimal-location-trigger-and-camera-collection-experiment) and [CQ-20261103-005](../progress/en/daily/2026-11-03.md#cq-20261103-005--english-product-ui-and-claude-frontend-responsibilities) for authorization and checks.
+
+See [CQ-20261103-006](../progress/en/daily/2026-11-03.md#cq-20261103-006--shared-computer-backend-and-phone-browser-access) for this backend integration.
+
+See [CQ-20261103-007](../progress/en/daily/2026-11-03.md#cq-20261103-007--direct-lan-https-preparation) for LAN access and certificate boundaries.
+
+Rooms, teammates, AR, voice, AI hints, leaderboards and badges in the original six-screen demo remain simulated or preset. Real guest sessions and durable claims in the independent experiment do not establish completion of those demo features.
 
 ## Process records
 

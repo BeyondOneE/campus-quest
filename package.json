@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "node server/index.mjs",
+    "start:lan": "node server/lan-proxy.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",

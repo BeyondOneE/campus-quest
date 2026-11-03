@@ -11,7 +11,7 @@ Target device: USB-reported `iPhone18,1`, iOS `27.2`, build `24B5089g`. USB iden
 3. Open the generated HTTPS address at `/device-check/` in the iPhone's system **Safari**.
 4. Check the secure-context indicator and have the user confirm the actual app. The page infers Safari-like characteristics from the UA; its label does not prove browser identity. No USB connection or Developer Mode is required.
 
-Temporary tunnels have no uptime guarantee and stop working when closed. Only four static diagnostic assets are served. The tunnel provider can see ordinary page-access network metadata, but the page does not upload coordinates, sensor data or camera frames. Decide production hosting separately.
+Temporary tunnels have no uptime guarantee and stop working when closed. This Python service exposes only four hardware-diagnostic files; the diagnostic page uploads no coordinates, sensor data or camera frames, while a relay still processes page-access traffic. The separate [shared treasure backend](backend-api.en.md) receives location after the user starts sharing; its data boundary differs from the diagnostics. Authorize the specific HTTPS relay before enabling it and decide production hosting separately.
 
 ## Check sequence
 

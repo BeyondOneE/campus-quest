@@ -1,0 +1,57 @@
+{
+  "id": "E-20261103-003",
+  "eventDate": "2026-11-03",
+  "timeZone": "Asia/Shanghai",
+  "type": "local-code-and-desktop-validation",
+  "physicalSafariAcceptance": false,
+  "fieldExperimentRun": false,
+  "runtime": {
+    "node": "24.19.0",
+    "npm": "11.17.0"
+  },
+  "checks": {
+    "npmCi": "passed",
+    "npmTest": {
+      "passed": 28,
+      "failed": 0,
+      "existingDiagnosticCases": 15,
+      "newCases": 13,
+      "fixturesArePhysicalEvidence": false
+    },
+    "productionBuild": {
+      "result": "passed",
+      "vite": "7.3.7",
+      "warning": "Existing prototype JS chunk remains around 520 kB."
+    },
+    "httpServing": {
+      "allowlistedAssets": 8,
+      "head": "passed",
+      "canonicalRedirect": "passed",
+      "nonAssetPathsBlocked": 5,
+      "contentSecurityPolicy": "passed"
+    },
+    "englishUI": {
+      "language": "en",
+      "sourceContainsChinese": false,
+      "desktopViewportsChecked": [
+        320,
+        390
+      ],
+      "horizontalOverflow": false,
+      "initialPlacementDisabled": true,
+      "initialCameraDisabled": true,
+      "liveHardwareRequested": false
+    }
+  },
+  "screenshot": {
+    "path": "treasure-lab-desktop-en.png",
+    "sha256": "be9cead94c39921bedc05b293823b63bfeb78ff10ad606c09197e2e65eaf91e7",
+    "level": "desktop-initial-state-only"
+  },
+  "limitations": [
+    "No physical phone or campus test.",
+    "No application backend or HTTP business API.",
+    "Functional shell; frontend visual design assigned to Claude.",
+    "No HTTPS phone test URL created."
+  ]
+}

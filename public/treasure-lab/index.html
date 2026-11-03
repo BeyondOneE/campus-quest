@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#102d2a">
+  <meta name="referrer" content="no-referrer">
+  <title>Campus Quest · Location Treasure Test</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <main>
+    <header><a href="/device-check/" class="brand">C<span>Q</span> <b>CAMPUS QUEST</b></a><span class="edition">FIELD LAB / 02</span></header>
+    <section class="intro"><p class="eyebrow">EXPLORE. DISCOVER. COLLECT.</p><h1>Location-triggered<br><em>treasure test.</em></h1><p class="lead">Create a test session or join from another phone. Share one treasure point and collect it once per player.</p><p id="environment" class="environment" role="status"></p></section>
+
+    <section class="card" aria-labelledby="account-title">
+      <h2 id="account-title">Your account</h2>
+      <p id="account-status" role="status">Checking sign-in…</p>
+      <form id="account-form">
+        <label for="username">Username</label><input id="username" name="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9_]{3,32}" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="Letters, numbers or underscores">
+        <label for="password">Password</label><input id="password" name="password" type="password" minlength="15" maxlength="256" autocomplete="current-password" required placeholder="15–128 characters">
+        <div class="actions"><button id="login" type="submit">Sign in</button><button id="register" type="button">Create account</button></div>
+      </form>
+      <button id="logout" type="button" hidden>Sign out</button>
+      <p id="account-rooms" class="hint"></p><p id="account-error" role="alert"></p>
+      <p class="hint">Creating an account keeps this browser's current guest room and collections. Signing in restores that account's rooms. Use the same account on another device to return as the same player. This test has no password recovery or student verification.</p>
+    </section>
+
+    <section class="card" aria-labelledby="session-title">
+      <h2 id="session-title">Join the field test</h2>
+      <p id="connection-status" role="status">Connecting to the computer backend…</p>
+      <label for="nickname">Nickname</label><input id="nickname" maxlength="32" autocomplete="nickname" placeholder="Your nickname">
+      <label for="room-code">Session code (to join)</label><input id="room-code" maxlength="8" autocomplete="off" placeholder="8-character code">
+      <div class="actions"><button id="create-room">Create session</button><button id="join-room">Join session</button></div>
+      <p id="room-status" class="description" role="status"></p><p id="players" class="hint"></p><p id="connection-error" role="alert"></p>
+      <p class="hint">You can also play as a temporary guest. Sign in to keep your identity across devices. Only the creator can place or replace the shared treasure. Each player may collect once per round.</p>
+    </section>
+
+    <ol class="steps" aria-label="Test steps"><li id="step-place" class="current">Set a point</li><li id="step-leave">Leave</li><li id="step-return">Return</li><li id="step-collect">Collect</li></ol>
+
+    <section class="card" aria-labelledby="location-title">
+      <div class="heading"><div><p class="eyebrow">01 / EXPLORE</p><h2 id="location-title">Start here</h2></div><span id="location-status" class="badge">Not started</span></div>
+      <p id="location-message" class="description" role="status">Choose an outdoor spot where you can walk away and return. Then start location.</p>
+      <div class="metrics"><div><span>Distance</span><strong id="distance">—</strong></div><div><span>Reported accuracy</span><strong id="accuracy">—</strong></div><div><span>Reading age</span><strong id="age">—</strong></div></div>
+      <div class="actions"><button id="start-location" class="primary">Start live location</button><button id="stop-location" disabled>Stop location</button></div>
+      <div class="placement"><label for="radius">Collection radius <span>metres</span></label><input id="radius" type="number" min="15" max="100" step="5" value="30" inputmode="numeric"><button id="place" disabled>Place treasure here</button></div>
+      <p class="hint">After placement, leave the radius plus its boundary buffer, then return near the centre. The initial radius is 30 m; reported accuracy must be 20 m or better. The computer backend checks positions and records collections. These are experimental settings.</p>
+      <p id="journey-message" class="journey-message" role="status">No treasure point yet.</p>
+    </section>
+
+    <section class="card camera-card" aria-labelledby="camera-title">
+      <div class="heading"><div><p class="eyebrow">02 / DISCOVER</p><h2 id="camera-title">Find your treasure</h2></div><span id="camera-status" class="badge">Awaiting discovery</span></div>
+      <div class="viewfinder">
+        <video id="camera" autoplay muted playsinline aria-label="Live rear camera"></video>
+        <div id="camera-placeholder" class="placeholder"><span class="compass">⌖</span><p>Unlock the treasure to open the camera</p><small>Your live camera appears here</small></div>
+        <button id="treasure" class="treasure" hidden disabled aria-label="Collect treasure"><span class="halo"></span><span class="chest"><span class="lid"></span><span class="lock"></span></span><span class="treasure-label">Campus treasure<span>Tap to collect</span></span></button>
+        <div id="collected" class="success" hidden><span>✓</span><h3>Treasure collected</h3><p>Your field attempt is complete.</p></div>
+        <span class="camera-caption">CAMERA ENCOUNTER</span>
+      </div>
+      <p id="camera-message" class="description" role="status">Leave the area and return to unlock the treasure.</p>
+      <div class="actions"><button id="start-camera" class="primary" disabled>Open camera</button><button id="stop-camera" disabled>Close camera</button></div>
+      <button id="retry-playback" class="text-button" hidden>Resume video</button>
+      <p class="hint">The chest is an interactive camera overlay, without ground anchoring or positioning. Collection checks that location and live video are still valid.</p>
+    </section>
+
+    <details class="card notes"><summary>Field notes</summary><p class="description">Export your report with actual field observations. Automatic records do not establish physical-device acceptance.</p><label for="notes">Your observations</label><textarea id="notes" maxlength="1500" rows="3" placeholder="Note trigger timing, camera behaviour and changes near the boundary."></textarea><button id="download-report">Export coordinate-free report</button><p id="report-status" role="status" class="hint"></p></details>
+    <footer><p>Starting location shares your coordinates with the computer backend. The treasure point is saved on that computer; each player's latest position is held in memory, without a stored movement history. Camera video stays on the phone. A temporary HTTPS relay can process network traffic. Backgrounding stops capture; restart manually on return. Collections survive reloads. Keep private information out of notes.</p><a href="/device-check/">Hardware diagnostics ↗</a><span>CAMPUS QUEST / FEASIBILITY FIRST</span></footer>
+  </main>
+</body>
+</html>

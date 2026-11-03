@@ -1,0 +1,47 @@
+{
+  "id": "E-20261103-008",
+  "eventDate": "2026-11-03",
+  "timeZone": "Asia/Shanghai",
+  "type": "frontend-handoff-document-validation",
+  "checks": {
+    "languagePairs": 8,
+    "pairedRecordIds": "passed",
+    "localLinksResolved": 162,
+    "documentedApiRoutes": 12,
+    "responseExamplesChecked": 2,
+    "inMemoryResponseShapeComparison": "passed",
+    "domElementsComparedToHtml": 48,
+    "literalControllerIdsExist": true,
+    "bilingualErrorCodes": "matched",
+    "jsonSyntax": "passed",
+    "diffWhitespace": "passed"
+  },
+  "sourceChanges": false,
+  "productTestSuiteRerun": false,
+  "buildRerun": false,
+  "claudeInvoked": false,
+  "externalTransfer": false,
+  "runtimeDatabaseAccess": false,
+  "phonePermissionsRequested": false,
+  "physicalSafariAcceptance": false,
+  "baselineEvidence": "E-20261103-007",
+  "baselineTestsPassed": 48,
+  "documents": [
+    "README.md",
+    "README.zh-CN.md",
+    "docs/frontend-handoff.md",
+    "docs/frontend-handoff.en.md",
+    "docs/backend-api.md",
+    "docs/backend-api.en.md",
+    "docs/claude-frontend-brief.md",
+    "docs/claude-frontend-brief.en.md",
+    "docs/project-status.md",
+    "docs/project-status.en.md",
+    "docs/frontend-dom-contract.json"
+  ],
+  "limits": [
+    "Only documentation and isolated in-memory schema checks.",
+    "No frontend redesign or physical device acceptance.",
+    "The working tree includes uncommitted and untracked baseline files."
+  ]
+}

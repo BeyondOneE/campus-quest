@@ -1,0 +1,404 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-11-03",
+  "source": "public/treasure-lab/index.html",
+  "controller": "public/treasure-lab/app.js",
+  "mode": "retain-ids-and-element-semantics-when-reusing-controller",
+  "documentation": {
+    "en": "frontend-handoff.en.md",
+    "zh-CN": "frontend-handoff.md"
+  },
+  "elements": [
+    {
+      "id": "environment",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "account-title",
+      "tag": "h2",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "account-status",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "account-form",
+      "tag": "form",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "username",
+      "tag": "input",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "minlength": "3",
+        "maxlength": "32",
+        "pattern": "[A-Za-z0-9_]{3,32}",
+        "autocomplete": "username",
+        "required": true
+      }
+    },
+    {
+      "id": "password",
+      "tag": "input",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "password",
+        "minlength": "15",
+        "maxlength": "256",
+        "autocomplete": "current-password",
+        "required": true
+      }
+    },
+    {
+      "id": "login",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "submit"
+      }
+    },
+    {
+      "id": "register",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "logout",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "account-rooms",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "account-error",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "alert"
+      }
+    },
+    {
+      "id": "session-title",
+      "tag": "h2",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "connection-status",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "nickname",
+      "tag": "input",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "maxlength": "32",
+        "autocomplete": "nickname"
+      }
+    },
+    {
+      "id": "room-code",
+      "tag": "input",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "maxlength": "8",
+        "autocomplete": "off"
+      }
+    },
+    {
+      "id": "create-room",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "join-room",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "room-status",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "players",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "connection-error",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "alert"
+      }
+    },
+    {
+      "id": "step-place",
+      "tag": "li",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "step-leave",
+      "tag": "li",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "step-return",
+      "tag": "li",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "step-collect",
+      "tag": "li",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "location-title",
+      "tag": "h2",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "location-status",
+      "tag": "span",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "location-message",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "distance",
+      "tag": "strong",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "accuracy",
+      "tag": "strong",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "age",
+      "tag": "strong",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "start-location",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "stop-location",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": true,
+      "attributes": {}
+    },
+    {
+      "id": "radius",
+      "tag": "input",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "number",
+        "min": "15",
+        "max": "100",
+        "step": "5"
+      }
+    },
+    {
+      "id": "place",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": true,
+      "attributes": {}
+    },
+    {
+      "id": "journey-message",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "camera-title",
+      "tag": "h2",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "camera-status",
+      "tag": "span",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "camera",
+      "tag": "video",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "autoplay": true,
+        "muted": true,
+        "playsinline": true
+      }
+    },
+    {
+      "id": "camera-placeholder",
+      "tag": "div",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "treasure",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": true,
+      "attributes": {}
+    },
+    {
+      "id": "collected",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "camera-message",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "start-camera",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": true,
+      "attributes": {}
+    },
+    {
+      "id": "stop-camera",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": true,
+      "attributes": {}
+    },
+    {
+      "id": "retry-playback",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "notes",
+      "tag": "textarea",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "maxlength": "1500"
+      }
+    },
+    {
+      "id": "download-report",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "report-status",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    }
+  ]
+}

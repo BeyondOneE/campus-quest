@@ -1,0 +1,39 @@
+{
+  "id": "E-20261103-005",
+  "eventDate": "2026-11-03",
+  "timeZone": "Asia/Shanghai",
+  "type": "direct-lan-tls-validation",
+  "externalRelayUsed": false,
+  "phoneTrustChanged": false,
+  "computerTrustChanged": false,
+  "phoneReachabilityVerified": false,
+  "physicalSafariAcceptance": false,
+  "checks": {
+    "automatedTests": {
+      "passed": 39,
+      "failed": 0
+    },
+    "build": "passed-with-existing-prototype-size-warning",
+    "explicitCaTlsVerification": "passed",
+    "ipVerification": "passed",
+    "wrongHostnameRejected": true,
+    "independentHttpsClients": 2,
+    "sharedRoom": "passed",
+    "secureCookie": "passed",
+    "bootstrapPrivateKeyPathsBlocked": true,
+    "applicationPrivatePathsBlocked": true,
+    "deviceCoordinatesSubmitted": false,
+    "cameraUsed": false
+  },
+  "certificate": {
+    "rootLifetimeDays": 30,
+    "serverLifetimeDays": 7,
+    "rootDerSha256": "44637a0e29a85cc690eb2c0ebb29bd808203f59b11e63fae17de61f90e2a958f",
+    "privateFilesCommitted": false
+  },
+  "limits": [
+    "Computer-local TLS checks do not prove phone connectivity or trust.",
+    "The user must install and trust the development root manually.",
+    "No firewall, router or device trust-store changes were made."
+  ]
+}

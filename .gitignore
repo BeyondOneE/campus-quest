@@ -9,4 +9,5 @@ dist/
 *.log
 __pycache__/
 campus-quest-safari-*.json
+campus-quest-treasure-*.json
 device-reports/

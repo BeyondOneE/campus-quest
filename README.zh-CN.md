@@ -6,13 +6,18 @@
 
 ## 现在可以做什么
 
-- `/`：保留的六页前端演示。房间、AR、语音、队友、排行榜及 AI 仍为模拟内容。
+- Vite 原型 `/`（`npm run dev`）：保留的六页前端演示，房间、AR、语音、队友、排行榜及 AI 仍为模拟内容。后端根路径（`npm start`）跳转至 `/treasure-lab/`。
 - `/device-check/`：独立的 Safari 真机验证页，检查后置相机、姿态与旋转速率、定位、切后台后的手动恢复，并导出 JSON 报告。
-- 当前没有后端、真实多人房间、账号验证或空间 AR 跟踪。
+- `/treasure-lab/`：电脑后端托管的寻宝实验，支持访客场次、共享放置与每人领取持久化；见 [测试步骤](docs/treasure-lab.md)。尚未通过 Safari 实地验收。
+- 实验已有真实后端；本地用户名 / 密码账号已实现；学生身份验证、最终多人玩法和空间 AR 跟踪尚未实现。原六页演示仍使用模拟功能。
 
 ## 本地开发
 
-使用 Node.js 22.12+ 的兼容版本（已在 Node.js 22.23.2 验证）：
+共享实验使用已验证的 Node.js 24.19.0，运行 `npm start`，打开 `http://127.0.0.1:4180/treasure-lab/`。电脑同时提供页面与 [业务 API](docs/backend-api.md)。手机使用 [局域网 HTTPS](docs/lan-access.md)、匹配的 `PUBLIC_ORIGIN` 及用户手动信任的开发证书；Cloudflare 保持关闭，手机信任和连通仍待确认。
+
+前端交接从 [Claude 开工指令](docs/claude-frontend-brief.md)、[修改 / 验收说明](docs/frontend-handoff.md) 和 [接口契约](docs/backend-api.md) 开始；文档对应包含尚未提交文件的当前工作树。
+
+保留的 Vite 原型使用 Node.js 22.12+ 的兼容版本（历史在 Node.js 22.23.2 验证，共享后端当前使用 Node.js 24.19.0）：
 
 ```sh
 npm ci
@@ -32,7 +37,7 @@ npm run preview
 python3 scripts/serve_device_check.py
 ```
 
-手机需要打开受信任的 **HTTPS** 地址。电脑上的 `http://localhost` 特例不适用于手机访问电脑的局域网 IP。临时 HTTPS 入口可以转发到此专用服务器；它仅提供验证页的四个静态文件，不开放源码、目录列表或数据上传接口。
+手机需要打开受信任的 **HTTPS** 地址。电脑上的 `http://localhost` 特例不适用于手机访问电脑的局域网 IP。该 Python 服务只提供四个诊断文件，不开放源码、目录列表或上传接口；共享寻宝后端改用 `npm start`。
 
 详细步骤见 [Safari 测试清单](docs/safari-device-check.md)。相机、传感器、定位权限需要由用户在 iPhone 上自行确认。
 
@@ -40,7 +45,7 @@ python3 scripts/serve_device_check.py
 
 项目测试分为自动化逻辑测试、桌面浏览器检查、iPhone 真机实测三类。前两类通过不代表 iPhone 硬件能力已经通过。最新状态见 [项目状态](docs/project-status.md)。
 
-精确坐标默认不会写入导出的报告。报告和相机画面不会自动上传；不要将含坐标的测试报告提交 Git。当前页面刷新会清空本次测试状态。
+精确坐标默认不会写入导出的报告，报告和相机画面不会自动上传。共享实验中，开启定位会向电脑发送位置作范围判定；共享点坐标保存到被忽略的 SQLite，玩家最近位置只在内存保留，不保存轨迹。访客身份和领取记录刷新后可恢复；诊断页刷新仍清空状态。私密报告与数据库不得进入 Git。
 
 ## 过程记录与规范
 
@@ -52,6 +57,8 @@ python3 scripts/serve_device_check.py
 
 - `src/`、`public/assets/`：从交接包导入的原型。
 - `public/device-check/`：无第三方运行依赖的真机诊断页面。
+- `public/treasure-lab/`：英文功能页、同源 API 适配器、真实定位与相机生命周期。
+- `server/`：Node HTTP 后端、SQLite 账号 / 访客场次 / 共享点 / 收集凭据；私密数据保存在被忽略的 `.local/`。
 - `scripts/`：只提供诊断页面的本地服务器。
 - `tests/`：数据有效性、权限和生命周期测试。
 - `docs/archive/`：原始 proposal、交接说明和来源校验清单。

@@ -1,0 +1,65 @@
+{
+  "id": "E-20261103-004",
+  "eventDate": "2026-11-03",
+  "timeZone": "Asia/Shanghai",
+  "type": "shared-backend-and-local-http-validation",
+  "physicalSafariAcceptance": false,
+  "phoneHttpsAvailable": false,
+  "runtime": {
+    "node": "24.19.0",
+    "npm": "11.17.0",
+    "cloudflaredDownloadedVersion": "2026.10.7"
+  },
+  "checks": {
+    "npmCi": "passed",
+    "npmTest": {
+      "passed": 38,
+      "failed": 0,
+      "fixturesEnteredLiveDatabase": false
+    },
+    "productionBuild": {
+      "result": "passed",
+      "warning": "Existing prototype chunk remains around 520 kB."
+    },
+    "http": {
+      "independentCookieClients": 2,
+      "sharedRoom": "passed",
+      "reloadIdentity": "passed",
+      "allowlistedAssets": 9,
+      "privatePathBlocking": "passed",
+      "csrf": "passed",
+      "deviceCoordinatesSubmitted": false
+    },
+    "persistence": {
+      "isolatedSqliteRestartAndClaimRecovery": "passed",
+      "actualBrowserIdentityAfterServerRestart": "passed"
+    },
+    "desktopBrowser": {
+      "language": "en",
+      "viewport": 390,
+      "documentWidth": 375,
+      "guestSessionConnected": true,
+      "locationRequested": false,
+      "cameraEnabled": false
+    }
+  },
+  "httpsRelay": {
+    "provider": "Cloudflare",
+    "startup": "rejected-by-automatic-approval-review",
+    "processStarted": false,
+    "userApprovalRequired": true,
+    "reason": "External provider would process page access, room activity and precise submitted positions without explicit authorization of that destination and data flow.",
+    "alternateRouteUsed": false
+  },
+  "screenshot": {
+    "path": "backend-desktop-en.png",
+    "sha256": "40b19883bef0adb6b5a24b4f683a483cffc71038ce0a36beda94d4232aa105a7",
+    "level": "desktop-guest-session-without-device-data"
+  },
+  "limitations": [
+    "Guest identity is not a verified user account.",
+    "Server checks do not establish anti-cheat or camera proof.",
+    "No multi-phone or campus field acceptance.",
+    "Phone HTTPS entry remains blocked pending specific provider approval."
+  ]
+}

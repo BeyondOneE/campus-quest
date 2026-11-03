@@ -1,0 +1,58 @@
+{
+  "id": "E-20261103-007",
+  "eventDate": "2026-11-03",
+  "timeZone": "Asia/Shanghai",
+  "type": "local-account-validation",
+  "automatedTests": {
+    "passed": 48,
+    "failed": 0
+  },
+  "install": "passed-after-esbuild-execution-restriction",
+  "build": "passed-with-existing-prototype-chunk-warning",
+  "dependencyAuditModerateAdvisories": 10,
+  "database": {
+    "additiveMigrationTested": true,
+    "privateBackupBeforeRuntimeUpgrade": true,
+    "legacyRowCountsPreserved": true,
+    "testAccountsSeededInRuntimeDatabase": false
+  },
+  "authentication": {
+    "passwordAlgorithm": "scrypt",
+    "N": 131072,
+    "r": 8,
+    "p": 1,
+    "saltBytes": 16,
+    "crossDeviceIdentityAndReceipts": "passed",
+    "perLoginLocationGates": "passed",
+    "csrfAndOriginGuards": "passed",
+    "logoutRevocation": "passed",
+    "rateAndConcurrencyLimits": "passed"
+  },
+  "desktop": {
+    "isolatedDatabase": true,
+    "guestAdoption": "passed",
+    "loginLogoutReload": "passed",
+    "widths": [
+      320,
+      390
+    ],
+    "horizontalOverflow": false,
+    "credentials": "public-test-fixtures-only"
+  },
+  "runningLanTls": {
+    "health": "passed",
+    "authSession": "passed",
+    "accountPage": "passed",
+    "certificateValidation": true,
+    "externalRelay": false
+  },
+  "physicalSafariAcceptance": false,
+  "phoneAccountFlowVerified": false,
+  "deviceCoordinatesSubmitted": false,
+  "cameraUsed": false,
+  "limits": [
+    "No password recovery, email verification or student SSO.",
+    "Isolated fixtures and desktop layout do not establish physical phone acceptance.",
+    "Dependency advisories and the original prototype chunk warning remain."
+  ]
+}

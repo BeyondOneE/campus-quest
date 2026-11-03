@@ -61,6 +61,96 @@
         "zh-CN": "../zh-CN/evidence/README.md",
         "en": "../en/evidence/README.md"
       }
+    },
+    {
+      "id": "E-20261103-003",
+      "eventDate": "2026-11-03",
+      "type": "local-code-and-desktop-validation",
+      "committed": true,
+      "artifact": "2026-11-03/treasure-lab-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261103-004",
+      "eventDate": "2026-11-03",
+      "type": "shared-backend-and-local-http-validation",
+      "committed": true,
+      "artifact": "2026-11-03/backend-checks.json",
+      "physicalSafariAcceptance": false,
+      "phoneHttpsAvailable": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261103-005",
+      "eventDate": "2026-11-03",
+      "type": "direct-lan-tls-validation",
+      "committed": true,
+      "artifact": "2026-11-03/lan-checks.json",
+      "physicalSafariAcceptance": false,
+      "phoneTrustVerified": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261103-006",
+      "receivedOn": "2026-11-03",
+      "type": "user-screenshot",
+      "committed": true,
+      "artifact": "2026-11-03/camera-locked-user.png",
+      "sha256": "90c3f2f4ba79911dad668d489fff3c164c6cb8b1ad67432df924547fc6e27d46",
+      "supports": [
+        "Camera section displays Locked.",
+        "Open camera appears disabled.",
+        "Message requires leaving and returning after treasure replacement.",
+        "Browser address bar displays Not Secure."
+      ],
+      "limitations": [
+        "Full URL and protocol are not visible.",
+        "Screenshot does not establish certificate trust or camera permission status.",
+        "No live camera frame or error is shown."
+      ],
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261103-007",
+      "eventDate": "2026-11-03",
+      "type": "local-account-validation",
+      "committed": true,
+      "artifact": "2026-11-03/account-checks.json",
+      "screenshot": {
+        "artifact": "2026-11-03/account-desktop-en.png",
+        "sha256": "d88f61845cca64abe6e623f7ad4f50c56bd09efaf588b9262fd7253677331dab",
+        "source": "desktop-in-app-browser-isolated-test-database"
+      },
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261103-008",
+      "eventDate": "2026-11-03",
+      "type": "frontend-handoff-document-validation",
+      "committed": true,
+      "artifact": "2026-11-03/frontend-handoff-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
     }
   ]
 }
