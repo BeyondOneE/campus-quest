@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "verifiedOn": "2026-11-03",
+  "timeZone": "Asia/Shanghai",
+  "records": [
+    {
+      "id": "E-20261028-001",
+      "eventDate": "2026-10-28",
+      "type": "private-device-report",
+      "committed": false,
+      "sourceBasename": "campus-quest-safari-2026-10-28T09-45-14-625Z.json",
+      "sha256": "f39d74388190c0bb1ecbe679466f164aa9412d0452dbc28bdf4d7455646e4fc5",
+      "retention": "ignored-local-repository-root",
+      "browserConfirmedByUser": "Brave",
+      "safariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261028-002",
+      "eventDate": "2026-10-28",
+      "type": "git-history",
+      "commits": [
+        "19c4224",
+        "e59b370",
+        "bb1463a"
+      ],
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261103-001",
+      "type": "external-course-sources",
+      "committed": false,
+      "sources": [
+        {
+          "basename": "ENT207TC_GroupCW_2627_Final3.pdf",
+          "sha256": "ca15577538d650214767d0a0e425c287aea9bf0f7dd17da7c98caf5018d02e73"
+        },
+        {
+          "basename": "ENT207TC_ModuleHandbook_2627_Final3.pdf",
+          "sha256": "b2c472cedd85260fbb9d92ccab33a0f297bce5124592ff675f1d5f94d5a5c354"
+        }
+      ],
+      "notes": {
+        "zh-CN": "../zh-CN/course-requirements.md",
+        "en": "../en/course-requirements.md"
+      }
+    },
+    {
+      "id": "E-20261103-002",
+      "eventDate": "2026-11-03",
+      "type": "documentation-consistency-check",
+      "committed": true,
+      "artifact": "2026-11-03/document-checks.json",
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    }
+  ]
+}

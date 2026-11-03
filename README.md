@@ -1,16 +1,18 @@
 # Campus Quest
 
-面向西浦太仓校区新生与访客的校园协作寻宝项目。当前交付平台为手机网页；第一阶段只适配用户的 **iPhone Safari**。
+[中文](README.zh-CN.md)
 
-## 现在可以做什么
+A collaborative campus treasure-hunt project for new students and visitors at XJTLU Taicang. Delivery is mobile web; first-stage acceptance targets the user's **iPhone Safari** only.
 
-- `/`：保留的六页前端演示。房间、AR、语音、队友、排行榜及 AI 仍为模拟内容。
-- `/device-check/`：独立的 Safari 真机验证页，检查后置相机、姿态与旋转速率、定位、切后台后的手动恢复，并导出 JSON 报告。
-- 当前没有后端、真实多人房间、账号验证或空间 AR 跟踪。
+## What is available
 
-## 本地开发
+- `/`: retained six-screen frontend demonstration. Rooms, AR, voice, teammates, leaderboards and AI are still simulated.
+- `/device-check/`: standalone Safari diagnostics for the rear camera, orientation, rotation rate, location, manual restart after backgrounding and JSON report export.
+- There is no backend, real multiplayer room, account authentication or spatial AR tracking yet.
 
-使用 Node.js 22.12+ 的兼容版本（已在 Node.js 22.23.2 验证）：
+## Local development
+
+Use a compatible Node.js version of 22.12+ (validated with Node.js 22.23.2):
 
 ```sh
 npm ci
@@ -20,33 +22,40 @@ npm run build
 npm run preview
 ```
 
-不要直接双击 `dist/index.html`。默认部署到网站根目录。
+Do not open `dist/index.html` by double-clicking it. Deployment defaults to a site's root path.
 
-## iPhone 真机检查
+## Physical iPhone check
 
-无需安装 npm 依赖即可运行独立验证页：
+The standalone page needs no npm dependencies:
 
 ```sh
 python3 scripts/serve_device_check.py
 ```
 
-手机需要打开受信任的 **HTTPS** 地址。电脑上的 `http://localhost` 特例不适用于手机访问电脑的局域网 IP。临时 HTTPS 入口可以转发到此专用服务器；它仅提供验证页的四个静态文件，不开放源码、目录列表或数据上传接口。
+The phone must use a trusted **HTTPS** URL. The computer's `http://localhost` exception does not apply to a phone accessing the computer's LAN IP. A temporary HTTPS entry may forward to this dedicated server; it serves only the four diagnostic assets, with no source listing or data-upload endpoint.
 
-详细步骤见 [Safari 测试清单](docs/safari-device-check.md)。相机、传感器、定位权限需要由用户在 iPhone 上自行确认。
+Follow the [Safari checklist](docs/safari-device-check.en.md). The user grants camera, motion and location permissions on the iPhone.
 
-## 当前验证边界
+## Validation limits
 
-项目测试分为自动化逻辑测试、桌面浏览器检查、iPhone 真机实测三类。前两类通过不代表 iPhone 硬件能力已经通过。最新状态见 [项目状态](docs/project-status.md)。
+Separate automated logic tests, desktop-browser checks and physical iPhone tests. The first two do not establish phone hardware acceptance. See [project status](docs/project-status.en.md) for the latest retained evidence.
 
-精确坐标默认不会写入导出的报告。报告和相机画面不会自动上传；不要将含坐标的测试报告提交 Git。当前页面刷新会清空本次测试状态。
+Exact coordinates are excluded from exported reports by default. Reports and camera frames do not upload automatically. Do not commit reports containing locations. Reloading the page clears the current test state.
 
-## 目录
+## Process records and guidelines
 
-- `src/`、`public/assets/`：从交接包导入的原型。
-- `public/device-check/`：无第三方运行依赖的真机诊断页面。
-- `scripts/`：只提供诊断页面的本地服务器。
-- `tests/`：数据有效性、权限和生命周期测试。
-- `docs/archive/`：原始 proposal、交接说明和来源校验清单。
-- `docs/`：已确认范围、测试方法与实测状态。
+- [English progress](progress/en/README.md) / [中文进度](progress/zh-CN/README.md)
+- [Repository guidelines](docs/repository-guidelines.en.md) / [agent rules](AGENTS.md)
+- Keep separate Chinese and English versions of maintained prose, updated in the same commit. Weekly summaries follow Form 1. Retain course-platform submission receipts separately.
 
-原始 proposal 中的 Rokid 眼镜方案为历史背景；当前手机网页决策以项目状态文档为准。包含 API 密钥或个人信息的课程资料保留在仓库外。
+## Layout
+
+- `src/`, `public/assets/`: imported prototype.
+- `public/device-check/`: diagnostics with no third-party runtime dependencies.
+- `scripts/`: server exposing only diagnostic assets.
+- `tests/`: data validity, permission and lifecycle checks.
+- `docs/archive/`: original proposal, handoff notes and source checksums.
+- `docs/`: bilingual guidelines, confirmed scope, methods and retained results.
+- `progress/`: bilingual daily records, weekly templates, indexes and shared sanitized evidence.
+
+The original Rokid-glasses proposal is historical context; current mobile-web decisions are in project status. Course material containing API keys or personal information stays outside this repository.

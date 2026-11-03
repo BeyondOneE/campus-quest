@@ -1,5 +1,7 @@
 # iPhone Safari 真机验证
 
+[English](safari-device-check.en.md)
+
 目标设备：用户通过 USB 读取的 `iPhone18,1`，iOS `27.2`，构建 `24B5089g`。USB 读取只证明设备基础信息可读，不证明 Safari 硬件功能通过。
 
 ## 打开页面

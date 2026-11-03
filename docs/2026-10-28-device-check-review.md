@@ -1,5 +1,7 @@
 # 2026-10-28 iPhone 浏览器实测审阅
 
+[English](2026-10-28-device-check-review.en.md)
+
 ## 来源与环境
 
 - 用户提供 `campus-quest-safari-2026-10-28T09-45-14-625Z.json`，SHA256：`f39d74388190c0bb1ecbe679466f164aa9412d0452dbc28bdf4d7455646e4fc5`。

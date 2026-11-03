@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "recordedDate": "2026-11-03",
+  "timeZone": "Asia/Shanghai",
+  "evidenceId": "E-20261103-002",
+  "gitHeadBeforeChange": "bb1463a",
+  "languagePairs": 16,
+  "progressPairs": 8,
+  "localMarkdownLinksChecked": 106,
+  "matchingRecordIdsHashesAndCommitReferences": true,
+  "matchingNormalizedNumericTokens": true,
+  "evidenceIdsUnique": true,
+  "privateSourceHashVerified": true,
+  "implementationCommitsResolved": true,
+  "numberedWeeklyFilesCreated": false,
+  "codeTestsRun": false,
+  "phoneTestsRun": false,
+  "result": "passed",
+  "pairs": [
+    [
+      "progress/zh-CN/README.md",
+      "progress/en/README.md"
+    ],
+    [
+      "progress/zh-CN/course-requirements.md",
+      "progress/en/course-requirements.md"
+    ],
+    [
+      "progress/zh-CN/daily/2026-10-28.md",
+      "progress/en/daily/2026-10-28.md"
+    ],
+    [
+      "progress/zh-CN/daily/2026-11-03.md",
+      "progress/en/daily/2026-11-03.md"
+    ],
+    [
+      "progress/zh-CN/evidence/README.md",
+      "progress/en/evidence/README.md"
+    ],
+    [
+      "progress/zh-CN/templates/daily.md",
+      "progress/en/templates/daily.md"
+    ],
+    [
+      "progress/zh-CN/templates/weekly.md",
+      "progress/en/templates/weekly.md"
+    ],
+    [
+      "progress/zh-CN/weekly/README.md",
+      "progress/en/weekly/README.md"
+    ],
+    [
+      "README.zh-CN.md",
+      "README.md"
+    ],
+    [
+      "AGENTS.zh-CN.md",
+      "AGENTS.md"
+    ],
+    [
+      "docs/repository-guidelines.zh-CN.md",
+      "docs/repository-guidelines.en.md"
+    ],
+    [
+      "progress/README.zh-CN.md",
+      "progress/README.md"
+    ],
+    [
+      "progress/evidence/README.zh-CN.md",
+      "progress/evidence/README.md"
+    ],
+    [
+      "docs/project-status.md",
+      "docs/project-status.en.md"
+    ],
+    [
+      "docs/safari-device-check.md",
+      "docs/safari-device-check.en.md"
+    ],
+    [
+      "docs/2026-10-28-device-check-review.md",
+      "docs/2026-10-28-device-check-review.en.md"
+    ]
+  ]
+}
