@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "verifiedOn": "2026-11-03",
+  "verifiedOn": "2026-11-04",
   "timeZone": "Asia/Shanghai",
   "records": [
     {
@@ -146,6 +146,141 @@
       "type": "frontend-handoff-document-validation",
       "committed": true,
       "artifact": "2026-11-03/frontend-handoff-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261104-001",
+      "eventDate": "2026-11-04",
+      "type": "frontend-screen-redesign-desktop-check",
+      "committed": true,
+      "artifact": "2026-11-04/frontend-redesign-checks.json",
+      "physicalSafariAcceptance": false,
+      "screenshots": [
+        {
+          "artifact": "2026-11-04/redesign-entry-390-desktop.jpg",
+          "sha256": "b7d61bda9f5f8ea5ccb7fb90dc80161217f4e787af7c4d0d8f90e746f34a906f"
+        },
+        {
+          "artifact": "2026-11-04/redesign-place-390-desktop.jpg",
+          "sha256": "6717e53e1e042c0801e9ed3f744a8ed5c92f56c37b0a659c03f9a7d6dcb3e9ec"
+        },
+        {
+          "artifact": "2026-11-04/redesign-menu-390-desktop.jpg",
+          "sha256": "1717ddf24d3aa0a0afa9ea3f821fc9be9a759ba2903c1ec0f495152487d1bec0"
+        },
+        {
+          "artifact": "2026-11-04/redesign-move-320-desktop.jpg",
+          "sha256": "3b0dc8c20f4993c3b57fff6bdb7864168a9d87b10b367ed8de1af67acb58fc26"
+        }
+      ],
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261104-002",
+      "eventDate": "2026-11-04",
+      "type": "frontend-visual-motion-desktop-check",
+      "committed": true,
+      "artifact": "2026-11-04/visual-motion-checks.json",
+      "screenshots": [
+        {
+          "artifact": "2026-11-04/visual-entry-390-desktop.jpg",
+          "sha256": "bac91c2310ad9db05fa32993d2af559a259421a6bce42d8dde858a83b0d0b0cb"
+        },
+        {
+          "artifact": "2026-11-04/visual-place-390-desktop.jpg",
+          "sha256": "3346e7257e0390dd5cb8483097ad8be1267652dd7ea074815e3998ab269138ce"
+        },
+        {
+          "artifact": "2026-11-04/visual-ready-390-desktop.jpg",
+          "sha256": "e80ac83887da9d4dddeada67d6933358b21e645669de50e1921e5c9fc9f5696f"
+        },
+        {
+          "artifact": "2026-11-04/visual-camera-simulated-390-desktop.jpg",
+          "sha256": "bcd71fc7015500ecad0cb2684b4f5f46d5721baecdadb915de0e55524050d808"
+        },
+        {
+          "artifact": "2026-11-04/visual-claimed-390-desktop.jpg",
+          "sha256": "dbca43d6317209e9069ed5a6b3dd1bf7432081751dc2583b47fa467bf559848c"
+        },
+        {
+          "artifact": "2026-11-04/visual-claimed-320-desktop.jpg",
+          "sha256": "de23d84207624e047ca02d503b3b0d656108ee3c51544992cb36a8d5d418600a"
+        }
+      ],
+      "source": "desktop-in-app-browser-isolated-test-database",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261104-003",
+      "eventDate": "2026-11-04",
+      "type": "frontend-menu-jolt-and-calm-pass-desktop-check",
+      "committed": true,
+      "artifact": "2026-11-04/calm-pass-checks.json",
+      "screenshots": [
+        {
+          "artifact": "2026-11-04/calm-entry-390-desktop.jpg",
+          "sha256": "dd4002784acdb66e1dafe135d58f73b70abf2e39452908f47a054013bd746bd4"
+        },
+        {
+          "artifact": "2026-11-04/calm-place-390-desktop.jpg",
+          "sha256": "5998890684003087528286d93797e1e974497805764c361bb510cd7284c15708"
+        },
+        {
+          "artifact": "2026-11-04/calm-leave-390-desktop.jpg",
+          "sha256": "b0ae12e5fdb7ff88022cfdb60a883fa5afa6346ef0b702ec447425ba52875833"
+        },
+        {
+          "artifact": "2026-11-04/calm-camera-simulated-390-desktop.jpg",
+          "sha256": "ca863c5a8029311bd83864c8d039dffd42d1b93297ed7904cba51e4960743d89"
+        },
+        {
+          "artifact": "2026-11-04/calm-claimed-390-desktop.jpg",
+          "sha256": "f8adfa7754c9eb9d153d8d0f777c64ee4e5db25778e4ca28096d9db88134c40f"
+        },
+        {
+          "artifact": "2026-11-04/calm-claimed-320-desktop.jpg",
+          "sha256": "c5e18fd1ca6772ff1f5477ef44132570b7f6856596e33eb6b1d5f01a9dab2d01"
+        }
+      ],
+      "source": "desktop-in-app-browser-isolated-test-database",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261104-004",
+      "eventDate": "2026-11-04",
+      "type": "frontend-fantasy-background-desktop-check",
+      "committed": true,
+      "artifact": "2026-11-04/forest-checks.json",
+      "screenshots": [
+        {
+          "artifact": "2026-11-04/forest-entry-390-desktop.jpg",
+          "sha256": "04f2f2dfc367105fc2fd4b907f87dab6e25649b1332338d7a6e3ff22e104bdc5"
+        },
+        {
+          "artifact": "2026-11-04/forest-return-390-desktop.jpg",
+          "sha256": "e66f7e58ee559afde2be14e9449c3e68c006f60b6f8f5bb46ccfd29a9213d122"
+        },
+        {
+          "artifact": "2026-11-04/forest-claimed-390-desktop.jpg",
+          "sha256": "1ee3d89a39aece138ad971f1bd39abb764632f43a36f2a26407428e0c7cc06ad"
+        }
+      ],
+      "source": "desktop-in-app-browser-isolated-test-database",
       "physicalSafariAcceptance": false,
       "notes": {
         "zh-CN": "../zh-CN/evidence/README.md",

@@ -8,7 +8,7 @@ Frontend work can start against the existing backend. Claude owns visual design,
 
 Work in `/home/beyondonee/projects/campus-quest`. `/home/beyondonee/Documents/xjtlu/workspace/ent207tc` holds course material and original handoff documents. Preserve those originals and `docs/archive/`.
 
-This handoff prepares Claude's work; it does not claim Claude has received it, implemented a design or passed user acceptance. The current visual design is replaceable. The user accepted the interaction logic and deferred outdoor tests because the dormitory lacks space.
+This handoff prepares Claude's work; it does not claim Claude has received it, implemented a design or passed user acceptance. The current visual design is replaceable. The user stated on 2026-11-04 that place → leave → return → camera claim is only a provisional test flow, not the final design; outdoor tests are deferred because the dormitory lacks space. Claude has changed the page to non-scrolling screens; see CQ-20261104-001, with visuals and motion redone in CQ-20261104-002.
 
 ## Course context and reading priority
 
@@ -125,4 +125,4 @@ Return a changed-file summary, actual checks / outcomes, screenshots, remaining 
 
 ## Working tree and handoff transport
 
-The reviewed working tree contains uncommitted modifications and untracked backend, treasure UI, tests and docs. Do not reset, clean, overwrite or switch away from them blindly. A fresh remote clone or `git show HEAD` does not contain this complete baseline. If Claude works in this same directory, use these actual files; if it works elsewhere, transfer the required current source / tests / docs or establish an explicit Git checkpoint first. Exclude `.local/`, credentials, certificate private keys and raw phone reports. No commit or push was made by this documentation task.
+The backend, treasure UI, tests and docs are committed on local `main` (057b9d9) and not yet pushed; later frontend changes are in subsequent commits. Do not reset, clean, overwrite or switch away from them blindly. A fresh remote clone does not contain this complete baseline until it is pushed. If Claude works in this same directory, use these actual files; if it works elsewhere, transfer the required current source / tests / docs or establish an explicit Git checkpoint first. Exclude `.local/`, credentials, certificate private keys and raw phone reports. No commit or push was made by this documentation task.

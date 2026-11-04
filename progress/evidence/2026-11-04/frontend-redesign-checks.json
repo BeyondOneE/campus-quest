@@ -1,0 +1,14 @@
+{
+  "id": "E-20261104-001",
+  "checkedOn": "2026-11-04",
+  "environment": "Desktop app browser pane with emulated viewports; isolated backend on loopback port 4190 with a temporary database. The running .local database was not touched.",
+  "automated": { "npmTest": { "tests": 49, "pass": 49, "fail": 0 }, "npmRunBuild": "passed; existing prototype chunk-size warning remains", "npmCi": "not run; dependencies unchanged" },
+  "browserChecks": {
+    "viewports": ["390x664", "320x500", "desktop pane"],
+    "pageScroll": "document height equalled viewport height on checked screens; no horizontal overflow",
+    "walkedStates": ["entry", "create room", "join error", "location on", "place", "leave", "return", "ready", "camera live", "claimed", "move treasure", "menu", "account", "register with a 1-character password", "sign out", "sign in", "switch room", "reload restore"],
+    "smallestViewportNote": "At 320x500 the menu sheet content is 505 px in a 460 px sheet, so that sheet scrolls internally; the page itself does not."
+  },
+  "simulatedInputs": "Geolocation and getUserMedia were replaced from the browser console, in the test tab only, with synthetic coordinates near 0,0 and a generated canvas stream. No stub ships in the page.",
+  "notEvidenceOf": ["iPhone Safari behaviour", "real location or camera", "Safari toolbar and on-screen keyboard layout", "phone certificate trust", "multiple real phones"]
+}

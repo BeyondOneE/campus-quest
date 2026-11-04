@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedOn": "2026-11-03",
+  "reviewedOn": "2026-11-04",
   "source": "public/treasure-lab/index.html",
   "controller": "public/treasure-lab/app.js",
   "mode": "retain-ids-and-element-semantics-when-reusing-controller",
@@ -10,83 +10,35 @@
   },
   "elements": [
     {
-      "id": "environment",
-      "tag": "p",
-      "initiallyHidden": false,
-      "initiallyDisabled": false,
-      "attributes": {
-        "role": "status"
-      }
-    },
-    {
-      "id": "account-title",
-      "tag": "h2",
+      "id": "app",
+      "tag": "div",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
     {
-      "id": "account-status",
-      "tag": "p",
-      "initiallyHidden": false,
-      "initiallyDisabled": false,
-      "attributes": {
-        "role": "status"
-      }
-    },
-    {
-      "id": "account-form",
-      "tag": "form",
+      "id": "screens",
+      "tag": "div",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
     {
-      "id": "username",
-      "tag": "input",
+      "id": "screen-loading",
+      "tag": "section",
       "initiallyHidden": false,
       "initiallyDisabled": false,
-      "attributes": {
-        "minlength": "3",
-        "maxlength": "32",
-        "pattern": "[A-Za-z0-9_]{3,32}",
-        "autocomplete": "username",
-        "required": true
-      }
+      "attributes": {}
     },
     {
-      "id": "password",
-      "tag": "input",
-      "initiallyHidden": false,
+      "id": "screen-entry",
+      "tag": "section",
+      "initiallyHidden": true,
       "initiallyDisabled": false,
-      "attributes": {
-        "type": "password",
-        "minlength": "15",
-        "maxlength": "256",
-        "autocomplete": "current-password",
-        "required": true
-      }
+      "attributes": {}
     },
     {
-      "id": "login",
-      "tag": "button",
-      "initiallyHidden": false,
-      "initiallyDisabled": false,
-      "attributes": {
-        "type": "submit"
-      }
-    },
-    {
-      "id": "register",
-      "tag": "button",
-      "initiallyHidden": false,
-      "initiallyDisabled": false,
-      "attributes": {
-        "type": "button"
-      }
-    },
-    {
-      "id": "logout",
+      "id": "entry-back",
       "tag": "button",
       "initiallyHidden": true,
       "initiallyDisabled": false,
@@ -95,24 +47,33 @@
       }
     },
     {
-      "id": "account-rooms",
-      "tag": "p",
+      "id": "open-account",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "entry-brand",
+      "tag": "h1",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
     {
-      "id": "account-error",
+      "id": "environment",
       "tag": "p",
-      "initiallyHidden": false,
+      "initiallyHidden": true,
       "initiallyDisabled": false,
       "attributes": {
-        "role": "alert"
+        "role": "status"
       }
     },
     {
-      "id": "session-title",
-      "tag": "h2",
+      "id": "entry-home",
+      "tag": "div",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
@@ -127,6 +88,61 @@
       }
     },
     {
+      "id": "room-shortcuts",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "show-create",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "show-join",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "entry-form",
+      "tag": "form",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "entry-cancel",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "entry-title",
+      "tag": "h2",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "nickname-field",
+      "tag": "div",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
       "id": "nickname",
       "tag": "input",
       "initiallyHidden": false,
@@ -137,32 +153,74 @@
       }
     },
     {
+      "id": "code-field",
+      "tag": "div",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
       "id": "room-code",
       "tag": "input",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {
         "maxlength": "8",
+        "minlength": "8",
         "autocomplete": "off"
       }
     },
     {
-      "id": "create-room",
+      "id": "entry-submit",
       "tag": "button",
       "initiallyHidden": false,
       "initiallyDisabled": false,
-      "attributes": {}
+      "attributes": {
+        "type": "submit"
+      }
     },
     {
-      "id": "join-room",
-      "tag": "button",
-      "initiallyHidden": false,
-      "initiallyDisabled": false,
-      "attributes": {}
-    },
-    {
-      "id": "room-status",
+      "id": "connection-error",
       "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "alert"
+      }
+    },
+    {
+      "id": "screen-field",
+      "tag": "section",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "open-room",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "room-label",
+      "tag": "b",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "player-count",
+      "tag": "span",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "location-status",
+      "tag": "span",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {
@@ -170,20 +228,20 @@
       }
     },
     {
-      "id": "players",
-      "tag": "p",
-      "initiallyHidden": false,
-      "initiallyDisabled": false,
-      "attributes": {}
-    },
-    {
-      "id": "connection-error",
-      "tag": "p",
+      "id": "open-menu",
+      "tag": "button",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {
-        "role": "alert"
+        "type": "button"
       }
+    },
+    {
+      "id": "steps",
+      "tag": "ol",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
     },
     {
       "id": "step-place",
@@ -214,27 +272,32 @@
       "attributes": {}
     },
     {
-      "id": "location-title",
-      "tag": "h2",
+      "id": "gauge",
+      "tag": "div",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
     {
-      "id": "location-status",
-      "tag": "span",
+      "id": "gauge-zone",
+      "tag": "circle",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
     {
-      "id": "location-message",
-      "tag": "p",
+      "id": "gauge-arc",
+      "tag": "circle",
       "initiallyHidden": false,
       "initiallyDisabled": false,
-      "attributes": {
-        "role": "status"
-      }
+      "attributes": {}
+    },
+    {
+      "id": "gauge-head",
+      "tag": "g",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
     },
     {
       "id": "distance",
@@ -244,54 +307,35 @@
       "attributes": {}
     },
     {
-      "id": "accuracy",
-      "tag": "strong",
+      "id": "distance-label",
+      "tag": "span",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
     {
-      "id": "age",
-      "tag": "strong",
+      "id": "collected",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "receipt",
+      "tag": "p",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
     {
-      "id": "start-location",
-      "tag": "button",
+      "id": "headline",
+      "tag": "h2",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
     {
-      "id": "stop-location",
-      "tag": "button",
-      "initiallyHidden": false,
-      "initiallyDisabled": true,
-      "attributes": {}
-    },
-    {
-      "id": "radius",
-      "tag": "input",
-      "initiallyHidden": false,
-      "initiallyDisabled": false,
-      "attributes": {
-        "type": "number",
-        "min": "15",
-        "max": "100",
-        "step": "5"
-      }
-    },
-    {
-      "id": "place",
-      "tag": "button",
-      "initiallyHidden": false,
-      "initiallyDisabled": true,
-      "attributes": {}
-    },
-    {
-      "id": "journey-message",
+      "id": "message",
       "tag": "p",
       "initiallyHidden": false,
       "initiallyDisabled": false,
@@ -300,16 +344,126 @@
       }
     },
     {
-      "id": "camera-title",
-      "tag": "h2",
+      "id": "readouts",
+      "tag": "dl",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
     {
-      "id": "camera-status",
-      "tag": "span",
+      "id": "accuracy",
+      "tag": "dd",
       "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "age",
+      "tag": "dd",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "alert",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "alert"
+      }
+    },
+    {
+      "id": "place-panel",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "radius-value",
+      "tag": "output",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "for": "radius"
+      }
+    },
+    {
+      "id": "radius",
+      "tag": "input",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "range",
+        "min": "15",
+        "max": "100",
+        "step": "5"
+      }
+    },
+    {
+      "id": "place-note",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "place",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": true,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "start-location",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "place-cancel",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "location-note",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "start-camera",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": true,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "rehide",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "screen-camera",
+      "tag": "section",
+      "initiallyHidden": true,
       "initiallyDisabled": false,
       "attributes": {}
     },
@@ -319,9 +473,9 @@
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {
-        "autoplay": true,
-        "muted": true,
-        "playsinline": true
+        "autoplay": "",
+        "muted": "",
+        "playsinline": ""
       }
     },
     {
@@ -332,18 +486,31 @@
       "attributes": {}
     },
     {
+      "id": "camera-status",
+      "tag": "span",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "stop-camera",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
       "id": "treasure",
       "tag": "button",
       "initiallyHidden": true,
       "initiallyDisabled": true,
-      "attributes": {}
-    },
-    {
-      "id": "collected",
-      "tag": "div",
-      "initiallyHidden": true,
-      "initiallyDisabled": false,
-      "attributes": {}
+      "attributes": {
+        "type": "button"
+      }
     },
     {
       "id": "camera-message",
@@ -355,23 +522,211 @@
       }
     },
     {
-      "id": "start-camera",
-      "tag": "button",
-      "initiallyHidden": false,
-      "initiallyDisabled": true,
-      "attributes": {}
-    },
-    {
-      "id": "stop-camera",
-      "tag": "button",
-      "initiallyHidden": false,
-      "initiallyDisabled": true,
-      "attributes": {}
-    },
-    {
       "id": "retry-playback",
       "tag": "button",
       "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "scrim",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "sheet-menu",
+      "tag": "section",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "dialog"
+      }
+    },
+    {
+      "id": "sheet-room-code",
+      "tag": "b",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "copy-code",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "players",
+      "tag": "ul",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "account-status",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "open-account-menu",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "logout",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "stop-location",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": true,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "move-treasure",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "switch-room",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "open-notes",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "sheet-account",
+      "tag": "section",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "dialog"
+      }
+    },
+    {
+      "id": "account-title",
+      "tag": "h2",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "account-form",
+      "tag": "form",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "username",
+      "tag": "input",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "minlength": "3",
+        "maxlength": "32",
+        "pattern": "[A-Za-z0-9_]{3,32}",
+        "autocomplete": "username",
+        "required": ""
+      }
+    },
+    {
+      "id": "password",
+      "tag": "input",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "password",
+        "maxlength": "128",
+        "autocomplete": "current-password",
+        "required": ""
+      }
+    },
+    {
+      "id": "account-error",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "alert"
+      }
+    },
+    {
+      "id": "register",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "login",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "submit"
+      }
+    },
+    {
+      "id": "account-hint",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "sheet-notes",
+      "tag": "section",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "dialog"
+      }
+    },
+    {
+      "id": "notes-title",
+      "tag": "h2",
+      "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
@@ -389,7 +744,9 @@
       "tag": "button",
       "initiallyHidden": false,
       "initiallyDisabled": false,
-      "attributes": {}
+      "attributes": {
+        "type": "button"
+      }
     },
     {
       "id": "report-status",
@@ -399,6 +756,20 @@
       "attributes": {
         "role": "status"
       }
+    },
+    {
+      "id": "fx",
+      "tag": "canvas",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "flash",
+      "tag": "div",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
     }
   ]
 }

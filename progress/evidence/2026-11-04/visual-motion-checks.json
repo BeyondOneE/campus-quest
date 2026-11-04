@@ -1,0 +1,51 @@
+{
+  "id": "E-20261104-002",
+  "checkedOn": "2026-11-04",
+  "environment": "Desktop app browser pane with emulated viewports; isolated backend on loopback port 4190, run from a temporary working directory so its database was separate. The running .local database was not touched.",
+  "automated": {
+    "npmTest": {
+      "tests": 49,
+      "pass": 49,
+      "fail": 0
+    },
+    "npmRunBuild": "passed; existing prototype chunk-size warning remains",
+    "npmCi": "not run; dependencies unchanged"
+  },
+  "browserChecks": {
+    "viewports": [
+      "390x780",
+      "320x500",
+      "desktop pane"
+    ],
+    "walkedStates": [
+      "entry",
+      "create room",
+      "location on",
+      "place with radius preview",
+      "leave",
+      "return",
+      "ready",
+      "camera live",
+      "claim ceremony",
+      "claimed",
+      "menu sheet open and close",
+      "move treasure",
+      "switch room",
+      "reload restore"
+    ],
+    "sampled": {
+      "exitCopiesRemovedAfterAnimation": true,
+      "horizontalOverflow": false,
+      "cspErrorsInConsole": 0
+    }
+  },
+  "simulatedInputs": "Geolocation and getUserMedia were replaced from the browser console, in the test tab only, with synthetic coordinates near 0,0 and a generated canvas stream. No stub ships in the page.",
+  "limits": "Screenshots are still frames. The pane was hidden during part of the run, which throttles animation, so smoothness and frame rate were not measured. Fonts differ on iPhone: Didot, Baskerville and SF Rounded are iOS fonts and desktop screenshots show fallbacks.",
+  "notEvidenceOf": [
+    "iPhone Safari behaviour or animation performance",
+    "real location or camera",
+    "Safari toolbar and on-screen keyboard layout",
+    "phone certificate trust",
+    "user or grader reaction"
+  ]
+}

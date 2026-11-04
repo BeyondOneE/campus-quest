@@ -1,20 +1,163 @@
 import { RemoteTreasureSession } from './client.js';
 
+// Motion only decorates. State, text and [hidden] always change synchronously first, and
+// every effect here does nothing when the browser lacks it or asks for reduced motion.
+function createMotion({ document, window, canvas }) {
+  const calm = !window.requestAnimationFrame || !window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const noop = () => {};
+  if (calm) return { calm, ghost: noop, pulse: noop, swapIn: noop, flip: noop, burst: noop, flash: noop, ambient: noop, count: (el, value) => { el.textContent = value === null ? '—' : `${value} m`; } };
+  const ctx = canvas.getContext?.('2d'), particles = [], gold = ['#fff3bf', '#ffd262', '#f8c64f', '#ffb84a'];
+  const places = new Map();
+  let width = 0, height = 0, ratio = 1, frame = 0, mode = 'dust', tick = 0, target = null, shown = null, tween = 0;
+  const resize = () => {
+    ratio = Math.min(window.devicePixelRatio || 1, 2); width = canvas.clientWidth; height = canvas.clientHeight;
+    canvas.width = width * ratio; canvas.height = height * ratio;
+  };
+  const between = (low, high) => low + Math.random() * (high - low);
+  function spawnAmbient() {
+    if (mode === 'dust' && particles.filter(p => p.kind === 'dust').length < 8 && Math.random() < .05) {
+      particles.push({ kind: 'dust', x: between(0, width), y: between(height * .35, height), vx: between(-6, 6), vy: between(-22, -8), size: between(.6, 1.4), age: 0, life: between(4, 9), phase: between(0, 6) });
+    }
+    if (mode === 'sparkle' && Math.random() < .08) {
+      const angle = between(0, 6.28), reach = between(50, Math.min(width, 460) * .42);
+      particles.push({ kind: 'spark', x: width / 2 + Math.cos(angle) * reach, y: height * .47 + Math.sin(angle) * reach * .8, vx: 0, vy: between(-30, -8), size: between(3, 8), age: 0, life: between(.6, 1.2), phase: 0 });
+    }
+  }
+  function draw(p, t) {
+    const fade = Math.min(1, t * 5) * Math.min(1, (1 - t) * 3);
+    ctx.globalAlpha = fade;
+    if (p.kind === 'coin') {
+      p.spin += .22;
+      ctx.fillStyle = Math.cos(p.spin) > 0 ? '#ffd262' : '#c98a1f';
+      ctx.beginPath(); ctx.ellipse(p.x, p.y, p.size * Math.max(.18, Math.abs(Math.cos(p.spin))), p.size, p.tilt, 0, 6.29); ctx.fill();
+    } else if (p.kind === 'spark') {
+      const r = p.size * (1 - t * .4), w = r * .16;
+      ctx.fillStyle = p.color || '#fff6cf';
+      ctx.beginPath(); ctx.moveTo(p.x, p.y - r); ctx.lineTo(p.x + w, p.y - w); ctx.lineTo(p.x + r, p.y); ctx.lineTo(p.x + w, p.y + w);
+      ctx.lineTo(p.x, p.y + r); ctx.lineTo(p.x - w, p.y + w); ctx.lineTo(p.x - r, p.y); ctx.lineTo(p.x - w, p.y - w); ctx.fill();
+    } else {
+      ctx.globalAlpha = fade * .85; ctx.fillStyle = '#d6f5a4';
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, 6.29); ctx.fill();
+    }
+  }
+  let last = 0;
+  function loop(time) {
+    frame = 0;
+    if (document.hidden || !ctx) return;
+    const dt = Math.min(.05, (time - last) / 1000 || .016); last = time;
+    if (canvas.clientWidth !== width || canvas.clientHeight !== height) resize();
+    tick += 1;
+    // Quiet moments run at half rate; only a burst earns every frame.
+    const busy = particles.some(p => p.kind === 'coin');
+    if (busy || tick % 2 === 0) {
+      spawnAmbient();
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0); ctx.clearRect(0, 0, width, height);
+      const step = busy ? dt : dt * 2;
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i]; p.age += step;
+        if (p.age >= p.life) { particles.splice(i, 1); continue; }
+        p.vy += (p.gravity || 0) * step; p.vx *= p.drag || 1;
+        p.x += (p.vx + (p.kind === 'dust' ? Math.sin(p.age + p.phase) * 8 : 0)) * step; p.y += p.vy * step;
+        draw(p, p.age / p.life);
+      }
+      ctx.globalAlpha = 1;
+    }
+    if (particles.length || mode !== 'none') frame = window.requestAnimationFrame(loop);
+    else ctx.clearRect(0, 0, width, height);
+  }
+  const kick = () => { if (!frame && !document.hidden && ctx) frame = window.requestAnimationFrame(loop); };
+  return {
+    calm,
+    // Leaves a decorative copy animating out while the real element is already hidden.
+    ghost(element, keyframes, ms) {
+      const copy = element.cloneNode?.(true);
+      if (!copy) return;
+      copy.removeAttribute('id'); copy.querySelectorAll('[id]').forEach(child => child.removeAttribute('id'));
+      copy.querySelectorAll('video').forEach(child => child.remove());
+      copy.classList.add('ghost'); copy.setAttribute('aria-hidden', 'true'); copy.setAttribute('inert', '');
+      element.before(copy);
+      copy.animate(keyframes, { duration: ms, easing: 'cubic-bezier(.4,0,.7,.2)', fill: 'forwards' });
+      // A timer, not onfinish: animations stall in a throttled page and a copy must never linger.
+      window.setTimeout(() => copy.remove(), ms + 40);
+    },
+    pulse(element, amount = 1.08) {
+      element.animate?.([{ transform: 'scale(1)' }, { transform: `scale(${amount})` }, { transform: 'scale(1)' }], { duration: 560, easing: 'cubic-bezier(.2,1.25,.35,1)' });
+    },
+    swapIn(element) {
+      element.animate?.([{ opacity: 0, transform: 'translateY(9px)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.22,.8,.24,1)' });
+    },
+    // When the layout settles somewhere new, glide there instead of jumping.
+    flip(elements) {
+      for (const element of elements) {
+        if (typeof element.offsetTop !== 'number') continue;
+        const was = places.get(element), now = element.offsetWidth ? { x: element.offsetLeft, y: element.offsetTop, w: element.offsetWidth } : null;
+        places.set(element, now);
+        if (!was || !now) continue;
+        const dy = was.y - now.y, dx = was.x - now.x, scale = was.w / now.w;
+        if (Math.abs(dy) < 2 && Math.abs(dx) < 2 && Math.abs(scale - 1) < .01) continue;
+        element.animate?.([{ transform: `translate(${dx}px,${dy}px) scale(${scale})` }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.22,.8,.24,1)' });
+      }
+    },
+    forgetPlaces() { places.clear(); },
+    burst(element, size = 1) {
+      const box = element.getBoundingClientRect?.();
+      if (!box || !box.width || !ctx) return;
+      if (!width) resize();
+      const x = box.left + box.width / 2, y = box.top + box.height * .45;
+      for (let i = 0; i < 46 * size; i++) {
+        const angle = between(-3.05, -.09), speed = between(160, 560) * Math.sqrt(size), coin = i % 2 === 0;
+        particles.push({ kind: coin ? 'coin' : 'spark', x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, gravity: 720, drag: .992,
+          size: coin ? between(4, 8) : between(4, 11), spin: between(0, 6), tilt: between(-.5, .5), age: 0, life: between(1.1, 2.1), color: gold[i % 4] });
+      }
+      kick();
+    },
+    flash(element) {
+      element.animate?.([{ opacity: 0 }, { opacity: .95, offset: .16 }, { opacity: 0 }], { duration: 760, easing: 'ease-out' });
+    },
+    ambient(next) { mode = next; if (mode !== 'none') kick(); },
+    // Distance rolls to each new reading rather than snapping.
+    count(element, value) {
+      if (value === null) { window.cancelAnimationFrame(tween); tween = 0; target = shown = null; element.textContent = '—'; return; }
+      if (value === target) return;
+      target = value;
+      const from = shown ?? value, start = window.performance?.now?.() ?? 0;
+      window.cancelAnimationFrame(tween);
+      const roll = time => {
+        const t = Math.min(1, Math.max(0, (time - start) / 500)), eased = 1 - (1 - t) ** 3;
+        shown = Math.round(from + (value - from) * eased); element.textContent = `${shown} m`;
+        tween = t < 1 ? window.requestAnimationFrame(roll) : 0;
+      };
+      if (from === value || document.hidden) { shown = value; element.textContent = `${value} m`; }
+      else tween = window.requestAnimationFrame(roll);
+    },
+  };
+}
+
 export function mountTreasureLab({ document, window, navigator, now = () => Date.now(), session = new RemoteTreasureSession({ now }) }) {
   const $ = id => document.getElementById(id);
+  const motion = createMotion({ document, window, canvas: $('fx') });
   const createdAt = new Date(now()).toISOString();
   const video = $('camera');
   let watch = null, locationToken = 0, stream = null, cameraToken = 0, frameCallback = null;
   let cameraPending = false, cameraError = null, cameraSettings = null;
   let frames = 0, lastFrameAt = null, lastVideoTime = -1, timer = null;
-  let locationError = '', cameraMessage = 'Leave the area and return to unlock the treasure.', nextPoll = 0, collecting = false;
+  let locationError = '', cameraMessage = '', cameraNotice = '', cameraFailure = '', nextPoll = 0, collecting = false;
+  // Which screen is showing follows session state; these only track what the player has opened.
+  let booted = !session.connect, entryMode = 'home', switching = false, placing = false, sheet = '', sheetOpener = null;
+  let playersKey = '', shortcutsKey = '', shownScreen = '', shownRound = null;
+  const phaseOrder = ['unplaced', 'leave', 'return', 'ready', 'collected'];
+  // Text in the field screen eases in when it actually changes; the value itself is set immediately.
+  const swapText = (id, text) => { const el = $(id); if (el.textContent !== text) { el.textContent = text; motion.swapIn(el); } };
   const settle = (result, done) => result && typeof result.then === 'function' ? result.then(done).catch(() => { render(); }) : done(result);
   const listen = (id, event, fn) => $(id).addEventListener(event, fn);
-  const badge = (id, text, tone = '') => { $(id).textContent = text; $(id).dataset.tone = tone; };
+  const chip = (id, text, tone = '') => { $(id).textContent = text; $(id).dataset.tone = tone; };
+  const show = (id, visible) => { $(id).hidden = !visible; };
+  const notify = (id, text) => { $(id).textContent = text; $(id).hidden = !text; };
   const secure = () => window.isSecureContext === true;
   const cameraLive = () => Boolean(stream && !document.hidden && !video.paused && frames > 0
     && lastFrameAt !== null && now() - lastFrameAt < 2500);
   function stopCamera(reason = 'Camera closed.') {
+    if ((stream || cameraPending) && reason !== 'Camera closed.') cameraNotice = reason;
     cameraToken += 1; cameraPending = false;
     if (frameCallback !== null && typeof video.cancelVideoFrameCallback === 'function') video.cancelVideoFrameCallback(frameCallback);
     frameCallback = null;
@@ -27,12 +170,12 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
     locationToken += 1;
     if (watch !== null) navigator.geolocation?.clearWatch(watch);
     watch = null; session.stop(now()); locationError = reason;
-    stopCamera('Location stopped and camera released. Restart manually when ready.');
+    stopCamera('Location stopped and camera released. Turn location back on when ready.');
     render();
   }
   function startLocation() {
     if (!secure() || document.hidden || session.connected === false) return;
-    stopLocation(); locationError = '';
+    stopLocation(); locationError = ''; cameraNotice = '';
     if (!navigator.geolocation) { locationError = 'Location is unavailable in this browser. Use iPhone Safari.'; render(); return; }
     const token = locationToken; session.start(now());
     try {
@@ -74,16 +217,17 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
   }
   async function startCamera() {
     if (!secure() || document.hidden || !session.snapshot(now()).eligible) return;
-    if (!navigator.mediaDevices?.getUserMedia) { cameraMessage = 'Camera is unavailable. Open a trusted HTTPS address.'; render(); return; }
+    cameraNotice = ''; cameraFailure = '';
+    if (!navigator.mediaDevices?.getUserMedia) { cameraFailure = 'Camera is unavailable. Open a trusted HTTPS address.'; render(); return; }
     stopCamera(); const token = cameraToken; cameraPending = true; cameraError = null;
     frames = 0; lastFrameAt = null; cameraSettings = null; lastVideoTime = -1;
-    cameraMessage = 'Waiting for camera permission. Please allow the rear camera.'; render();
+    cameraMessage = 'Allow the rear camera to continue.'; render();
     try {
       const acquired = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' },
         width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
       if (token !== cameraToken || document.hidden || !session.snapshot(now()).eligible) {
         acquired.getTracks().forEach(track => track.stop());
-        if (token === cameraToken) { cameraPending = false; cameraMessage = 'Location changed. Confirm you are still within treasure range.'; render(); }
+        if (token === cameraToken) { cameraPending = false; cameraNotice = 'Location changed. Confirm you are still within treasure range.'; render(); }
         return;
       }
       stream = acquired; cameraPending = false;
@@ -98,18 +242,107 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
         $('retry-playback').hidden = false;
       }
       if (token !== cameraToken) return;
-      cameraMessage = 'Waiting for live video. Tap the chest when it appears.';
+      cameraMessage = 'Waiting for live video…';
       session.log('camera-started', now()); render();
     } catch (error) {
       if (token !== cameraToken) return;
       stopCamera(); cameraError = error.name || 'Error';
-      cameraMessage = error.name === 'NotAllowedError' ? 'Camera permission denied. Check Safari website settings, then retry.'
+      cameraFailure = error.name === 'NotAllowedError' ? 'Camera permission denied. Check Safari website settings, then retry.'
         : 'Camera could not start. Close other apps using it, then retry.';
       session.log(`camera-error:${cameraError}`, now()); render();
     }
   }
+  function exitDistance() {
+    return (session.zone?.radius ?? 30) + (session.data?.report.config.exitMargin ?? 10);
+  }
+  // One title and one sentence for the current moment of the round.
+  function guidance(reading, tracking, owner, collected) {
+    if (collected && !placing) return ['Treasure claimed', owner ? 'Saved on the server. Hide another one to start a new round.' : 'Saved on the server. The host can start a new round.'];
+    if (!session.zone && !owner) return ['Waiting for the host', 'The host hasn’t hidden the treasure yet. Stay on this screen.'];
+    const title = placing ? 'Move the treasure' : session.zone
+      ? { unplaced: 'Hide the treasure', leave: 'Walk away', return: 'Head back', ready: reading.eligible ? 'Treasure found' : 'Hold on', collected: 'Treasure claimed' }[session.phase]
+      : 'Hide the treasure';
+    if (!tracking) return session.zone && !placing ? ['Location is off', 'Turn it on to keep hunting.'] : [title, 'Stand where you want to hide it, then turn on location.'];
+    const held = { stopped: 'Turn on location to continue.', waiting: 'Looking for your position. Keep this page open.',
+      stale: 'That reading is too old. Waiting for a fresh one.', imprecise: 'GPS accuracy is weaker than 20 m. Move somewhere more open and wait.',
+      boundary: 'You’re right at the edge. Move clearly in or out.' }[reading.kind];
+    if (held) return [title, held];
+    if (placing || !session.zone) return [title, placing ? 'It moves to where you’re standing, and everyone starts over.' : 'The treasure goes right where you’re standing. Everyone in this room hunts the same spot.'];
+    return [title, { leave: `Go at least ${exitDistance()} m from the treasure. We’ll tell you when to turn back.`,
+      return: reading.kind === 'inside' ? 'Almost there. Hold still for a few seconds.' : 'You’re far enough. Go back to where it was hidden.',
+      ready: reading.eligible ? 'Open the camera to spot it and claim it.' : 'Your position needs to settle before the camera can open.',
+      unplaced: '', collected: '' }[session.phase]];
+  }
+  function gaugeFill(reading, collected) {
+    if (placing) return 0;
+    if (collected || session.phase === 'ready') return 100;
+    const distance = reading.distance, reach = exitDistance();
+    if (distance === null || distance === undefined || !session.zone) return 0;
+    if (session.phase === 'leave') return Math.min(100, Math.round(distance / reach * 100));
+    if (session.phase === 'return') return Math.max(0, Math.min(100, Math.round((1 - (distance - session.zone.radius) / reach) * 100)));
+    return 0;
+  }
+  function renderRooms(data, tracking) {
+    const roomList = (session.accountRooms || []).filter(room => room.code !== data?.room.code);
+    const nextShortcuts = roomList.map(room => room.code).join();
+    if (nextShortcuts !== shortcutsKey) {
+      shortcutsKey = nextShortcuts;
+      $('room-shortcuts').replaceChildren(...roomList.map(room => {
+        const button = document.createElement('button');
+        button.type = 'button'; button.className = 'chip'; button.textContent = room.code;
+        button.setAttribute('aria-label', `Return to room ${room.code}`);
+        button.addEventListener('click', () => connect(room.code));
+        return button;
+      }));
+    }
+    show('room-shortcuts', roomList.length > 0);
+    const nextPlayers = data ? JSON.stringify([data.player.id, data.players]) : '';
+    if (nextPlayers !== playersKey) {
+      playersKey = nextPlayers;
+      $('players').replaceChildren(...(data?.players || []).map(player => {
+        const row = document.createElement('li'), name = document.createElement('span');
+        name.textContent = player.id === data.player.id ? `${player.name} (you)` : player.name;
+        row.append(name);
+        if (player.collected) { const mark = document.createElement('em'); mark.textContent = 'Claimed'; row.append(mark); }
+        return row;
+      }));
+    }
+    $('room-label').textContent = data?.room.code ?? '—';
+    $('sheet-room-code').textContent = data?.room.code ?? '—';
+    $('player-count').textContent = data ? `· ${data.room.playerCount}` : '';
+    if (data) $('open-room').setAttribute('aria-label', `Room ${data.room.code}, ${data.room.playerCount} players. Open room details.`);
+    $('stop-location').disabled = !tracking;
+    $('stop-location').textContent = tracking ? 'Turn off location' : 'Location is off';
+  }
+  function renderEntry(data) {
+    const signedIn = Boolean(session.account), guestForm = entryMode !== 'home';
+    show('entry-back', switching && session.connected === true);
+    $('open-account').textContent = signedIn ? `${session.account.username} · Sign out` : 'Sign in';
+    $('open-account').disabled = session.busy;
+    show('entry-home', !guestForm); show('entry-form', guestForm);
+    $('connection-status').textContent = session.busy ? 'Connecting…' : data && switching ? `You’re in room ${data.room.code}. Pick another room.`
+      : signedIn ? `Signed in as ${session.account.username}. Pick a room or create one.` : 'Playing as a guest. Sign in to keep your place across devices.';
+    $('show-create').disabled = session.busy; $('show-join').disabled = session.busy;
+    $('entry-title').textContent = entryMode === 'join' ? 'Join a room' : 'Create a room';
+    show('nickname-field', !signedIn); $('nickname').required = !signedIn;
+    show('code-field', entryMode === 'join'); $('room-code').required = entryMode === 'join';
+    $('entry-submit').disabled = session.busy;
+    $('entry-submit').textContent = session.busy ? 'Connecting…' : entryMode === 'join' ? 'Join room' : 'Create room';
+    notify('connection-error', session.lastError || '');
+  }
+  function renderAccount() {
+    if (!session.authenticate) return;
+    const signedIn = Boolean(session.account);
+    $('account-status').textContent = signedIn ? `Signed in as ${session.account.username}` : 'Playing as a guest';
+    show('open-account-menu', !signedIn); show('logout', signedIn);
+    for (const id of ['login', 'register', 'logout', 'username', 'password']) $(id).disabled = session.busy || !secure();
+    notify('account-error', session.lastError || (!secure() ? 'Use trusted HTTPS before entering a password.' : ''));
+    $('account-hint').textContent = session.connected
+      ? 'Creating an account keeps this room and your claims. Signing in switches to that account’s rooms instead. There’s no password recovery.'
+      : 'Use the same account on another device to come back as the same player. There’s no password recovery, so pick something you’ll remember.';
+  }
   function render() {
-    if (watch !== null && session.active === false) { stopLocation('Session changed. Restart location manually.'); return; }
+    if (watch !== null && session.active === false) { stopLocation('Session changed. Turn location back on when ready.'); return; }
     if (session.refresh && !document.hidden && now() >= nextPoll) {
       nextPoll = now() + 2000; session.refresh().then(() => render());
     }
@@ -118,72 +351,139 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
       lastVideoTime = video.currentTime; frameArrived(cameraToken);
     }
     const reading = session.snapshot(now());
-    if ((stream || cameraPending) && !reading.eligible) stopCamera('Location no longer meets collection conditions. Camera closed; reopen it near the treasure.');
-    const live = cameraLive(), collected = session.phase === 'collected';
-    const names = { stopped: 'Stopped', waiting: 'Waiting', stale: 'Reading expired', imprecise: 'Low accuracy',
-      unplaced: 'Ready to place', inside: 'In range', outside: 'Outside', boundary: 'At boundary' };
-    badge('location-status', names[reading.kind], ['inside','unplaced'].includes(reading.kind) ? 'good' : 'warn');
-    const descriptions = { stopped: 'Start location and confirm permission on your phone.', waiting: 'Waiting for live location. Keep this page in the foreground.',
-      stale: 'The position has expired. Waiting for a fresh reading.', imprecise: 'Reported accuracy exceeds 20 m. Entry and exit checks are paused; wait in an open area.',
-      unplaced: 'A valid position is available. You can place the treasure here.', inside: 'Near the treasure centre. Checking entry conditions.',
-      outside: 'Outside treasure range.', boundary: 'Near the boundary. Collection is paused; move farther out or closer to the centre.' };
-    $('location-message').textContent = session.lastError || locationError || descriptions[reading.kind];
-    $('distance').textContent = reading.distance === null ? '—' : `${Math.round(reading.distance)} m`;
+    if ((stream || cameraPending) && !reading.eligible) stopCamera('Your position no longer qualifies, so the camera closed. Reopen it near the treasure.');
+    if (reading.eligible) cameraNotice = '';
+    const live = cameraLive(), collected = session.phase === 'collected', data = session.data;
+    const tracking = session.active ?? session.tracking, owner = data ? data.player.role === 'owner' : true;
+    const inRoom = session.connected !== false;
+    const screen = !booted ? 'loading' : !inRoom || switching ? 'entry' : stream || cameraPending ? 'camera' : 'field';
+    if (shownScreen && shownScreen !== screen) leaveScreen(shownScreen, screen);
+    shownScreen = screen;
+    $('app').dataset.screen = screen;
+    for (const name of ['loading', 'entry', 'field', 'camera']) show(`screen-${name}`, screen === name);
+    if (!inRoom) { placing = false; if (sheet === 'menu' || sheet === 'notes') setSheet(''); }
+
+    const names = { stopped: 'Location off', waiting: 'Searching', stale: 'Reading old', imprecise: 'Weak GPS',
+      unplaced: 'GPS ready', inside: 'In range', outside: 'Out of range', boundary: 'At the edge' };
+    chip('location-status', session.online === false && session.connected ? 'Reconnecting' : names[reading.kind],
+      ['inside', 'unplaced'].includes(reading.kind) ? 'good' : reading.kind === 'stopped' ? '' : 'warn');
+    const [title, sentence] = guidance(reading, tracking, owner, collected);
+    swapText('headline', title); swapText('message', sentence);
+    notify('alert', !secure() ? 'Open the trusted HTTPS address to use location and camera.'
+      : session.lastError || locationError || cameraFailure || cameraNotice);
+
+    const showCollected = collected && !placing;
+    show('gauge', !showCollected); show('collected', showCollected);
+    $('gauge').dataset.tone = reading.kind === 'stopped' ? '' : ['imprecise', 'stale', 'boundary'].includes(reading.kind) ? 'warn'
+      : reading.eligible ? 'good' : 'gold';
+    const fill = gaugeFill(reading, collected), hasDistance = reading.distance !== null && reading.distance !== undefined;
+    $('gauge-arc').setAttribute('stroke-dashoffset', String(100 - fill));
+    $('gauge-arc').setAttribute('visibility', fill ? 'visible' : 'hidden');
+    $('gauge-head').style?.setProperty('--angle', `${fill * 3.6}deg`);
+    $('gauge').dataset.lit = fill ? '1' : '';
+    $('gauge').dataset.empty = hasDistance && !placing ? '' : '1';
+    // Pings quicken with progress through this leg of the round. They carry no direction.
+    $('gauge').dataset.heat = !tracking || !session.zone || placing ? '0' : fill > 70 ? '3' : fill > 35 ? '2' : '1';
+    $('gauge').dataset.zone = tracking && (placing || !session.zone) ? '1' : '';
+    $('gauge-zone').style?.setProperty('--zone', String(.28 + Number($('radius').value) / 100 * .72));
+    $('radius').style?.setProperty('--pct', `${(Number($('radius').value) - 15) / 85 * 100}%`);
+    motion.count($('distance'), hasDistance ? Math.round(reading.distance) : null);
+    swapText('distance-label', hasDistance ? 'from treasure'
+      : !tracking ? (session.zone ? 'Location off' : 'No treasure yet') : reading.kind === 'unplaced' ? 'Ready to hide' : 'Waiting for GPS');
+    const receipt = data?.receipt;
+    $('receipt').textContent = receipt ? `Receipt ${String(receipt.id).slice(0, 8)} · ${new Date(receipt.collectedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : '';
+    show('readouts', tracking && !showCollected);
     $('accuracy').textContent = session.fix ? `±${Math.round(session.fix.accuracy)} m` : '—';
-    $('age').textContent = session.fix ? `${Math.max(0, Math.floor((now() - session.fix.timestamp) / 1000))} s` : '—';
-    const tracking = session.active ?? session.tracking;
-    $('start-location').disabled = !secure() || tracking || session.connected === false;
-    $('stop-location').disabled = !tracking;
-    $('place').disabled = !reading.canPlace;
-    $('place').textContent = session.zone ? 'Re-place shared treasure (new round)' : 'Place shared treasure here';
-    if ($('connection-status')) {
-      const data = session.data;
-      $('connection-status').textContent = session.connected ? `${session.online ? 'Connected' : 'Reconnecting'} · ${data.player.name} · ${data.player.role}` : session.account ? 'Create a room or join using a session code' : 'Sign in, or create or join as a guest';
-      $('room-status').textContent = data ? `Session ${data.room.code} · ${data.room.playerCount} player(s) · ${data.room.policy}` : 'All devices must use this same website and session code.';
-      $('players').textContent = data ? data.players.map(p => `${p.name}${p.collected ? ' — collected' : ''}`).join(' · ') : '';
-      $('connection-error').textContent = session.lastError || '';
-      $('create-room').disabled = session.busy || tracking || Boolean(stream) || cameraPending;
-      $('join-room').disabled = session.busy || tracking || Boolean(stream) || cameraPending;
-      $('nickname').disabled = tracking || Boolean(session.account); $('room-code').disabled = tracking || session.busy;
-      if (session.account) $('nickname').value = session.account.username;
-    }
-    if ($('account-status') && session.authenticate) {
-      $('account-status').textContent = session.account ? `Signed in as ${session.account.username}` : 'Guest mode · Sign in to save your identity';
-      $('account-form').hidden = Boolean(session.account); $('logout').hidden = !session.account;
-      for (const id of ['login','register','logout','username','password']) $(id).disabled = session.busy || !secure();
-      $('account-rooms').textContent = session.accountRooms?.length ? `Your rooms: ${session.accountRooms.map(r => `${r.code} (${r.role})`).join(' · ')}. Enter a code below to return.` : '';
-      $('account-error').textContent = session.lastError || (!secure() ? 'Use trusted HTTPS before entering a password.' : '');
-    }
-    const journeys = { unplaced: 'No treasure point yet.', leave: 'Treasure placed. Walk outside the range first; the page will tell you when to return.',
-      return: reading.kind === 'inside' ? 'Back near the treasure. Waiting for two fresh readings spanning at least 2 seconds.' : 'Departure confirmed. Return to the point where you placed the treasure.',
-      ready: reading.eligible ? 'Treasure unlocked. Open the camera to find and collect it.' : 'Previously unlocked, but location is currently unsuitable. Wait for a better reading or approach the centre.',
-      collected: 'Treasure collected. Export the report or re-place using live location for another attempt.' };
-    $('journey-message').textContent = journeys[session.phase];
-    const stages = ['unplaced','leave','return','ready','collected'].indexOf(session.phase);
-    ['step-place','step-leave','step-return','step-collect'].forEach((id, index) => {
-      $(id).className = index < stages ? 'done' : index === stages ? 'current' : '';
-      if (index === Math.min(stages, 3)) $(id).setAttribute('aria-current', 'step');
+    $('age').textContent = session.fix ? `${Math.max(0, Math.floor((now() - session.fix.timestamp) / 1000))} s ago` : '—';
+
+    const steps = phaseOrder.indexOf(session.phase);
+    $('steps').dataset.step = String(Math.min(Math.max(steps, 0), 3));
+    ['step-place', 'step-leave', 'step-return', 'step-collect'].forEach((id, index) => {
+      $(id).className = index < steps ? 'done' : index === steps ? 'current' : '';
+      if (index === Math.min(steps, 3)) $(id).setAttribute('aria-current', 'step');
       else $(id).removeAttribute('aria-current');
     });
+
+    // The dock only ever offers the one next action.
+    const wantsPlacement = owner && (placing || !session.zone);
+    const offerLocation = !tracking && (wantsPlacement || (Boolean(session.zone) && !collected));
+    show('start-location', offerLocation); show('location-note', offerLocation);
+    $('start-location').disabled = !secure() || tracking || session.connected === false;
+    show('place-panel', tracking && wantsPlacement);
+    show('place-note', placing); show('place-cancel', placing);
+    $('place').disabled = !reading.canPlace;
+    $('place').textContent = session.zone ? 'Move treasure here' : 'Hide treasure here';
+    $('radius-value').textContent = `${$('radius').value} m`;
+    show('start-camera', tracking && !wantsPlacement && session.phase === 'ready');
     $('start-camera').disabled = !reading.eligible || cameraPending || Boolean(stream);
-    $('stop-camera').disabled = !stream && !cameraPending;
-    $('camera-placeholder').hidden = live || collected;
+    show('rehide', showCollected && owner);
+    show('move-treasure', owner && Boolean(session.zone));
+
+    show('camera-placeholder', !live);
     $('treasure').hidden = !live || !reading.eligible; $('treasure').disabled = !live || !reading.eligible || collecting;
-    $('collected').hidden = !collected;
-    badge('camera-status', collected ? 'Collected' : live ? 'Live video' : cameraPending ? 'Permission pending' : stream ? 'Awaiting video' : reading.eligible ? 'Ready' : 'Locked', live || collected ? 'good' : '');
-    $('camera-message').textContent = collected ? 'Collected and camera released. The computer backend saved your collection.'
-      : !$('retry-playback').hidden ? 'Tap Resume video. Collection requires a live video update.' : cameraMessage;
+    $('stop-camera').disabled = !stream && !cameraPending;
+    chip('camera-status', live ? 'Live video' : cameraPending ? 'Waiting for permission' : 'Starting video', live ? 'good' : '');
+    $('camera-message').textContent = !$('retry-playback').hidden ? 'Tap Resume video. Claiming needs a live picture.'
+      : live ? 'Your treasure is here. Tap it to claim.' : cameraMessage;
+
+    renderRooms(data, tracking); renderEntry(data); renderAccount();
+
+    $('app').dataset.sky = screen !== 'field' && screen !== 'camera' || placing ? 'dusk'
+      : { unplaced: 'dusk', leave: 'night', return: 'predawn', ready: 'dawn', collected: 'sunrise' }[session.phase];
+    motion.ambient(screen === 'camera' ? (live && reading.eligible ? 'sparkle' : 'none') : screen === 'entry' ? 'dust' : 'none');
+    if (screen === 'field') motion.flip([$('gauge'), $('collected'), $('headline'), $('message'), $('readouts')]);
+    else motion.forgetPlaces?.();
+    celebrate(screen, data);
   }
+  function leaveScreen(from, to) {
+    motion.forgetPlaces?.();
+    const closing = from === 'camera';
+    motion.ghost($(`screen-${from}`), closing
+      ? [{ clipPath: 'circle(150% at 50% 50%)' }, { clipPath: 'circle(0% at 50% 50%)' }]
+      : [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: `scale(${to === 'camera' ? 1.08 : 1.03})` }], closing ? 420 : to === 'camera' ? 620 : 260);
+  }
+  // A moment of reward whenever this player's round moves forward; never on resume or a room change.
+  function celebrate(screen, data) {
+    const round = { room: data?.room.code ?? '', phase: session.phase };
+    const moved = shownRound && booted && shownRound.room === round.room && phaseOrder.indexOf(round.phase) > phaseOrder.indexOf(shownRound.phase);
+    shownRound = round;
+    if (!moved || screen !== 'field') return;
+    if (round.phase === 'collected') {
+      motion.flash($('flash'));
+      window.setTimeout(() => { if (!$('collected').hidden) motion.burst($('collected'), 2.4); }, 620);
+    } else {
+      motion.pulse($('gauge'));
+      motion.burst($('gauge'), round.phase === 'leave' ? .6 : round.phase === 'return' ? .8 : 1.2);
+    }
+  }
+  function setSheet(name) {
+    if (name && !sheet) sheetOpener = document.activeElement;
+    if (sheet && sheet !== name) {
+      motion.ghost($(`sheet-${sheet}`), [{ transform: 'translateY(0)' }, { transform: 'translateY(100%)' }], 260);
+      if (!name) motion.ghost($('scrim'), [{ opacity: 1 }, { opacity: 0 }], 260);
+    }
+    sheet = name;
+    for (const id of ['menu', 'account', 'notes']) show(`sheet-${id}`, sheet === id);
+    show('scrim', Boolean(sheet));
+    if (sheet) { $('screens').setAttribute('inert', ''); $(`sheet-${sheet}`).focus?.({ preventScroll: true }); }
+    else { $('screens').removeAttribute('inert'); sheetOpener?.focus?.({ preventScroll: true }); sheetOpener = null; }
+  }
+  function openSheet(name) { setSheet(name); render(); }
+  function closeSheet() { setSheet(''); render(); }
   listen('start-location', 'click', startLocation);
-  listen('stop-location', 'click', () => stopLocation());
+  listen('stop-location', 'click', () => { stopLocation(); closeSheet(); });
   listen('place', 'click', () => {
     settle(session.place(Number($('radius').value), now()), success => {
-      if (success) { stopCamera('Treasure re-placed. Leave and return before opening the camera.'); locationError = ''; }
+      if (success) { stopCamera('Treasure moved. Leave and return before opening the camera.'); cameraNotice = ''; locationError = ''; placing = false; }
       else locationError = session.lastError || 'Wait for a valid position and use a radius between 15 and 100 m.';
       render();
     });
     render();
   });
+  listen('radius', 'input', () => render());
+  listen('rehide', 'click', () => { placing = true; render(); });
+  listen('place-cancel', 'click', () => { placing = false; render(); });
+  listen('move-treasure', 'click', () => { placing = true; closeSheet(); });
   listen('start-camera', 'click', startCamera);
   listen('stop-camera', 'click', () => { stopCamera(); session.log('camera-stopped', now()); render(); });
   listen('retry-playback', 'click', async () => {
@@ -194,7 +494,7 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
   listen('treasure', 'click', () => {
     if (cameraLive() && !collecting) {
       collecting = true;
-      settle(session.collect(now()), success => { collecting = false; if (success) stopCamera('Collection saved by the server.'); render(); });
+      settle(session.collect(now()), success => { collecting = false; if (success) { stopCamera('Collection saved by the server.'); cameraNotice = ''; } render(); });
     }
     render();
   });
@@ -222,34 +522,71 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
     session.log('background-hardware-stopped', now());
   }
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) pause('Capture stopped in the background. Restart location manually on return.');
+    if (document.hidden) pause('Paused while in the background. Turn location back on to continue.');
     else { if (timer === null) timer = window.setInterval(render, 500); render(); }
   });
-  window.addEventListener('pagehide', () => pause('Capture stopped when leaving. Restart location manually on return.'));
+  window.addEventListener('pagehide', () => pause('Paused when you left. Turn location back on to continue.'));
   window.addEventListener('pageshow', () => { if (!document.hidden && timer === null) timer = window.setInterval(render, 500); render(); });
+  // Safari only applies :active press states once a touch listener exists.
+  document.addEventListener('touchstart', () => {}, { passive: true });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && sheet) closeSheet(); });
+  listen('scrim', 'click', closeSheet);
+  document.querySelectorAll?.('[data-close-sheet]').forEach(button => button.addEventListener('click', closeSheet));
+  listen('open-menu', 'click', () => openSheet('menu'));
+  listen('open-room', 'click', () => openSheet('menu'));
+  listen('open-notes', 'click', () => openSheet('notes'));
+  listen('copy-code', 'click', () => {
+    const code = session.data?.room.code; if (!code) return;
+    const label = text => { $('copy-code').textContent = text; window.setTimeout(() => { $('copy-code').textContent = 'Copy code'; }, 1500); };
+    (navigator.clipboard?.writeText(code) ?? Promise.reject()).then(() => label('Copied'), () => label('Copy failed'));
+  });
+  function connect(code) {
+    stopLocation();
+    const result = session.connect($('nickname').value, code);
+    render();
+    result.then(joined => { if (joined) { switching = false; entryMode = 'home'; $('room-code').value = ''; } render(); });
+  }
+  function chooseEntry(mode) {
+    // Signed-in players already have a name, so creating needs no further input.
+    if (mode === 'create' && session.account) { connect(''); return; }
+    entryMode = mode; render();
+    $(session.account || mode === 'join' ? 'room-code' : 'nickname').focus?.();
+  }
   if (session.connect) {
-    const connect = code => {
-      stopLocation();
-      const result = session.connect($('nickname').value, code);
-      render(); result.then(() => render());
-    };
-    listen('create-room', 'click', () => connect(''));
-    listen('join-room', 'click', () => connect($('room-code').value.trim().toUpperCase()));
-    session.resume().then(() => render());
+    listen('show-create', 'click', () => chooseEntry('create'));
+    listen('show-join', 'click', () => chooseEntry('join'));
+    listen('entry-cancel', 'click', () => { entryMode = 'home'; session.lastError = ''; render(); });
+    listen('entry-back', 'click', () => { switching = false; entryMode = 'home'; closeSheet(); });
+    listen('switch-room', 'click', () => { switching = true; entryMode = 'home'; closeSheet(); });
+    listen('entry-form', 'submit', event => {
+      event.preventDefault();
+      if (!$('entry-form').reportValidity()) return;
+      connect(entryMode === 'join' ? $('room-code').value.trim().toUpperCase() : '');
+    });
+    session.resume().then(() => { booted = true; render(); });
   }
   if (session.authenticate) {
     const authenticate = async action => {
       if (!$('account-form').reportValidity()) return;
       stopLocation();
       const pending = session.authenticate(action, $('username').value, $('password').value);
-      $('password').value = ''; render(); await pending; render();
+      $('password').value = ''; render();
+      if (await pending) { switching = false; entryMode = 'home'; setSheet(''); }
+      render();
+    };
+    const logout = async () => {
+      stopLocation(); setSheet('');
+      const pending = session.logout(); render();
+      await pending; switching = false; entryMode = 'home'; render();
     };
     listen('account-form', 'submit', event => { event.preventDefault(); authenticate('login'); });
     listen('register', 'click', () => authenticate('register'));
-    listen('logout', 'click', async () => { stopLocation(); const pending = session.logout(); render(); await pending; render(); });
+    listen('logout', 'click', logout);
+    listen('open-account', 'click', () => { if (session.account) logout(); else openSheet('account'); });
+    listen('open-account-menu', 'click', () => openSheet('account'));
   }
-  $('environment').textContent = secure() ? 'Computer backend · Start location to share positions for range checks; video stays on this phone.'
-    : 'Use a trusted HTTPS address. LAN HTTP supports layout preview only.';
+  $('environment').textContent = secure() ? '' : 'Open the trusted HTTPS address to sign in and use location or camera.';
+  $('environment').hidden = secure();
   timer = window.setInterval(render, 500); render();
   return { session, render, exportReport };
 }

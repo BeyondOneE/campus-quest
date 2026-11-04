@@ -30,7 +30,7 @@
 | `POST /api/auth/login` | `{ username, password }`；HTTP 200，创建新的浏览器登录会话，返回账号状态包 |
 | `POST /api/auth/logout` | `{}`；HTTP 200，撤销本次账号会话、释放其临时定位状态并清除两种 Cookie；其他设备继续登录 |
 
-用户名为 3–32 位 ASCII 字母、数字或下划线，统一小写保存。密码为 15–128 个 Unicode 码点，空格保留，不回传或记录。后端采用异步加盐 scrypt（`N=131072, r=8, p=1`，16 字节随机盐），最多同时进行两个密码运算。参考 [OWASP 密码存储指导](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) 与 [Node crypto](https://nodejs.org/download/release/latest-v24.x/docs/api/crypto.html)。测试服务上限：1,000 个账号、每账号八个会话、每地址每 15 分钟 20 次认证尝试、每规范化用户名每 15 分钟八次。限流窗口只在内存中，重启会清空。并发运算超限返回 429 `AUTH_BUSY`。
+用户名为 3–32 位 ASCII 字母、数字或下划线，统一小写保存。密码为 1–128 个 Unicode 码点，长度以外不设强度要求（2026-11-04 用户决定），空格保留，不回传或记录。后端采用异步加盐 scrypt（`N=131072, r=8, p=1`，16 字节随机盐），最多同时进行两个密码运算。参考 [OWASP 密码存储指导](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) 与 [Node crypto](https://nodejs.org/download/release/latest-v24.x/docs/api/crypto.html)。测试服务上限：1,000 个账号、每账号八个会话、每地址每 15 分钟 20 次认证尝试、每规范化用户名每 15 分钟八次。限流窗口只在内存中，重启会清空。并发运算超限返回 429 `AUTH_BUSY`。
 
 注册携带有效访客 Cookie 和对应 CSRF 时，将当前访客的场次、玩家 ID、房主权限和领取记录关联到新账号，旧访客令牌随即失效。登录恢复账号最近使用的房间，不合并无关访客进度。重进已有房间恢复原玩家，不新增成员。一个账号可属于多个房间，当前房间属于浏览器登录会话；各设备临时定位判定独立，登录不会恢复旧定位或开启硬件。领取凭据跨设备共享，重复领取返回原凭据。
 
@@ -198,4 +198,4 @@ async function joinRoom(code, guestNickname = '') {
 | 404 `NOT_FOUND`、405 `METHOD_NOT_ALLOWED` | 检查文档路由 / 方法 |
 | 500 `SERVER_ERROR`、超时 / 网络失败 | 禁止领取，显示服务恢复入口并谨慎重试 |
 
-2026-11-03 已按 `server/app.mjs`、`server/store.mjs`、`server/index.mjs`、`public/treasure-lab/client.js` 和 `model.js` 核对本文。[前端交接](frontend-handoff.md) 列明修改范围与硬件验收边界。当前含未跟踪文件的工作树是集成基线，单独远程克隆可能不包含它。
+2026-11-03 已按 `server/app.mjs`、`server/store.mjs`、`server/index.mjs`、`public/treasure-lab/client.js` 和 `model.js` 核对本文。[前端交接](frontend-handoff.md) 列明修改范围与硬件验收边界。该基线已提交到本地 `main`（057b9d9），推送前远程克隆不包含它。

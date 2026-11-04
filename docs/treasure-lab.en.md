@@ -18,12 +18,12 @@ The Node service exposes nine allowlisted static files across both pages plus th
 
 ## Field procedure
 
-1. Open the same HTTPS test URL in phone Safari, enter a nickname and tap “Create session”. Other phones enter the session code and their own nicknames, then tap “Join session”. You may first create an account or sign in. Signed-in players use their account username; returning to a previous room restores identity and receipts. Registration keeps the current guest room; login does not merge unrelated guest progress. Use trusted HTTPS before entering credentials.
-2. At an outdoor site where you can walk away and return, read the location-sharing notice, tap “Start live location” and grant permission. Positions are sent to the computer backend for checks. Location and camera permission are never requested automatically.
-3. Once the creator's location is valid, choose a collection radius and tap “Place shared treasure here”. Other players share this point. Only the creator can re-place it, starting a new round.
+1. Open the same HTTPS test URL in phone Safari, tap “Create a room” and enter a nickname. Other phones tap “Join with a code” and enter the room code and their own nicknames. You may first create an account or sign in. Signed-in players use their account username; returning to a previous room restores identity and receipts. Registration keeps the current guest room; login does not merge unrelated guest progress. Use trusted HTTPS before entering credentials.
+2. At an outdoor site where you can walk away and return, read the location-sharing notice, tap “Turn on location” and grant permission. Positions are sent to the computer backend for checks. Location and camera permission are never requested automatically.
+3. Once the creator's location is valid, choose a collection radius and tap “Hide treasure here”. Other players share this point. Only the creator can move it, from the menu or after claiming, which starts a new round.
 4. Each player keeps the page visible and walks outside until departure is confirmed, then returns near the centre to unlock the treasure. Poor accuracy, uncertain boundaries, stale samples or lost backend connectivity suspend collection.
 5. Tap “Open camera” and grant permission. A clickable chest requires observed live video updates. Collection is rechecked and recorded by the backend before releasing the camera. The experiment allows each player one independent claim per round.
-6. Expand “Field notes”, record actual observations and export the report. Reloading restores the cookie identity and backend claim; restart camera and location manually. Backend restart clears transient location observation but retains the shared point and claim receipts.
+6. Open “Field notes” from the top-right menu, record actual observations and export the report. Reloading restores the cookie identity and backend claim; restart camera and location manually. Backend restart clears transient location observation but retains the shared point and claim receipts.
 
 ## Experiment parameters and gates
 

@@ -62,8 +62,8 @@ export class GameStore {
     return value.toLowerCase();
   }
   password(value) {
-    if (typeof value !== 'string' || [...value].length < 15 || [...value].length > 128) {
-      fail(400, 'INVALID_PASSWORD', 'Use a password between 15 and 128 characters.');
+    if (typeof value !== 'string' || !value || [...value].length > 128) {
+      fail(400, 'INVALID_PASSWORD', 'Enter a password of up to 128 characters.');
     }
     return value; // Preserve spaces and Unicode exactly; never trim or truncate passwords.
   }
@@ -128,7 +128,7 @@ export class GameStore {
   accountRoom(session, code = null) {
     let player;
     if (code !== null) {
-      if (typeof code !== 'string' || !/^[A-Z2-9]{8}$/.test(code) || !this.room(code)) fail(404, 'ROOM_NOT_FOUND', 'Test session not found. Check the code.');
+      if (typeof code !== 'string' || !/^[A-Z2-9]{8}$/.test(code) || !this.room(code)) fail(404, 'ROOM_NOT_FOUND', 'Room not found. Check the code.');
       player = this.db.prepare('SELECT * FROM players WHERE room=? AND account_id=?').get(code, session.account_id);
     }
     if (!player) {
@@ -154,7 +154,7 @@ export class GameStore {
   }
   join(code, name) {
     name = this.name(name);
-    if (typeof code !== 'string' || !/^[A-Z2-9]{8}$/.test(code) || !this.room(code)) fail(404, 'ROOM_NOT_FOUND', 'Test session not found. Check the code.');
+    if (typeof code !== 'string' || !/^[A-Z2-9]{8}$/.test(code) || !this.room(code)) fail(404, 'ROOM_NOT_FOUND', 'Room not found. Check the code.');
     if (this.db.prepare('SELECT count(*) AS n FROM players WHERE room=? AND expires_at>?').get(code, this.now()).n >= 16) {
       fail(409, 'ROOM_FULL', 'This test session is full.');
     }

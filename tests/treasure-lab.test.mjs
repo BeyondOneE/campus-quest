@@ -118,3 +118,29 @@ test('non-secure contexts cannot start hardware; automatic reports contain no co
   const html = readFileSync(new URL('../public/treasure-lab/index.html', import.meta.url), 'utf8');
   for (const id of h.elements.keys()) assert.ok(html.includes(`id="${id}"`), `controller element ${id} exists`);
 });
+
+test('the page shows one screen and offers only the next action for the current state', async () => {
+  const stream = cameraStream(); let grant;
+  const h = harness({ getUserMedia: () => new Promise(resolve => { grant = () => resolve(stream); }) });
+  const visible = () => ['start-location', 'place-panel', 'start-camera', 'rehide'].filter(id => !h.node(id).hidden);
+  assert.equal(h.node('app').dataset.screen, 'field'); assert.deepEqual(visible(), ['start-location']);
+  h.click('start-location'); h.fix(); assert.deepEqual(visible(), ['place-panel']);
+  h.click('place'); assert.deepEqual(visible(), []); assert.equal(h.node('headline').textContent, 'Walk away');
+  h.advance(1000); h.fix({ north: 65 }); assert.equal(h.node('headline').textContent, 'Head back');
+  h.advance(1000); h.fix(); h.advance(2000); h.fix(); assert.deepEqual(visible(), ['start-camera']);
+  const opening = h.click('start-camera'); assert.equal(h.node('app').dataset.screen, 'camera');
+  assert.equal(h.node('screen-field').hidden, true); assert.equal(h.node('screen-camera').hidden, false);
+  grant(); await opening; h.frame(); assert.equal(h.node('treasure').hidden, false);
+  h.click('treasure'); assert.equal(h.node('app').dataset.screen, 'field');
+  assert.equal(h.node('collected').hidden, false); assert.deepEqual(visible(), ['rehide']);
+  h.click('rehide'); assert.equal(h.node('collected').hidden, true); assert.deepEqual(visible(), ['place-panel']);
+  h.click('place-cancel'); assert.equal(h.node('collected').hidden, false);
+});
+
+test('opening a sheet moves focus without scrolling the page underneath', () => {
+  const h = harness(); let options;
+  h.node('sheet-menu').focus = value => { options = value; };
+  h.click('open-menu');
+  assert.equal(h.node('sheet-menu').hidden, false);
+  assert.deepEqual(options, { preventScroll: true });
+});

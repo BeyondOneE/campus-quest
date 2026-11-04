@@ -1,0 +1,45 @@
+{
+  "id": "E-20261104-004",
+  "checkedOn": "2026-11-04",
+  "environment": "Desktop app browser pane with emulated viewports; isolated backend on loopback port 4190, run from a temporary working directory. The running .local database was not touched.",
+  "automated": {
+    "npmTest": {
+      "tests": 50,
+      "pass": 50,
+      "fail": 0
+    },
+    "npmRunBuild": "passed; existing prototype chunk-size warning remains",
+    "npmCi": "not run; dependencies unchanged"
+  },
+  "browserChecks": {
+    "viewports": [
+      "390x780",
+      "320x500"
+    ],
+    "walkedStates": [
+      "entry",
+      "create room",
+      "place",
+      "leave",
+      "return",
+      "ready",
+      "camera live",
+      "claim",
+      "claimed",
+      "reload restore"
+    ],
+    "sampled": {
+      "exitCopiesRemaining": 0,
+      "horizontalOverflow": false,
+      "cspErrorsInConsole": 0
+    }
+  },
+  "simulatedInputs": "Geolocation and getUserMedia were replaced from the browser console, in the test tab only. No stub ships in the page.",
+  "limits": "Entrance animations were fast-forwarded in the test tab before some still frames because the hidden pane throttles animation. Mist drift, smoothness and frame rate were not measured. A final style tweak lowering the stones on screens under 600 px tall was not rechecked in the browser.",
+  "notEvidenceOf": [
+    "iPhone Safari behaviour or animation performance",
+    "real location or camera",
+    "Safari toolbar and on-screen keyboard layout",
+    "user or grader reaction"
+  ]
+}

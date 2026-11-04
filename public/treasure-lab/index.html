@@ -3,69 +3,225 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#102d2a">
+  <meta name="theme-color" content="#0d1030">
   <meta name="referrer" content="no-referrer">
-  <title>Campus Quest · Location Treasure Test</title>
+  <title>Campus Quest</title>
   <link rel="stylesheet" href="./style.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
-  <main>
-    <header><a href="/device-check/" class="brand">C<span>Q</span> <b>CAMPUS QUEST</b></a><span class="edition">FIELD LAB / 02</span></header>
-    <section class="intro"><p class="eyebrow">EXPLORE. DISCOVER. COLLECT.</p><h1>Location-triggered<br><em>treasure test.</em></h1><p class="lead">Create a test session or join from another phone. Share one treasure point and collect it once per player.</p><p id="environment" class="environment" role="status"></p></section>
+  <svg class="defs" aria-hidden="true" width="0" height="0">
+    <defs>
+      <linearGradient id="g-wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a5602c"/><stop offset="1" stop-color="#55290f"/></linearGradient>
+      <linearGradient id="g-lid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cf8440"/><stop offset=".55" stop-color="#93531f"/><stop offset="1" stop-color="#673413"/></linearGradient>
+      <linearGradient id="g-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3bf"/><stop offset=".45" stop-color="#f8c64f"/><stop offset="1" stop-color="#b8741a"/></linearGradient>
+      <linearGradient id="g-hollow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e3a18"/><stop offset="1" stop-color="#1d0d04"/></linearGradient>
+      <radialGradient id="g-hoard" cx=".5" cy=".9" r=".9"><stop offset="0" stop-color="#fffbe0"/><stop offset=".5" stop-color="#ffd566"/><stop offset="1" stop-color="#d98f23"/></radialGradient>
+    </defs>
+    <symbol id="chest" viewBox="0 0 160 130">
+      <rect x="16" y="66" width="128" height="56" rx="8" fill="url(#g-wood)"/>
+      <path fill="#3d1c08" opacity=".5" d="M16 84h128v2H16zM16 103h128v2H16z"/>
+      <path fill="url(#g-lid)" d="M16 66V48C16 26 36 12 58 12h44c22 0 42 14 42 36v18z"/>
+      <path fill="none" stroke="#ffe2ad" stroke-opacity=".4" stroke-width="2.500" stroke-linecap="round" d="M26 50c2-14 16-28 34-28h40c10 0 19 4 25 10"/>
+      <path fill="#3d1c08" opacity=".35" d="M17 42h126v2H17zM26 26h108v2H26z"/>
+      <path fill="url(#g-gold)" d="M32 15h15v107H32zM113 15h15v107h-15z"/>
+      <rect x="11" y="60" width="138" height="10" rx="4" fill="url(#g-gold)"/>
+      <path fill="#fff6cf" d="M39.500 24a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5zm0 58a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5zm0 22a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5zm81-80a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5zm0 58a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5zm0 22a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5z"/>
+      <rect x="64" y="52" width="32" height="38" rx="7" fill="url(#g-gold)" stroke="#8a5413" stroke-width="1.500"/>
+      <path fill="#3a1d07" d="M80 62a5.500 5.500 0 0 1 3 10.100V80h-6v-7.900A5.500 5.500 0 0 1 80 62z"/>
+    </symbol>
+  </svg>
 
-    <section class="card" aria-labelledby="account-title">
-      <h2 id="account-title">Your account</h2>
-      <p id="account-status" role="status">Checking sign-in…</p>
-      <form id="account-form">
-        <label for="username">Username</label><input id="username" name="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9_]{3,32}" autocomplete="username" autocapitalize="none" spellcheck="false" required placeholder="Letters, numbers or underscores">
-        <label for="password">Password</label><input id="password" name="password" type="password" minlength="15" maxlength="256" autocomplete="current-password" required placeholder="15–128 characters">
-        <div class="actions"><button id="login" type="submit">Sign in</button><button id="register" type="button">Create account</button></div>
-      </form>
-      <button id="logout" type="button" hidden>Sign out</button>
-      <p id="account-rooms" class="hint"></p><p id="account-error" role="alert"></p>
-      <p class="hint">Creating an account keeps this browser's current guest room and collections. Signing in restores that account's rooms. Use the same account on another device to return as the same player. This test has no password recovery or student verification.</p>
-    </section>
+  <div id="app" class="app" data-screen="loading" data-sky="dusk">
+    <div class="sky" aria-hidden="true">
+      <i class="sky-layer sky-dusk"></i><i class="sky-layer sky-night"></i><i class="sky-layer sky-predawn"></i><i class="sky-layer sky-dawn"></i><i class="sky-layer sky-sunrise"></i>
+      <div class="stars"></div>
+      <div class="moon"></div>
+      <svg class="far-forest" viewBox="0 0 800 400" preserveAspectRatio="xMidYMax slice"><path d="M0 420L-10 313L-10 309L0 299L-3 277L3 268L4 248L7 236L10 217L14 236L17 249L17 268L24 280L21 299L31 311L25 294L25 292L31 278L29 256L34 241L34 216L36 205L39 183L41 205L43 218L43 241L48 253L46 278L53 293L46 319L46 318L52 301L50 276L55 259L55 230L57 217L60 192L62 217L65 230L65 259L69 275L67 301L74 314L66 318L66 313L73 305L71 282L76 274L76 254L78 243L81 225L84 243L86 254L86 274L91 286L89 305L96 317L82 285L82 285L91 273L87 255L93 245L91 227L96 217L96 197L98 189L101 172L103 189L106 199L106 217L110 226L108 245L115 256L111 273L120 284L115 299L115 297L123 295L119 287L125 286L124 281L127 277L128 272L130 268L132 263L134 268L136 271L136 277L140 276L138 286L144 289L140 295L148 295L144 297L144 294L152 294L148 288L154 285L152 276L156 276L156 267L158 267L161 262L163 267L165 266L165 276L169 279L167 285L173 284L169 294L177 297L165 297L165 295L176 286L172 268L180 258L180 242L183 231L187 216L191 231L195 242L195 258L202 269L199 286L209 293L205 320L205 319L211 302L208 274L213 260L212 234L215 219L215 193L217 177L218 153L220 177L222 191L222 219L225 235L224 260L229 273L225 302L232 316L227 319L227 316L234 299L232 268L237 252L237 224L240 204L242 177L245 204L247 222L247 252L252 271L250 299L257 315L246 315L246 310L257 302L251 281L260 272L257 253L263 241L263 222L266 211L269 193L272 211L274 221L275 241L280 250L278 272L286 284L281 302L292 311L278 315L278 315L289 293L286 261L293 240L293 205L297 186L301 155L305 186L308 204L309 240L316 260L312 293L323 311L315 312L315 309L324 303L320 287L327 282L325 265L329 261L329 247L332 239L334 227L337 239L339 243L339 261L344 266L342 282L349 286L345 303L354 310L337 312L337 309L346 305L342 294L348 290L346 277L350 274L350 262L353 258L355 249L357 258L359 261L359 274L364 279L362 290L368 293L364 305L373 308L367 315L367 311L377 301L372 277L380 267L377 245L382 233L383 210L385 199L388 179L391 199L393 212L394 233L399 243L396 267L404 277L399 301L409 313L400 291L400 290L410 285L405 273L412 270L410 257L415 255L415 244L418 239L420 231L423 239L425 241L425 255L430 260L428 270L435 273L431 285L441 288L423 310L423 305L430 302L427 291L432 284L431 269L434 265L434 254L436 247L438 236L440 247L442 250L442 265L445 271L444 284L449 289L446 302L453 308L442 292L442 292L449 285L446 273L450 268L449 256L452 250L452 238L454 233L456 223L458 233L459 240L459 250L463 253L461 268L466 273L463 285L470 292L463 297L463 292L471 281L467 254L474 242L472 218L476 204L476 178L479 166L481 143L483 166L486 178L486 204L490 218L488 242L495 258L491 281L499 294L489 306L489 302L500 302L495 292L503 291L501 283L506 281L506 273L509 270L512 264L515 270L518 270L518 281L523 282L521 291L529 294L524 302L535 302L522 302L522 297L533 290L528 272L536 262L534 241L539 234L539 214L542 206L545 190L548 206L551 215L551 234L556 245L554 262L562 269L557 290L568 300L553 302L553 301L564 289L558 270L567 257L564 235L570 225L570 202L572 193L575 175L578 193L581 205L581 225L587 238L584 257L593 270L587 289L598 300L584 302L584 300L592 289L589 269L594 258L595 239L597 226L600 208L602 226L605 235L605 258L610 269L608 289L615 299L606 311L606 311L615 298L612 280L618 268L618 249L621 238L625 220L628 238L631 247L631 268L637 278L634 298L644 307L625 313L625 313L634 295L632 267L638 250L638 222L641 205L645 179L648 205L651 219L652 250L658 264L655 295L665 311L645 305L645 301L653 298L649 284L656 282L654 270L658 265L658 252L660 249L662 239L665 249L667 252L667 265L671 268L669 282L675 286L671 298L680 301L666 305L666 301L676 287L672 261L679 243L677 216L682 200L682 171L685 156L687 130L690 156L692 172L693 200L698 216L695 243L703 261L698 287L708 302L701 314L701 310L708 289L706 256L711 231L711 194L713 173L716 140L719 173L721 193L721 231L726 251L724 289L731 310L717 308L717 304L724 299L722 287L727 279L727 266L729 259L732 248L734 259L737 263L737 279L742 287L740 299L747 305L737 287L737 283L746 268L743 238L749 223L750 196L753 178L756 153L759 178L763 194L763 223L769 241L766 268L775 285L766 309L766 307L772 290L769 260L774 246L773 218L776 202L776 176L778 157L780 131L781 157L783 172L783 202L787 219L785 246L790 261L787 290L794 306L790 294L790 293L799 282L796 262L802 253L803 234L806 224L809 208L812 224L815 236L816 253L822 264L819 282L828 292L810 420z"/></svg>
+      <div class="mist"></div>
+      <div class="aura aura-arcane"></div><div class="aura aura-gold"></div>
+      <svg class="land" viewBox="0 0 800 400" preserveAspectRatio="xMidYMax slice">
+        <path class="ground-far" d="M0 410L-10 297L4 297L18 297L32 297L46 296L60 296L74 295L88 294L102 293L116 292L130 291L144 290L158 289L172 288L186 287L200 286L214 285L228 285L242 285L256 284L270 284L284 284L298 284L312 284L326 283L340 283L354 283L368 282L382 282L396 281L410 280L424 280L438 279L452 278L466 276L480 275L494 274L508 273L522 273L536 272L550 271L564 271L578 271L592 271L606 272L620 272L634 273L648 274L662 275L676 276L690 277L704 279L718 280L732 281L746 282L760 283L774 284L788 285L802 285L816 286L820 410z"/>
+        <g class="stones">
+          <path d="M272 306l5-92 20-16 15 17 5 93z"/>
+          <path d="M488 306l3-82 20-18 16 15 4 87z"/>
+          <path d="M350 310l-6-140 28-9 13 12 3 139z"/>
+          <path d="M414 310l5-138 29-11 9 12-5 137z"/>
+          <path d="M332 174l7-24 124-5 8 21-68 7z"/>
+        </g>
+        <g class="runes" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="3">
+          <path class="rune rune-1" d="M295 212v32M295 220l10-8M295 232l-10-8"/>
+          <path class="rune rune-2" d="M366 190v36l10-9-10-9 10-9-10-9"/>
+          <path class="rune rune-3" d="M434 192l10 16-10 16-10-16zM434 224v12"/>
+          <path class="rune rune-4" d="M509 218v30M499 226l20 14M519 226l-20 14"/>
+        </g>
+        <path class="ground-mid" d="M0 410L-10 319L4 317L18 315L32 314L25 314L27 301L29 314L30 314L33 291L34 314L35 314L34 304L39 314L46 312L60 310L74 308L88 307L102 306L116 305L130 304L123 304L127 291L127 304L128 304L129 281L132 304L133 304L136 291L137 304L144 303L137 303L139 292L141 303L142 303L142 282L146 303L147 303L148 289L151 303L158 303L172 302L186 302L200 302L214 303L228 303L242 303L235 303L237 291L239 303L240 303L244 284L244 303L245 303L245 294L249 303L256 303L270 304L284 304L298 304L312 304L326 303L319 303L319 294L323 303L324 303L326 284L328 303L329 303L334 294L333 303L340 303L354 303L368 302L382 302L375 302L380 289L379 302L380 302L379 286L384 302L385 302L387 289L389 302L396 301L410 301L424 301L438 301L452 301L466 301L480 301L494 302L508 302L522 304L536 305L529 305L533 293L533 305L534 305L534 284L538 305L539 305L540 292L543 305L550 306L564 308L578 310L592 311L606 313L620 315L634 317L627 317L627 302L631 317L632 317L634 299L636 317L637 317L638 305L641 317L648 318L641 318L640 305L645 318L646 318L650 303L650 318L651 318L655 304L655 318L662 320L676 321L690 322L704 323L718 323L732 324L746 324L760 324L774 323L788 323L802 322L816 322L820 410z"/>
+        <path class="ground-near" d="M0 410L-10 360L4 362L18 363L32 364L46 365L60 366L74 366L88 366L102 366L116 366L130 365L144 364L137 364L138 354L141 364L142 364L146 341L146 364L147 364L150 353L151 364L158 364L151 364L154 351L155 364L156 364L156 343L160 364L161 364L162 354L165 364L172 363L165 363L170 352L169 363L170 363L172 339L174 363L175 363L178 351L179 363L186 362L200 361L214 360L207 360L207 347L211 360L212 360L216 340L216 360L217 360L219 350L221 360L228 360L221 360L223 347L225 360L226 360L226 343L230 360L231 360L235 345L235 360L242 359L235 359L235 348L239 359L240 359L242 345L244 359L245 359L245 345L249 359L256 358L270 358L284 358L298 358L312 358L326 358L340 358L354 357L347 357L352 345L351 357L352 357L351 341L356 357L357 357L357 342L361 357L368 357L382 357L396 357L389 357L390 343L393 357L394 357L396 333L398 357L399 357L404 345L403 357L410 356L424 356L438 355L431 355L432 341L435 355L436 355L435 336L440 355L441 355L442 344L445 355L452 354L466 352L480 351L494 350L508 348L522 346L536 345L529 345L533 335L533 345L534 345L535 329L538 345L539 345L539 334L543 345L550 343L564 342L578 340L592 339L606 338L620 338L634 337L648 337L662 337L676 337L690 338L704 339L718 340L732 341L746 342L760 343L774 344L788 345L802 346L816 347L820 410z"/>
+      </svg>
+      <svg class="tree tree-left" viewBox="0 0 200 800" preserveAspectRatio="xMinYMax meet"><path d="M33 813L32 760L32 709L36 660L39 608L43 556L47 505L49 451L50 400L53 348L58 297L60 244L59 192L54 140L52 88L52 36L47 -16L46 -15L46 36L41 88L39 140L40 192L36 243L31 293L22 345L15 397L10 449L6 499L-2 551L-10 603L-17 654L-24 708L-27 760L-29 811zM15 810L32 810L51 810L70 812L90 810L90 809L72 805L53 799L34 794L13 790zM15 807L25 805L36 800L45 795L54 788L53 787L43 790L33 792L24 793L13 793zM37 405L53 399L70 392L88 386L106 381L124 377L142 373L160 366L160 366L141 370L123 372L104 373L85 377L66 381L48 386L29 392zM141 372L147 375L153 377L159 378L166 378L172 376L177 373L177 372L172 375L166 376L160 377L154 375L148 373L143 370zM153 377L158 377L161 377L166 378L170 377L174 377L178 377L178 376L174 376L170 376L166 376L162 376L157 375L153 375zM159 378L161 380L164 382L166 384L169 386L172 387L175 388L175 388L173 386L170 385L167 383L165 381L162 379L160 377zM167 377L168 374L170 370L171 366L173 363L174 359L176 356L175 355L173 359L172 362L169 366L168 369L167 373L165 376zM172 376L175 375L178 373L180 371L183 370L186 368L188 366L188 366L185 368L183 369L180 370L177 372L174 373L171 375zM48 300L60 285L68 268L75 253L81 235L87 219L91 202L96 185L95 185L89 201L82 217L75 233L68 249L59 264L52 279L41 291zM66 265L62 260L60 257L59 252L56 247L53 243L50 239L50 239L51 244L54 249L55 253L56 259L58 264L61 268zM60 258L61 255L62 251L61 247L61 244L61 240L62 237L61 236L60 240L60 244L59 247L59 251L58 254L57 257zM56 248L58 245L60 241L61 237L63 233L65 229L66 225L66 225L64 229L62 233L60 236L58 240L57 244L54 248zM80 234L76 228L72 223L68 219L63 215L58 212L52 209L52 210L57 213L62 216L66 221L70 225L73 230L76 235zM67 219L62 219L58 220L54 221L50 223L46 225L43 228L43 228L47 226L51 224L54 222L58 221L62 221L67 221zM62 215L60 215L57 215L55 215L53 214L51 213L49 211L48 212L50 213L52 215L55 216L57 217L60 217L63 217zM59 212L58 208L58 204L59 200L61 197L63 193L64 189L63 189L62 192L60 196L58 200L57 204L56 208L56 212zM91 201L90 196L88 192L86 188L85 183L85 178L84 173L83 174L84 178L84 183L84 188L86 193L88 197L89 202zM88 191L85 190L83 189L80 188L78 187L76 185L74 184L74 184L76 186L78 188L80 189L82 190L84 192L87 193zM85 187L82 187L80 186L77 185L75 184L73 182L70 181L70 181L72 183L74 185L77 186L79 187L82 189L85 189zM85 184L87 180L88 176L89 172L90 169L91 165L91 161L90 161L90 165L89 168L87 172L87 176L85 179L83 182zM53 195L65 188L79 183L92 174L105 165L119 160L135 158L150 154L150 153L134 155L118 157L103 161L89 169L77 176L61 181L46 189zM77 182L85 182L92 184L99 186L106 187L114 187L121 188L121 187L114 185L107 184L100 183L93 180L85 178L78 177zM91 183L92 185L94 187L96 188L99 189L101 190L103 191L104 191L102 189L99 188L97 187L96 185L94 184L93 181zM98 185L100 188L102 191L105 194L108 196L111 198L114 200L115 200L112 197L109 195L106 193L104 191L102 187L100 184zM106 186L108 189L110 193L112 197L114 201L115 205L117 209L117 209L116 205L115 200L114 196L111 193L110 188L107 185zM104 165L110 167L116 169L123 171L128 174L133 178L136 184L137 183L134 177L129 172L123 169L117 166L111 164L104 161zM117 168L121 168L125 169L129 170L133 169L137 168L141 166L141 166L137 167L133 168L129 168L125 168L121 166L117 166zM133 179L136 179L138 179L141 180L143 181L146 181L148 181L149 180L146 180L144 180L141 179L139 178L136 177L134 177zM48 90L63 81L76 68L86 53L96 38L108 25L122 14L138 5L137 5L121 13L106 23L94 36L84 51L73 65L61 77L45 86zM76 67L76 61L77 55L78 49L78 43L79 37L80 31L79 31L77 37L77 43L77 49L75 55L73 61L73 67zM77 54L76 52L75 49L73 47L72 45L70 43L67 42L67 42L69 44L71 45L72 48L73 50L74 53L75 55zM78 48L78 46L77 43L76 39L75 36L74 33L73 30L72 31L73 34L74 36L74 40L75 43L76 46L77 49zM96 38L101 38L106 40L111 42L116 45L121 47L127 48L127 47L121 46L116 44L111 41L106 38L101 36L95 36zM106 40L109 38L111 37L114 35L116 34L118 32L120 30L120 30L118 31L115 33L113 34L110 35L108 37L106 38zM116 45L120 43L123 41L127 40L131 39L135 38L139 38L139 37L135 37L131 38L127 38L123 40L119 41L116 43zM122 47L125 46L128 44L131 42L135 41L138 42L142 41L142 41L138 41L134 40L131 41L127 42L124 44L121 45zM47 -15L68 -26L86 -40L102 -58L120 -73L136 -91L147 -111L162 -130L161 -130L146 -112L135 -91L120 -74L101 -58L86 -41L67 -26L46 -16zM120 -72L127 -74L134 -75L141 -76L149 -77L156 -78L163 -78L163 -78L156 -79L149 -78L141 -78L134 -76L127 -75L120 -74zM135 -75L136 -79L137 -82L139 -84L141 -87L143 -89L145 -93L144 -93L142 -90L140 -88L137 -85L136 -82L134 -79L133 -76zM142 -77L143 -81L142 -86L142 -90L142 -94L143 -98L144 -102L143 -102L142 -98L141 -94L141 -90L140 -85L141 -81L140 -77zM148 -76L151 -75L154 -74L157 -74L160 -74L164 -74L167 -74L167 -75L164 -75L161 -75L157 -75L154 -75L152 -76L149 -78zM157 -77L158 -79L160 -79L163 -80L165 -80L167 -80L170 -80L170 -81L167 -81L165 -81L162 -82L160 -81L157 -80L155 -79zM147 -111L152 -110L157 -109L162 -107L166 -105L171 -102L174 -98L175 -99L171 -103L167 -106L162 -109L157 -111L152 -112L146 -113zM156 -110L157 -107L159 -104L162 -102L164 -99L167 -98L170 -97L170 -97L167 -99L165 -100L163 -103L161 -105L159 -107L158 -111zM162 -107L166 -108L170 -111L174 -113L177 -116L180 -120L182 -124L181 -124L179 -120L176 -117L173 -114L170 -112L166 -110L162 -109zM167 -104L171 -107L174 -109L178 -110L182 -112L186 -115L189 -118L188 -119L185 -116L182 -113L178 -112L174 -110L170 -108L166 -106zM171 -101L174 -102L177 -102L180 -103L183 -103L186 -103L189 -104L189 -104L186 -104L183 -104L180 -104L177 -104L174 -104L171 -103z"/></svg>
+      <svg class="tree tree-right" viewBox="0 0 200 800" preserveAspectRatio="xMaxYMax meet"><path d="M229 811L231 762L237 713L247 664L253 611L260 560L266 508L272 456L275 403L274 350L273 298L269 246L264 194L254 142L240 91L228 41L214 -9L214 -9L221 42L229 94L239 144L244 195L245 247L245 298L243 350L240 400L234 450L224 502L215 552L204 604L195 652L182 705L172 758L167 813zM187 790L169 788L149 788L129 791L110 793L110 793L129 798L147 799L166 804L185 810zM187 793L177 793L166 792L157 790L146 788L146 789L155 794L164 800L175 804L185 807zM262 395L247 384L229 373L208 367L189 362L171 354L153 345L135 338L135 338L152 348L169 359L187 369L205 376L222 383L238 394L253 408zM225 374L218 376L212 377L205 379L199 383L192 385L186 387L186 387L193 387L200 386L206 384L212 382L219 382L226 382zM211 378L209 380L207 382L204 384L202 386L201 389L199 392L200 392L202 390L204 388L206 386L208 384L211 383L213 381zM198 384L196 387L195 390L194 393L193 397L192 400L192 404L193 404L193 401L194 397L195 394L197 391L199 388L201 384zM192 386L190 390L188 393L185 396L182 399L178 402L175 404L175 405L179 402L183 400L186 397L189 394L192 391L194 387zM190 364L186 358L181 352L175 348L169 344L164 339L159 334L159 335L163 341L168 346L173 351L178 355L182 360L186 367zM180 352L176 351L172 351L168 350L164 348L161 345L159 342L158 342L161 346L164 349L167 352L171 353L175 354L179 355zM174 348L171 349L168 349L164 349L161 350L158 351L155 353L156 354L158 352L161 351L164 351L168 351L171 351L174 351zM164 340L162 336L160 332L158 328L155 325L153 321L150 318L150 318L152 322L154 326L157 329L158 333L160 337L162 340zM152 346L148 345L144 344L140 342L136 340L131 340L127 339L127 339L131 341L135 342L139 344L144 345L148 347L153 348zM141 343L138 339L136 336L135 333L132 330L131 327L128 324L128 324L130 327L131 331L133 334L135 337L137 340L139 344zM131 339L128 342L126 345L124 348L122 352L120 354L118 357L118 357L121 355L123 352L125 349L127 346L129 343L132 341zM262 293L243 282L225 270L204 261L182 255L159 255L137 258L116 264L116 265L138 261L159 259L180 261L201 268L220 278L238 291L256 303zM222 271L214 274L206 276L199 280L193 286L187 291L182 297L182 298L188 292L195 288L200 283L207 280L215 279L223 277zM207 276L203 276L199 276L195 277L191 277L187 278L183 279L183 280L187 279L191 279L195 279L199 279L203 279L206 280zM200 280L197 278L195 276L191 275L187 274L184 273L181 271L180 272L183 274L187 276L190 276L193 278L196 280L199 283zM194 286L190 286L186 286L183 285L179 283L176 282L172 281L172 281L176 283L179 285L182 286L186 288L190 288L194 288zM186 291L185 294L184 297L183 300L181 303L179 305L178 308L178 309L180 306L182 303L184 301L186 298L187 295L188 292zM183 257L181 251L180 245L177 238L177 232L176 225L177 218L176 218L175 225L175 232L175 239L176 245L178 252L180 259zM179 244L175 243L172 242L168 242L164 243L161 244L157 244L157 244L161 245L164 244L168 244L171 244L174 245L177 246zM176 238L174 237L171 236L169 236L166 235L164 235L161 235L161 236L164 236L166 237L169 237L171 238L173 239L176 240zM177 231L173 228L170 225L166 224L162 221L158 219L154 217L154 218L158 220L161 222L165 225L169 227L172 230L175 233zM176 226L178 222L182 220L185 218L189 217L193 214L197 213L197 213L193 214L189 215L185 217L181 218L177 221L174 225zM256 191L242 176L226 162L212 146L203 128L197 107L187 88L171 73L171 73L185 89L194 108L199 129L207 150L221 167L236 182L252 198zM223 162L216 164L209 166L202 167L195 167L189 165L182 163L181 163L188 167L195 169L203 170L210 169L217 168L224 167zM208 167L206 169L204 172L202 175L199 177L196 179L194 181L194 182L197 180L200 178L203 176L206 173L208 171L210 168zM194 168L192 172L191 176L188 179L186 183L185 187L184 192L185 192L186 188L187 184L189 180L192 176L194 173L196 169zM188 165L185 166L183 167L180 169L178 170L175 171L173 173L174 174L176 172L178 171L181 170L183 169L186 168L189 167zM202 127L196 123L189 118L181 116L174 113L167 110L159 109L159 110L167 111L174 115L181 118L188 121L194 125L200 130zM188 118L185 119L181 118L178 117L175 116L171 116L167 116L167 116L171 117L174 117L178 119L181 119L185 120L188 121zM181 116L177 116L173 118L169 120L166 122L162 122L158 123L158 123L162 123L166 123L170 121L173 119L177 118L181 118zM174 113L170 113L167 113L164 112L161 111L157 110L154 109L154 109L157 111L160 112L163 114L167 115L171 115L174 115zM167 110L163 111L160 112L157 113L154 114L151 115L148 115L148 116L151 116L155 115L158 114L161 113L164 113L167 112zM187 89L188 84L188 79L187 74L186 69L187 64L188 59L188 59L186 64L185 69L186 74L187 79L186 83L185 88zM188 80L191 77L193 73L196 71L198 67L201 65L204 62L203 61L200 64L197 67L195 70L192 72L190 75L187 78zM187 73L184 71L180 69L176 67L172 66L168 64L163 64L163 64L167 65L171 67L175 69L179 70L183 72L186 75zM187 68L185 65L184 61L182 57L180 54L179 50L178 46L178 46L178 50L179 54L180 58L182 61L183 66L185 70zM235 90L213 85L189 83L167 80L144 78L123 69L103 59L83 47L83 47L102 60L122 71L144 81L166 84L189 87L211 90L233 95zM143 78L139 82L135 87L133 93L132 99L132 105L133 111L134 111L133 105L134 99L135 94L137 88L140 84L144 80zM135 88L135 91L136 95L137 99L139 102L141 106L142 109L142 109L142 105L140 102L139 98L137 95L137 91L137 87zM132 100L135 102L137 105L139 107L142 109L145 111L149 112L149 112L146 110L143 108L140 106L138 104L136 101L134 98zM132 104L129 107L126 109L123 112L120 114L117 116L114 119L115 120L118 117L120 115L124 113L127 111L130 108L133 106zM214 -9L201 -17L186 -22L171 -25L157 -32L142 -38L127 -40L112 -44L112 -44L127 -40L142 -38L156 -32L170 -25L185 -21L200 -16L214 -9zM187 -22L182 -29L179 -36L174 -42L171 -49L167 -57L166 -65L166 -64L166 -56L170 -49L173 -42L177 -35L181 -28L185 -21zM178 -36L175 -38L171 -40L168 -42L163 -43L159 -44L156 -45L155 -45L159 -43L163 -42L167 -41L170 -38L174 -36L178 -34zM170 -50L168 -51L166 -53L163 -54L161 -56L159 -57L156 -58L156 -57L158 -56L161 -55L163 -53L165 -51L167 -50L170 -48zM158 -33L153 -37L149 -42L145 -47L141 -52L137 -56L131 -60L131 -59L136 -56L140 -51L144 -46L148 -41L152 -36L156 -32zM149 -42L148 -46L146 -49L145 -52L143 -56L140 -59L137 -62L137 -61L139 -58L142 -55L143 -52L144 -48L146 -45L147 -41zM144 -47L142 -48L140 -50L139 -52L136 -54L133 -55L130 -55L130 -55L133 -54L135 -53L137 -51L139 -49L141 -47L144 -45zM142 -51L144 -54L146 -57L148 -59L151 -62L152 -65L155 -68L154 -68L152 -66L150 -63L147 -60L144 -58L142 -55L140 -52zM137 -57L134 -57L131 -57L128 -57L125 -57L122 -57L119 -57L119 -56L122 -56L125 -56L128 -55L131 -55L134 -55L136 -55zM126 -41L122 -38L118 -35L114 -33L109 -31L105 -30L100 -27L100 -27L105 -29L110 -30L115 -31L119 -34L124 -36L127 -39zM119 -36L115 -37L111 -39L108 -42L105 -45L104 -49L102 -52L101 -52L103 -48L105 -44L107 -40L110 -37L114 -35L118 -34zM105 -30L102 -32L99 -34L96 -37L93 -39L90 -41L87 -43L87 -42L90 -40L92 -38L95 -35L98 -33L101 -31L104 -28z"/></svg>
+      <div class="mist mist-low"></div>
+    </div>
 
-    <section class="card" aria-labelledby="session-title">
-      <h2 id="session-title">Join the field test</h2>
-      <p id="connection-status" role="status">Connecting to the computer backend…</p>
-      <label for="nickname">Nickname</label><input id="nickname" maxlength="32" autocomplete="nickname" placeholder="Your nickname">
-      <label for="room-code">Session code (to join)</label><input id="room-code" maxlength="8" autocomplete="off" placeholder="8-character code">
-      <div class="actions"><button id="create-room">Create session</button><button id="join-room">Join session</button></div>
-      <p id="room-status" class="description" role="status"></p><p id="players" class="hint"></p><p id="connection-error" role="alert"></p>
-      <p class="hint">You can also play as a temporary guest. Sign in to keep your identity across devices. Only the creator can place or replace the shared treasure. Each player may collect once per round.</p>
-    </section>
+    <div id="screens" class="screens">
+      <section id="screen-loading" class="screen screen-loading" aria-label="Loading">
+        <div class="loader"><svg class="art" aria-hidden="true"><use href="#chest"/></svg></div>
+        <p>Opening the map…</p>
+      </section>
 
-    <ol class="steps" aria-label="Test steps"><li id="step-place" class="current">Set a point</li><li id="step-leave">Leave</li><li id="step-return">Return</li><li id="step-collect">Collect</li></ol>
+      <section id="screen-entry" class="screen screen-entry" aria-labelledby="entry-brand" hidden>
+        <header class="topbar">
+          <button id="entry-back" class="link" type="button" hidden>‹ Back to room</button>
+          <span class="spacer"></span>
+          <button id="open-account" class="chip" type="button">Sign in</button>
+        </header>
+        <div class="hero">
+          <div class="hero-art">
+            <svg class="art" aria-hidden="true"><use href="#chest"/></svg>
+          </div>
+          <h1 id="entry-brand" class="wordmark"><small>Campus</small> <span>Quest</span></h1>
+          <p>Hide a treasure on campus. Walk away, come back, and claim it through your camera.</p>
+        </div>
+        <p id="environment" class="alert" role="status" hidden></p>
+        <div id="entry-home" class="panel">
+          <p id="connection-status" class="quiet" role="status">Connecting…</p>
+          <div id="room-shortcuts" class="shortcuts" hidden></div>
+          <button id="show-create" class="primary" type="button">Create a room</button>
+          <button id="show-join" class="secondary" type="button">Join with a code</button>
+        </div>
+        <form id="entry-form" class="panel panel-card" novalidate hidden>
+          <div class="panel-head"><button id="entry-cancel" class="link" type="button">‹ Back</button><h2 id="entry-title">Create a room</h2></div>
+          <div id="nickname-field" class="field-group"><label for="nickname">Nickname</label><input id="nickname" maxlength="32" autocomplete="nickname" placeholder="What should others call you?"></div>
+          <div id="code-field" class="field-group"><label for="room-code">Room code</label><input id="room-code" class="code-input" maxlength="8" minlength="8" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="8 characters"></div>
+          <button id="entry-submit" class="primary" type="submit">Create room</button>
+        </form>
+        <p id="connection-error" class="alert" role="alert" hidden></p>
+      </section>
 
-    <section class="card" aria-labelledby="location-title">
-      <div class="heading"><div><p class="eyebrow">01 / EXPLORE</p><h2 id="location-title">Start here</h2></div><span id="location-status" class="badge">Not started</span></div>
-      <p id="location-message" class="description" role="status">Choose an outdoor spot where you can walk away and return. Then start location.</p>
-      <div class="metrics"><div><span>Distance</span><strong id="distance">—</strong></div><div><span>Reported accuracy</span><strong id="accuracy">—</strong></div><div><span>Reading age</span><strong id="age">—</strong></div></div>
-      <div class="actions"><button id="start-location" class="primary">Start live location</button><button id="stop-location" disabled>Stop location</button></div>
-      <div class="placement"><label for="radius">Collection radius <span>metres</span></label><input id="radius" type="number" min="15" max="100" step="5" value="30" inputmode="numeric"><button id="place" disabled>Place treasure here</button></div>
-      <p class="hint">After placement, leave the radius plus its boundary buffer, then return near the centre. The initial radius is 30 m; reported accuracy must be 20 m or better. The computer backend checks positions and records collections. These are experimental settings.</p>
-      <p id="journey-message" class="journey-message" role="status">No treasure point yet.</p>
-    </section>
+      <section id="screen-field" class="screen screen-field" aria-labelledby="headline" hidden>
+        <header class="topbar">
+          <button id="open-room" class="chip chip-room" type="button" aria-label="Room details"><b id="room-label">—</b><span id="player-count"></span></button>
+          <span class="spacer"></span>
+          <span id="location-status" class="chip chip-status" role="status">Location off</span>
+          <button id="open-menu" class="icon-button" type="button" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+        </header>
+        <ol id="steps" class="steps" data-step="0" aria-label="Round progress"><li id="step-place" class="current"><span>Hide</span></li><li id="step-leave"><span>Leave</span></li><li id="step-return"><span>Return</span></li><li id="step-collect"><span>Claim</span></li></ol>
 
-    <section class="card camera-card" aria-labelledby="camera-title">
-      <div class="heading"><div><p class="eyebrow">02 / DISCOVER</p><h2 id="camera-title">Find your treasure</h2></div><span id="camera-status" class="badge">Awaiting discovery</span></div>
-      <div class="viewfinder">
+        <div class="stage">
+          <div id="gauge" class="gauge" data-tone="" data-heat="0" data-empty="1">
+            <i class="ping"></i>
+            <svg class="gauge-ring" viewBox="0 0 200 200" aria-hidden="true">
+              <circle class="gauge-disc" cx="100" cy="100" r="84"/>
+              <circle class="gauge-track" cx="100" cy="100" r="84" pathLength="100"/>
+              <circle id="gauge-zone" class="gauge-zone" cx="100" cy="100" r="78" pathLength="100" stroke-dasharray="1 2"/>
+              <circle id="gauge-arc" class="gauge-arc" cx="100" cy="100" r="84" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" transform="rotate(-90 100 100)"/>
+              <g id="gauge-head" class="gauge-head"><circle cx="100" cy="16" r="9" class="gauge-head-glow"/><circle cx="100" cy="16" r="4.500" class="gauge-head-dot"/></g>
+            </svg>
+            <svg class="gauge-glyph" aria-hidden="true"><use href="#chest"/></svg>
+            <div class="gauge-core"><strong id="distance">—</strong><span id="distance-label">No treasure yet</span></div>
+          </div>
+          <div id="collected" class="collected" hidden>
+            <i class="rays rays-big"></i>
+            <svg class="chest-live" viewBox="0 0 160 130" aria-hidden="true">
+              <g class="lid-open">
+                <path fill="url(#g-lid)" d="M18 64V32C18 14 36 2 58 2h44c22 0 40 12 40 30v32z"/>
+                <path fill="url(#g-hollow)" d="M28 64V36c0-14 14-24 32-24h40c18 0 32 10 32 24v28z"/>
+                <path fill="url(#g-gold)" d="M32 4h15v12H32zM113 4h15v12h-15z"/>
+              </g>
+              <g class="hoard">
+                <path fill="url(#g-hoard)" d="M22 72c4-16 16-14 22-22 8-8 16-2 24-8 8-6 18-6 26 0 8 6 16 0 24 8 6 8 18 6 20 22z"/>
+                <path fill="#ff5f7a" d="M54 44l8 6-8 12-8-12z"/><path fill="#fff" fill-opacity=".5" d="M54 44l8 6h-16z"/>
+                <path fill="#4de3d0" d="M104 42l7 6-7 11-7-11z"/><path fill="#fff" fill-opacity=".5" d="M104 42l7 6H97z"/>
+                <path fill="#fff6cf" d="M80 30a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm-46 22a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm92 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/>
+              </g>
+              <rect x="16" y="66" width="128" height="56" rx="8" fill="url(#g-wood)"/>
+              <path fill="#3d1c08" opacity=".5" d="M16 84h128v2H16zM16 103h128v2H16z"/>
+              <path fill="url(#g-gold)" d="M32 66h15v56H32zM113 66h15v56h-15z"/>
+              <rect x="11" y="60" width="138" height="10" rx="4" fill="url(#g-gold)"/>
+              <rect x="64" y="60" width="32" height="30" rx="7" fill="url(#g-gold)" stroke="#8a5413" stroke-width="1.500"/>
+              <path fill="#3a1d07" d="M80 66a5.500 5.500 0 0 1 3 10.100V84h-6v-7.900A5.500 5.500 0 0 1 80 66z"/>
+              <g class="lid-shut">
+                <path fill="url(#g-lid)" d="M16 66V48C16 26 36 12 58 12h44c22 0 42 14 42 36v18z"/>
+                <path fill="url(#g-gold)" d="M32 15h15v51H32zM113 15h15v51h-15z"/>
+              </g>
+            </svg>
+            <p id="receipt" class="receipt"></p>
+          </div>
+          <h2 id="headline" class="headline">Hide the treasure</h2>
+          <p id="message" class="message" role="status"></p>
+        </div>
+
+        <dl id="readouts" class="readouts"><div><dt>GPS accuracy</dt><dd id="accuracy">—</dd></div><div><dt>Last update</dt><dd id="age">—</dd></div></dl>
+        <p id="alert" class="alert" role="alert" hidden></p>
+
+        <div class="dock">
+          <div id="place-panel" class="place-panel" hidden>
+            <label for="radius">Claim radius <output id="radius-value" for="radius">30 m</output></label>
+            <input id="radius" type="range" min="15" max="100" step="5" value="30">
+            <p id="place-note" class="quiet" hidden>This starts a new round for everyone in the room.</p>
+            <button id="place" class="primary" type="button" disabled>Hide treasure here</button>
+          </div>
+          <button id="start-location" class="primary" type="button">Turn on location</button>
+          <button id="place-cancel" class="link" type="button" hidden>Cancel</button>
+          <p id="location-note" class="quiet">Your coordinates go to the host computer to check range. Camera video stays on this phone.</p>
+          <button id="start-camera" class="primary primary-call" type="button" disabled hidden>Open camera</button>
+          <button id="rehide" class="secondary" type="button" hidden>Hide a new treasure</button>
+        </div>
+      </section>
+
+      <section id="screen-camera" class="screen screen-camera" aria-label="Camera" hidden>
         <video id="camera" autoplay muted playsinline aria-label="Live rear camera"></video>
-        <div id="camera-placeholder" class="placeholder"><span class="compass">⌖</span><p>Unlock the treasure to open the camera</p><small>Your live camera appears here</small></div>
-        <button id="treasure" class="treasure" hidden disabled aria-label="Collect treasure"><span class="halo"></span><span class="chest"><span class="lid"></span><span class="lock"></span></span><span class="treasure-label">Campus treasure<span>Tap to collect</span></span></button>
-        <div id="collected" class="success" hidden><span>✓</span><h3>Treasure collected</h3><p>Your field attempt is complete.</p></div>
-        <span class="camera-caption">CAMERA ENCOUNTER</span>
+        <div id="camera-placeholder" class="camera-placeholder"><div class="reticle"><i></i><i></i><i></i><i></i></div></div>
+        <header class="topbar">
+          <span id="camera-status" class="chip chip-status" role="status">Starting camera</span>
+          <span class="spacer"></span>
+          <button id="stop-camera" class="icon-button" type="button" aria-label="Close camera"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </header>
+        <button id="treasure" class="treasure" type="button" hidden disabled aria-label="Claim treasure"><i class="shock"></i><svg class="art" aria-hidden="true"><use href="#chest"/></svg><span>Tap to claim</span></button>
+        <div class="camera-foot">
+          <p id="camera-message" role="status"></p>
+          <button id="retry-playback" class="primary" type="button" hidden>Resume video</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="scrim" class="scrim" hidden></div>
+
+    <section id="sheet-menu" class="sheet" role="dialog" aria-modal="true" aria-label="Menu" tabindex="-1" hidden>
+      <div class="sheet-head"><h2>Room <b id="sheet-room-code">—</b></h2><button id="copy-code" class="chip" type="button">Copy code</button><button class="icon-button" data-close-sheet type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <ul id="players" class="players" aria-label="Players"></ul>
+      <div class="identity"><p id="account-status" role="status"></p><button id="open-account-menu" class="chip" type="button">Sign in</button><button id="logout" class="chip" type="button" hidden>Sign out</button></div>
+      <div class="menu-list">
+        <button id="stop-location" type="button" disabled>Turn off location</button>
+        <button id="move-treasure" type="button" hidden>Move the treasure</button>
+        <button id="switch-room" type="button">Switch room</button>
+        <button id="open-notes" type="button">Field notes</button>
+        <a href="/device-check/">Hardware diagnostics</a>
       </div>
-      <p id="camera-message" class="description" role="status">Leave the area and return to unlock the treasure.</p>
-      <div class="actions"><button id="start-camera" class="primary" disabled>Open camera</button><button id="stop-camera" disabled>Close camera</button></div>
-      <button id="retry-playback" class="text-button" hidden>Resume video</button>
-      <p class="hint">The chest is an interactive camera overlay, without ground anchoring or positioning. Collection checks that location and live video are still valid.</p>
+      <p class="fineprint">The treasure point is saved on the host computer. Your latest position stays in its memory, with no movement history. Backgrounding the page stops location and camera.</p>
     </section>
 
-    <details class="card notes"><summary>Field notes</summary><p class="description">Export your report with actual field observations. Automatic records do not establish physical-device acceptance.</p><label for="notes">Your observations</label><textarea id="notes" maxlength="1500" rows="3" placeholder="Note trigger timing, camera behaviour and changes near the boundary."></textarea><button id="download-report">Export coordinate-free report</button><p id="report-status" role="status" class="hint"></p></details>
-    <footer><p>Starting location shares your coordinates with the computer backend. The treasure point is saved on that computer; each player's latest position is held in memory, without a stored movement history. Camera video stays on the phone. A temporary HTTPS relay can process network traffic. Backgrounding stops capture; restart manually on return. Collections survive reloads. Keep private information out of notes.</p><a href="/device-check/">Hardware diagnostics ↗</a><span>CAMPUS QUEST / FEASIBILITY FIRST</span></footer>
-  </main>
+    <section id="sheet-account" class="sheet" role="dialog" aria-modal="true" aria-labelledby="account-title" tabindex="-1" hidden>
+      <div class="sheet-head"><h2 id="account-title">Your account</h2><button class="icon-button" data-close-sheet type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <form id="account-form" novalidate>
+        <div class="field-group"><label for="username">Username</label><input id="username" name="username" minlength="3" maxlength="32" pattern="[A-Za-z0-9_]{3,32}" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required placeholder="3–32 letters, numbers or _"></div>
+        <div class="field-group"><label for="password">Password</label><input id="password" name="password" type="password" maxlength="128" autocomplete="current-password" required placeholder="Anything you'll remember"></div>
+        <p id="account-error" class="alert" role="alert" hidden></p>
+        <div class="row"><button id="register" class="secondary" type="button">Create account</button><button id="login" class="primary" type="submit">Sign in</button></div>
+      </form>
+      <p id="account-hint" class="fineprint"></p>
+    </section>
+
+    <section id="sheet-notes" class="sheet" role="dialog" aria-modal="true" aria-labelledby="notes-title" tabindex="-1" hidden>
+      <div class="sheet-head"><h2 id="notes-title">Field notes</h2><button class="icon-button" data-close-sheet type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <label for="notes">What did you notice?</label>
+      <textarea id="notes" maxlength="1500" rows="4" placeholder="Trigger timing, camera behaviour, changes near the boundary."></textarea>
+      <button id="download-report" class="primary" type="button">Export report</button>
+      <p id="report-status" class="fineprint" role="status">The report has no coordinates. Keep private details out of your notes.</p>
+    </section>
+
+    <canvas id="fx" class="fx" aria-hidden="true"></canvas>
+    <div id="flash" class="flash" aria-hidden="true"></div>
+  </div>
 </body>
 </html>

@@ -112,9 +112,12 @@ test('account mutations enforce origin, JSON and session-specific CSRF; invalid 
   try {
     assert.equal(a.call('POST','/api/auth/register',{username:'safe_user',password},{origin:'https://evil.example'}).status,403);
     assert.equal(a.call('POST','/api/auth/login',{username:'safe_user',password},{'content-type':'text/plain'}).status,415);
-    for(const value of ['short',null,'x'.repeat(129)]) {
+    for(const value of ['',null,'x'.repeat(129)]) {
       assert.equal((await a.call('POST','/api/auth/register',{username:'safe_user',password:value})).status,400);
     }
+    const casual=h.client();
+    assert.equal((await casual.call('POST','/api/auth/register',{username:'casual_user',password:'1'})).status,201);
+    assert.equal((await h.client().call('POST','/api/auth/login',{username:'casual_user',password:'1'})).status,200);
     a.create();
     assert.equal((await a.call('POST','/api/auth/register',{username:'safe_user',password},{'x-csrf-token':'wrong'})).status,403);
     const signed=await register(a,'safe_user');assert.equal(signed.status,201);
@@ -131,7 +134,7 @@ test('authentication throttling spans clients by username and recovers after the
   const h=backendHarness(),a=h.client();
   try {
     for(let i=0;i<8;i++) {
-      const result=await h.client().call('POST','/api/auth/login',{username:'missing_user',password:'short'});
+      const result=await h.client().call('POST','/api/auth/login',{username:'missing_user',password:''});
       assert.equal(result.status,400);
     }
     assert.equal((await login(a,'missing_user')).status,429);

@@ -1,0 +1,56 @@
+{
+  "id": "E-20261104-003",
+  "checkedOn": "2026-11-04",
+  "environment": "Desktop app browser pane with emulated viewports; isolated backend on loopback port 4190, run from a temporary working directory. The running .local database was not touched.",
+  "automated": {
+    "npmTest": {
+      "tests": 50,
+      "pass": 50,
+      "fail": 0
+    },
+    "npmRunBuild": "passed; existing prototype chunk-size warning remains",
+    "npmCi": "not run; dependencies unchanged"
+  },
+  "menuJolt": {
+    "cause": "Focusing the sheet while it was translated below the viewport scrolled the overflow-hidden .app container.",
+    "measuredBeforeFix": {
+      "appScrollTopAfterOpeningMenu": 496
+    },
+    "measuredAfterFix": {
+      "maxAppScrollTopDuringOpenAndClose": 0,
+      "headlineShiftPx": 0
+    }
+  },
+  "browserChecks": {
+    "viewports": [
+      "390x780",
+      "320x500"
+    ],
+    "walkedStates": [
+      "entry",
+      "create room",
+      "menu open and close",
+      "place",
+      "leave",
+      "ready",
+      "camera live",
+      "claim",
+      "claimed",
+      "reload restore"
+    ],
+    "sampled": {
+      "exitCopiesRemaining": 0,
+      "horizontalOverflow": false,
+      "cspErrorsInConsole": 0
+    }
+  },
+  "simulatedInputs": "Geolocation and getUserMedia were replaced from the browser console, in the test tab only. No stub ships in the page.",
+  "limits": "The final moon and sun position adjustment was made after the entry, place, leave, camera and 320 width frames and only the 390 claimed frame was retaken. Screenshots are still frames; smoothness was not measured.",
+  "notEvidenceOf": [
+    "the jolt being gone on the user's iPhone",
+    "iPhone Safari behaviour or animation performance",
+    "real location or camera",
+    "Safari toolbar and on-screen keyboard layout",
+    "user or grader reaction"
+  ]
+}

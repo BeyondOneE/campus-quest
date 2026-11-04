@@ -15,7 +15,7 @@
 
 共享实验使用已验证的 Node.js 24.19.0，运行 `npm start`，打开 `http://127.0.0.1:4180/treasure-lab/`。电脑同时提供页面与 [业务 API](docs/backend-api.md)。手机使用 [局域网 HTTPS](docs/lan-access.md)、匹配的 `PUBLIC_ORIGIN` 及用户手动信任的开发证书；Cloudflare 保持关闭，手机信任和连通仍待确认。
 
-前端交接从 [Claude 开工指令](docs/claude-frontend-brief.md)、[修改 / 验收说明](docs/frontend-handoff.md) 和 [接口契约](docs/backend-api.md) 开始；文档对应包含尚未提交文件的当前工作树。
+前端交接从 [Claude 开工指令](docs/claude-frontend-brief.md)、[修改 / 验收说明](docs/frontend-handoff.md) 和 [接口契约](docs/backend-api.md) 开始；界面已改为不滚动的分屏结构，见 [2026-11-04 记录](progress/zh-CN/daily/2026-11-04.md)。
 
 保留的 Vite 原型使用 Node.js 22.12+ 的兼容版本（历史在 Node.js 22.23.2 验证，共享后端当前使用 Node.js 24.19.0）：
 

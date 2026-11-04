@@ -15,7 +15,7 @@ A collaborative campus treasure-hunt project for new students and visitors at XJ
 
 For the shared experiment, use the validated Node.js 24.19.0 runtime and run `npm start`. Open `http://127.0.0.1:4180/treasure-lab/`; the computer serves both the page and the [business API](docs/backend-api.en.md). Phone access uses [direct LAN HTTPS](docs/lan-access.en.md), a matching `PUBLIC_ORIGIN` and manually trusted development certificate. Cloudflare remains off; phone trust and connectivity are still pending.
 
-Frontend handoff: start with the [Claude brief](docs/claude-frontend-brief.en.md), [edit / acceptance guide](docs/frontend-handoff.en.md) and [API contract](docs/backend-api.en.md). These describe the current working tree, including files not yet committed.
+Frontend handoff: start with the [Claude brief](docs/claude-frontend-brief.en.md), [edit / acceptance guide](docs/frontend-handoff.en.md) and [API contract](docs/backend-api.en.md). The page now uses non-scrolling screens; see the [2026-11-04 record](progress/en/daily/2026-11-04.md).
 
 For the retained Vite prototype, use a compatible Node.js version of 22.12+ (historically validated with Node.js 22.23.2; the current shared backend uses Node.js 24.19.0):
 
