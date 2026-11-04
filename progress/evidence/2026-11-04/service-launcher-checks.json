@@ -1,0 +1,55 @@
+{
+  "id": "E-20261104-006",
+  "checkedOn": "2026-11-04",
+  "type": "one-command-service-launcher-validation",
+  "automated": {
+    "nodeTests": 51,
+    "passed": 51,
+    "failed": 0,
+    "pythonLauncherChecksWithinNodeSuite": 7,
+    "npmCi": "passed",
+    "build": "passed-with-existing-prototype-warning",
+    "syntax": "passed",
+    "moderateDependencyAdvisories": 10,
+    "dependencyOrLockfileChanged": false
+  },
+  "isolatedChecks": [
+    "assigned-address-selection",
+    "ambiguity-and-invalid-address-rejection",
+    "PID-reuse-guard",
+    "unrelated-port-owner-guard",
+    "start-repeat-status-restart-stop",
+    "durable-room-and-root-certificate-reuse",
+    "private-logs-and-state",
+    "foreign-live-listener-conflict",
+    "incomplete-CA-preservation"
+  ],
+  "runtime": {
+    "backendReused": true,
+    "terminalProxyReplacedWithDetachedProcess": true,
+    "repeatedStartDidNotDuplicatePids": true,
+    "backendHttp": "passed",
+    "lanHttpsWithExplicitCa": "passed",
+    "certificateSetup": "passed",
+    "runtimeAggregateRowCountsPreserved": true,
+    "developmentCaPreserved": true,
+    "bothServicesDetached": true,
+    "logAndStateModes": "600",
+    "leftRunning": true,
+    "actualRuntimeStopOrRestartTested": false
+  },
+  "phonePermissionsOrTrustChanged": false,
+  "externalRelay": false,
+  "physicalSafariAcceptance": false,
+  "limits": [
+    "Stop / restart were verified in an isolated temporary checkout and database.",
+    "No boot service or crash-restart supervisor is installed.",
+    "Phone certificate trust and real device play remain pending."
+  ],
+  "documentation": {
+    "languagePairs": 8,
+    "localLinksResolved": 220,
+    "pairedIds": "passed",
+    "diffWhitespace": "passed"
+  }
+}

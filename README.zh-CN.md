@@ -8,12 +8,12 @@
 
 - Vite 原型 `/`（`npm run dev`）：保留的六页前端演示，房间、AR、语音、队友、排行榜及 AI 仍为模拟内容。后端根路径（`npm start`）跳转至 `/treasure-lab/`。
 - `/device-check/`：独立的 Safari 真机验证页，检查后置相机、姿态与旋转速率、定位、切后台后的手动恢复，并导出 JSON 报告。
-- `/treasure-lab/`：电脑后端托管的寻宝实验，支持访客场次、共享放置与每人领取持久化；见 [测试步骤](docs/treasure-lab.md)。尚未通过 Safari 实地验收。
+- `/treasure-lab/`：电脑后端托管的寻宝实验，支持访客场次、共享测试放置、相机方向箭头、近处目标、瞄准领取与每人领取持久化；见 [测试步骤](docs/treasure-lab.md)。尚未通过 Safari 实地验收。
 - 实验已有真实后端；本地用户名 / 密码账号已实现；学生身份验证、最终多人玩法和空间 AR 跟踪尚未实现。原六页演示仍使用模拟功能。
 
 ## 本地开发
 
-共享实验使用已验证的 Node.js 24.19.0，运行 `npm start`，打开 `http://127.0.0.1:4180/treasure-lab/`。电脑同时提供页面与 [业务 API](docs/backend-api.md)。手机使用 [局域网 HTTPS](docs/lan-access.md)、匹配的 `PUBLIC_ORIGIN` 及用户手动信任的开发证书；Cloudflare 保持关闭，手机信任和连通仍待确认。
+共享实验使用已验证的 Node.js 24.19.0，运行 `./start.sh` 同时拉起后端与局域网 HTTPS，用 `./start.sh status`、`restart`、`stop` 管理；脚本打印当前手机地址。手动只开后端仍可用 `npm start`。打开 `http://127.0.0.1:4180/treasure-lab/`。电脑同时提供页面与 [业务 API](docs/backend-api.md)。手机使用 [局域网 HTTPS](docs/lan-access.md)、匹配的 `PUBLIC_ORIGIN` 及用户手动信任的开发证书；Cloudflare 保持关闭，手机信任和连通仍待确认。
 
 前端交接从 [Claude 开工指令](docs/claude-frontend-brief.md)、[修改 / 验收说明](docs/frontend-handoff.md) 和 [接口契约](docs/backend-api.md) 开始；界面已改为不滚动的分屏结构，见 [2026-11-04 记录](progress/zh-CN/daily/2026-11-04.md)。
 
@@ -45,7 +45,7 @@ python3 scripts/serve_device_check.py
 
 项目测试分为自动化逻辑测试、桌面浏览器检查、iPhone 真机实测三类。前两类通过不代表 iPhone 硬件能力已经通过。最新状态见 [项目状态](docs/project-status.md)。
 
-精确坐标默认不会写入导出的报告，报告和相机画面不会自动上传。共享实验中，开启定位会向电脑发送位置作范围判定；共享点坐标保存到被忽略的 SQLite，玩家最近位置只在内存保留，不保存轨迹。访客身份和领取记录刷新后可恢复；诊断页刷新仍清空状态。私密报告与数据库不得进入 Git。
+精确坐标默认不会写入导出的报告，报告和相机画面不会自动上传。共享实验中，开启定位会向电脑发送位置作范围判定；共享点坐标保存到被忽略的 SQLite，玩家最近位置只在内存保留，不保存轨迹。瞄准读数也发送电脑作临时停留判定，相机画面保留手机；手动埋藏是测试工具，后续方向为系统生成 / 工作人员布置。访客身份和领取记录刷新后可恢复；诊断页刷新仍清空状态。私密报告与数据库不得进入 Git。
 
 ## 过程记录与规范
 
@@ -59,10 +59,14 @@ python3 scripts/serve_device_check.py
 - `public/device-check/`：无第三方运行依赖的真机诊断页面。
 - `public/treasure-lab/`：英文功能页、同源 API 适配器、真实定位与相机生命周期。
 - `server/`：Node HTTP 后端、SQLite 账号 / 访客场次 / 共享点 / 收集凭据；私密数据保存在被忽略的 `.local/`。
-- `scripts/`：只提供诊断页面的本地服务器。
+- `scripts/`：诊断服务器、局域网证书设置与后台服务管理器。
 - `tests/`：数据有效性、权限和生命周期测试。
 - `docs/archive/`：原始 proposal、交接说明和来源校验清单。
 - `docs/`：双语规范、已确认范围、测试方法与实测状态。
 - `progress/`：双语日记、周模板、索引和共享脱敏证据。
 
 原始 proposal 中的 Rokid 眼镜方案为历史背景；当前手机网页决策以项目状态文档为准。包含 API 密钥或个人信息的课程资料保留在仓库外。
+
+相机向导：已接入文字对话、快捷提问、配置建筑 / 课程介绍与定时距离提示，见 [AI / 内容设置](docs/ai-guide.md)。回复区分预设与 DeepSeek，建筑地理围栏仍待补。离开与领取默认均为 3 米；GPS 暂时丢失保留相机、显示重连转圈并暂停 Claim，见 CQ-20261104-010。
+
+已导入 v0.1 预设：角色、四栋点名建筑和八个专业已接入知识检索，GPS 围栏仍待补。替换 Key 已通过官方 DeepSeek 认证及一次真实向导回答，服务已重启加载，见 [当前接入状态](docs/ai-guide.md)。

@@ -36,6 +36,14 @@ export function backendHarness(path = ':memory:') {
             fix: { latitude: north / 111195, longitude: 0, accuracy, timestamp } });
         },
         place() { return c.call('POST', '/api/treasure', { radius: 30, treasureId: c.data.room.treasureId }); },
+        aimAtTreasure() {
+          for (let i = 0; i < 4; i++) {
+            if (i) h.advance(450);
+            c.call('POST', '/api/aim', { treasureId: c.data.room.treasureId, sample: {
+              heading: c.data.state.guidance?.bearingDegrees ?? 180, pitch: 0, timestamp: time,
+              source: 'webkit-compass', accuracy: 5, cameraLive: true, videoAgeMs: 0 } });
+          }
+        },
         collect() { return c.call('POST', '/api/collect', { treasureId: c.data.room.treasureId, cameraLive: true }); },
         returnToTreasure() { h.advance(1000); c.fix(65); h.advance(1000); c.fix(0); h.advance(2000); c.fix(0); } };
       return c;

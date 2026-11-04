@@ -25,7 +25,9 @@ test('server rejects early collection and gives each player exactly one durable 
   a.fix(); a.place(); b.call('GET','/api/state');
   assert.equal(a.collect().status, 409);
   a.returnToTreasure(); b.returnToTreasure();
-  const first = a.collect(), duplicate = a.collect(), other = b.collect();
+  a.aimAtTreasure();
+  const first = a.collect(), duplicate = a.collect();
+  b.aimAtTreasure(); const other = b.collect();
   assert.equal(first.status, 200); assert.equal(duplicate.data.collection.repeated, true);
   assert.equal(first.data.collection.id, duplicate.data.collection.id); assert.equal(other.status, 200);
   assert.notEqual(other.data.collection.id, first.data.collection.id);
@@ -55,7 +57,7 @@ test('stopping location invalidates eligibility; re-placement isolates delayed r
 test('persistent storage restores identities, shared points and receipts without storing player movement histories', () => {
   const dir=mkdtempSync(join(tmpdir(),'cq-backend-')); const path=join(dir,'test.sqlite');
   try {
-    const h=backendHarness(path),a=h.client();a.create();a.fix();a.place();a.returnToTreasure();a.collect();
+    const h=backendHarness(path),a=h.client();a.create();a.fix();a.place();a.returnToTreasure();a.aimAtTreasure();a.collect();
     const code=a.data.room.code,id=a.data.receipt.id,cookie=a.cookie;h.store.close();
     const store=new GameStore(path,h.now),handle=createApplication({store});
     const response=handle({path:'/api/state',headers:{cookie}}),data=JSON.parse(response.body);

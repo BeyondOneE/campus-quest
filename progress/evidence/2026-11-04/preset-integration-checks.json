@@ -1,0 +1,48 @@
+{
+  "id": "E-20261104-009",
+  "checkedOn": "2026-11-04",
+  "type": "preset-and-private-api-integration",
+  "automated": {
+    "npmCi": "passed",
+    "tests": 80,
+    "passed": 80,
+    "failed": 0,
+    "build": "passed-with-existing-prototype-warning"
+  },
+  "content": {
+    "roleImported": true,
+    "knowledgeRecords": 13,
+    "sourceRecords": 17,
+    "faqRecords": 3,
+    "geofences": 0,
+    "verification": "user-supplied digest; no independent source recheck"
+  },
+  "provider": {
+    "keyConfiguredPrivately": true,
+    "keyValuesExported": false,
+    "officialModelDiscoveryHttpStatus": 401,
+    "prefixCheckHttpStatus": 401,
+    "prefixVariantSaved": false,
+    "successfulLiveGeneration": false,
+    "userConfirmedReplacementNeeded": true
+  },
+  "runtime": {
+    "restart": "passed-after-final-validation",
+    "health": true,
+    "dataOrHardwareChanged": false
+  },
+  "physicalSafariAcceptance": false,
+  "validatedSourceSha256": {
+    "server/guide.mjs": "0ce26734b603b3d0eac13eb81c04721ff0be1963503e6fde6df4e83732f4377e",
+    "server/guide-config.json": "fb08d251bc63c815902e39f7cf6fc07cab1e0ba60620c05dbc840efcfa04e46b",
+    "tests/campus-guide.test.mjs": "b558e382e4c808fc3ea37251c85de0c0d721b441e11294bfe898d9d05938f65b"
+  },
+  "documentation": {
+    "pairedFiles": 6,
+    "relativeLinks": 210,
+    "pairedIds": "passed",
+    "sourceHashes": "passed",
+    "whitespace": "passed",
+    "credentialInPendingFiles": false
+  }
+}

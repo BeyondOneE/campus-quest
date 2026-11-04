@@ -27,7 +27,8 @@ test('placement requires live data; exit, stable return and uncertainty gates pr
   h.advance(1000); h.fix({ north: 65 }); assert.equal(h.session.phase, 'return');
   h.advance(1000); h.fix(); assert.equal(h.session.phase, 'return');
   h.advance(2000); h.fix(); assert.equal(h.session.phase, 'ready');
-  h.advance(1000); h.fix({ north: 29 }); assert.equal(h.node('start-camera').disabled, true, 'boundary cannot collect');
+  h.advance(1000); h.fix({ north: 29 }); assert.equal(h.node('start-camera').disabled, false, 'boundary still permits direction guidance');
+  assert.equal(h.session.snapshot(1800000008000).canClaim, false);
 });
 
 test('duplicate samples, interrupted dwell and stale samples cannot complete a return', () => {
@@ -41,24 +42,30 @@ test('duplicate samples, interrupted dwell and stale samples cannot complete a r
 
 test('camera permission and a stream alone cannot collect; live frames can collect exactly once', async () => {
   const stream = cameraStream(), h = harness({ getUserMedia: () => Promise.resolve(stream) }); h.unlock();
-  await h.click('start-camera'); h.click('treasure'); assert.equal(h.session.collectionCount, 0);
-  h.frame(); assert.equal(h.node('treasure').hidden, false);
-  h.click('treasure'); h.click('treasure');
+  await h.click('start-camera'); h.click('claim'); assert.equal(h.session.collectionCount, 0);
+  h.frame(); h.direction(); assert.equal(h.node('treasure').hidden, false);
+  assert.equal(h.node('claim').disabled, true); h.aimAtTreasure();
+  h.click('claim'); h.click('claim');
   assert.equal(h.session.collectionCount, 1); assert.equal(h.session.phase, 'collected');
   assert.equal(stream.stops, 1); assert.equal(h.node('camera').srcObject, null);
   assert.equal(h.node('collected').hidden, false);
 });
 
-test('expired location closes an active camera and blocks collection', async () => {
+test('expired GPS retains the camera, shows reconnection and blocks collection', async () => {
   const stream = cameraStream(), h = harness({ getUserMedia: () => Promise.resolve(stream) }); h.unlock();
-  await h.click('start-camera'); h.frame(); h.advance(16000); h.click('treasure');
-  assert.equal(h.session.collectionCount, 0); assert.equal(stream.stops, 1);
-  assert.equal(h.node('start-camera').disabled, true);
+  await h.click('start-camera'); h.frame(); h.advance(16000); h.frame(); h.click('claim');
+  assert.equal(h.session.collectionCount, 0); assert.equal(stream.stops, 0);
+  assert.equal(h.node('camera').srcObject,stream);assert.equal(h.node('app').dataset.screen,'camera');
+  assert.equal(h.node('gps-spinner').hidden,false);assert.equal(h.node('ar-arrow').hidden,true);
+  assert.match(h.node('ar-message').textContent,/GPS signal lost/);assert.equal(h.geoRequests,2);
+  h.fix();h.frame();h.direction();assert.equal(h.node('gps-spinner').hidden,true);
+  assert.equal(h.node('claim').disabled,true);h.aimAtTreasure();assert.equal(h.node('claim').disabled,false);
+  assert.equal(h.cameraRequests,1);
 });
 
 test('stalled video blocks collection even with recent location', async () => {
   const h = harness({ getUserMedia: () => Promise.resolve(cameraStream()), frameCallbacks: true }); h.unlock();
-  await h.click('start-camera'); h.frame(); h.advance(3000); h.fix(); h.click('treasure');
+  await h.click('start-camera'); h.frame(); h.advance(3000); h.fix(); h.click('claim');
   assert.equal(h.session.collectionCount, 0); assert.equal(h.node('treasure').hidden, true);
 });
 
@@ -80,20 +87,23 @@ test('camera denial and blocked playback allow retry without claiming success', 
   await h.click('start-camera'); assert.equal(h.node('retry-playback').hidden, false);
   assert.equal(h.node('treasure').hidden, true);
   h.node('camera').play = function () { this.paused = false; return Promise.resolve(); };
-  await h.click('retry-playback'); h.frame(); assert.equal(h.node('treasure').hidden, false);
+  await h.click('retry-playback'); h.frame(); h.direction(); assert.equal(h.node('treasure').hidden, false);
 });
 
-test('location errors invalidate a recently eligible fix and cancel camera work', async () => {
+test('transient GPS errors retain capture and recover; permission revocation releases it', async () => {
   const stream = cameraStream(), h = harness({ getUserMedia: () => Promise.resolve(stream) }); h.unlock();
-  await h.click('start-camera'); h.frame(); h.geoError(3); h.click('treasure');
-  assert.equal(h.session.collectionCount, 0); assert.equal(stream.stops, 1);
-  assert.equal(h.node('start-camera').disabled, true);
-  h.geoError(1); assert.equal(h.session.tracking, false); assert.equal(h.node('start-location').disabled, false);
+  await h.click('start-camera'); h.frame(); h.geoError(3); h.click('claim');
+  assert.equal(h.session.collectionCount, 0); assert.equal(stream.stops, 0);
+  assert.equal(h.node('claim').disabled,true);assert.equal(h.node('gps-spinner').hidden,false);
+  assert.equal(h.node('camera').srcObject,stream);
+  h.advance(100);h.fix();h.advance(2000);h.fix();h.frame();h.direction();
+  assert.equal(h.node('gps-spinner').hidden,true);assert.equal(h.cameraRequests,1);
+  h.geoError(1);assert.equal(stream.stops,1); assert.equal(h.session.tracking, false); assert.equal(h.node('start-location').disabled, false);
 });
 
 test('callbacks after stopping location cannot update state; re-placement resets collection', async () => {
   const h = harness({ getUserMedia: () => Promise.resolve(cameraStream()) }); h.unlock();
-  await h.click('start-camera'); h.frame(); h.click('treasure');
+  await h.click('start-camera'); h.frame(); h.aimAtTreasure(); h.click('claim');
   h.advance(1000); h.fix(); h.click('place');
   assert.equal(h.session.phase, 'leave'); assert.equal(h.session.collectionCount, 0);
   h.click('stop-location'); const count = h.session.samples; h.advance(1000); h.fix();
@@ -130,8 +140,8 @@ test('the page shows one screen and offers only the next action for the current 
   h.advance(1000); h.fix(); h.advance(2000); h.fix(); assert.deepEqual(visible(), ['start-camera']);
   const opening = h.click('start-camera'); assert.equal(h.node('app').dataset.screen, 'camera');
   assert.equal(h.node('screen-field').hidden, true); assert.equal(h.node('screen-camera').hidden, false);
-  grant(); await opening; h.frame(); assert.equal(h.node('treasure').hidden, false);
-  h.click('treasure'); assert.equal(h.node('app').dataset.screen, 'field');
+  grant(); await opening; h.frame(); h.direction(); assert.equal(h.node('treasure').hidden, false);
+  h.aimAtTreasure(); h.click('claim'); assert.equal(h.node('app').dataset.screen, 'field');
   assert.equal(h.node('collected').hidden, false); assert.deepEqual(visible(), ['rehide']);
   h.click('rehide'); assert.equal(h.node('collected').hidden, true); assert.deepEqual(visible(), ['place-panel']);
   h.click('place-cancel'); assert.equal(h.node('collected').hidden, false);

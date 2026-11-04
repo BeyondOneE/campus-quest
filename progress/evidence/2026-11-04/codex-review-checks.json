@@ -1,0 +1,54 @@
+{
+  "id": "E-20261104-005",
+  "checkedOn": "2026-11-04",
+  "reviewedCommit": "99bb3fb",
+  "backendBaseline": "057b9d9",
+  "productSourceChanged": false,
+  "servicesRestarted": false,
+  "automated": {
+    "tests": 50,
+    "passed": 50,
+    "failed": 0,
+    "build": "passed-with-existing-prototype-chunk-warning",
+    "npmCiRerun": false,
+    "node": "24.19.0",
+    "npm": "11.17.0"
+  },
+  "browser": {
+    "url": "http://127.0.0.1:4180/treasure-lab/",
+    "readOnly": true,
+    "viewport": [
+      390,
+      780
+    ],
+    "documentSize": [
+      390,
+      780
+    ],
+    "consoleWarningsOrErrorsObserved": 0,
+    "state": "entry-with-expired-sign-in-message",
+    "roomOrAccountCreated": false,
+    "deviceApiReplaced": false,
+    "locationOrCameraRequested": false
+  },
+  "isolatedChecks": {
+    "expiredAccountCookieGuestCreateStatus": 401,
+    "errorCode": "ACCOUNT_SESSION_EXPIRED",
+    "freshGuestCreateStatus": 201,
+    "runtimeDatabaseTouched": false
+  },
+  "findings": [
+    {
+      "kind": "inherited-recovery-gap",
+      "area": "expired-account-to-guest",
+      "introducedByClaudeRedesign": false,
+      "fixed": false
+    }
+  ],
+  "physicalSafariAcceptance": false,
+  "animationPerformanceMeasured": false,
+  "existingScreenshotsInspected": [
+    "forest-entry-390-desktop.jpg",
+    "forest-return-390-desktop.jpg"
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "id": "E-20261104-007",
+  "checkedOn": "2026-11-04",
+  "type": "ar-direction-and-aim-validation",
+  "baseline": "99bb3fb",
+  "workingTree": "uncommitted-with-prior-launcher-and-review-work-preserved",
+  "automated": {
+    "node": "24.19.0",
+    "npm": "11.17.0",
+    "npmCi": "passed",
+    "nodeTests": 62,
+    "passed": 62,
+    "failed": 0,
+    "newArCases": 10,
+    "newLateAimClientCase": 1,
+    "pythonLauncherChecksWithinNodeSuite": 7,
+    "build": "passed-with-existing-prototype-chunk-warning",
+    "dependencyOrLockfileChanged": false,
+    "moderateDependencyAdvisories": 10
+  },
+  "isolatedHttp": {
+    "temporaryDatabase": true,
+    "realNodeHttp": true,
+    "farNavigation": true,
+    "claimWithoutAimRejected": true,
+    "receiptTimeAim": true,
+    "claim": true,
+    "idempotentReceipt": true,
+    "testProcessAndDatabaseCleaned": true,
+    "deviceReadings": "isolated-fixtures"
+  },
+  "desktop": {
+    "route": "http://127.0.0.1:4180/treasure-lab/",
+    "viewports": [
+      [
+        390,
+        780
+      ],
+      [
+        320,
+        500
+      ]
+    ],
+    "entryLoads": true,
+    "documentMatchesViewport": true,
+    "newControlsInitiallyHiddenAndDisabled": true,
+    "consoleWarningsOrErrors": 0,
+    "livePermissionsRequested": false,
+    "deviceApisReplaced": false,
+    "arCameraStateVisuallyChecked": false,
+    "inheritedExpiredAccountMessageStillPresent": true,
+    "newScreenshotArtifact": null
+  },
+  "runtime": {
+    "restartThroughLauncher": "passed",
+    "backendHealth": true,
+    "trustedLanHttps": true,
+    "certificateSetup": true,
+    "newArModuleAndMarkup": true,
+    "sameOriginSensorPolicy": true,
+    "aggregateCountsPreserved": true,
+    "developmentCaPreserved": true,
+    "transientObservationsResetByRestart": true,
+    "leftRunning": true,
+    "externalRelay": false
+  },
+  "parameters": {
+    "aimAngleDegrees": 10,
+    "holdMs": 1200,
+    "minimumDistinctSamples": 3,
+    "maxGapMs": 900,
+    "maxOrientationAgeMs": 1500,
+    "maxFrameAgeMs": 750,
+    "maxReportedCompassAccuracyDegrees": 25,
+    "minimumSendIntervalMs": 250,
+    "virtualHorizontalFovDegrees": 60,
+    "worldAnchored": false
+  },
+  "placement": {
+    "manualOwnerPlacement": "retained-for-tests",
+    "intendedProduction": "system-generated-or-staff-placed",
+    "productionPlacementImplemented": false
+  },
+  "physicalSafariAcceptance": false,
+  "phoneTrustOrPermissionsChanged": false,
+  "limits": [
+    "No upright Safari compass alignment or outdoor aiming measurement.",
+    "No ground anchoring, visual SLAM, surveyed point matching or road routing.",
+    "Nearby approach bearing lock and virtual projection need field validation.",
+    "Client-reported location / aim / video state is not anti-cheat proof.",
+    "Camera-state wrapping and real-phone performance remain unverified."
+  ],
+  "validatedFileSha256": {
+    "public/treasure-lab/ar.js": "07f85e5af5284ba713e10b1f0f90d45d7013c1b7eb1af0a74fefa25baa4b446e",
+    "public/treasure-lab/app.js": "91382bdba57504338f8f0a27c2b04c5bc797ed34c92aa56f4eb7bb86a0fd6955",
+    "public/treasure-lab/client.js": "b5b43a7e3588f7a809c6c540e5623c2eb9381dc935c57d9bd9803e9307fbbfe0",
+    "public/treasure-lab/model.js": "18f40f85df7297a55d0a9698708eb966f37b8e64af3503ca6976411db8c4a392",
+    "public/treasure-lab/index.html": "c0ac71c53fd40954c74bbf95eaa061d06c6ded869f7de78dd274b551f3c64e56",
+    "public/treasure-lab/style.css": "ba9764e276a6ca94d9b36c7a7f0084074e67a20346c4f85bca93dd87d5140a3a",
+    "server/app.mjs": "056460ffbac14cc00e0d55b3e0c0010bff7af557f06a6536c4259c68beea61f4",
+    "server/store.mjs": "b2c15f4a2a3f2894ee6823b5287cc756ca1ff3701209a0b0c8e26342eca25790",
+    "tests/ar.test.mjs": "c16a9a3d9d961fe0fc263ce645b5a4b77425757234062971ebdc7d1c66bbe369",
+    "tests/remote-client.test.mjs": "1213feca5f8bcd5a45bad2d8e9297d7d32d223651c930e0c061f105b4ce1d60c",
+    "tests/helpers/treasure-harness.mjs": "8bf4029ee4178b2c12bacb840eff85d341cb7b7d81a5fa89b100e286e8056437"
+  },
+  "documentation": {
+    "languagePairs": 10,
+    "relativeLinks": 240,
+    "pairedIds": "passed",
+    "domElementsChecked": 100,
+    "uniqueRecordIds": "passed",
+    "diffWhitespace": "passed",
+    "javascriptSyntax": "passed"
+  }
+}

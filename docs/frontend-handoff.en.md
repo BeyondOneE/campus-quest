@@ -1,6 +1,6 @@
 # Claude frontend handoff
 
-[中文](frontend-handoff.md) · Baseline reviewed: 2026-11-03 (Asia/Shanghai)
+[中文](frontend-handoff.md) · Contract updated: 2026-11-04 (Asia/Shanghai)
 
 ## Start here
 
@@ -25,7 +25,7 @@ The [course requirements map](../progress/en/course-requirements.md) summarizes 
 
 ## Product and first delivery
 
-Campus Quest is a mobile-web campus treasure hunt. Real phone location determines eligibility; the camera displays a collectible treasure overlay after unlocking. This version has no road alignment, spatial tracking, ground anchor or route guidance.
+Campus Quest is a mobile-web campus treasure hunt. Real phone location determines eligibility. After departure the camera shows a direction arrow; a nearby chest follows absolute camera orientation, and centring / holding enables manual Claim. This version has no road alignment, visual SLAM, ground anchor or road-route planning. Manual placement is for testing; system-generated / staff-placed treasures are the intended direction, with no production placement interface yet.
 
 Target the user's iPhone Safari. Build all product UI directly in English: labels, errors, pending states, instructions and accessibility text. Keep maintained repository prose in separate Chinese / English files.
 
@@ -35,11 +35,11 @@ The first frontend delivery should cover this real flow:
 2. Create a room or join by its eight-character code; show the current user, room code, owner role and player roster.
 3. Explicitly start live location, explaining that coordinates go to the computer and video stays on the phone.
 4. The owner places the shared treasure using a fresh accurate position. Everyone leaves the range and returns to unlock it.
-5. Explicitly open the rear camera after unlocking; show the collectible only after observed live video updates.
-6. Collect only after server confirmation, show the receipt / collected state, then release the camera.
+5. After confirmed departure, explicitly open rear-camera AR directions and request Motion & Orientation. Show an arrow far away and a direction-bound chest near the target after stable return / live frames.
+6. Centre the chest, hold, then enable manual Claim only with local current aim and server `canClaim`; await server confirmation, show the receipt and release the camera.
 7. Keep optional field notes, coordinate-free export and hardware diagnostics reachable but secondary to the game.
 
-Page splits, navigation, typography, colors, spacing, iconography, the treasure illustration and animations are Claude's design space. Do not invent working maps, scheduled spawns, scoring, chat, AI hints or account recovery; their backend interfaces do not exist yet. The treasure itself may be illustrated; the live-camera background and location must remain real.
+Page splits, navigation, typography, colors, spacing, iconography, the treasure illustration and animations are Claude's design space. Do not invent working maps, scheduled spawns, scoring, player-to-player chat or account recovery; their backend interfaces do not exist yet. The treasure itself may be illustrated; the live-camera background and location must remain real.
 
 ## Choose the correct entry
 
@@ -56,7 +56,7 @@ Page splits, navigation, typography, colors, spacing, iconography, the treasure 
 
 `npm start` serves the live view at `http://127.0.0.1:4180/treasure-lab/`. `npm run dev` starts the old Vite prototype; it does not proxy `/api` and is not the gameplay integration server. Building `src/` alone does not update the live game.
 
-The backend currently serves an explicit allowlist: five treasure files and four diagnostic files. New assets, additional modules, external font / CDN dependencies, a React bundle or a separate frontend origin need an integration change coordinated with Codex. The current CSP permits same-origin assets and connections. Do not weaken CSP, cookie protection or CORS merely to make a preview work. Preserve the live URL and same-origin API path.
+The backend currently serves an explicit allowlist: seven treasure files (including `ar.js` and `guide.js`) and four diagnostic files. New assets, additional modules, external font / CDN dependencies, a React bundle or a separate frontend origin need an integration change coordinated with Codex. The current CSP permits same-origin assets and connections. Do not weaken CSP, cookie protection or CORS merely to make a preview work. Preserve the live URL and same-origin API path.
 
 For a styling / structure pass, retain every controller-used element ID and required element type; see [DOM contract](frontend-dom-contract.json). Keep elements mounted if `app.js` still queries them, including hidden / secondary panels. Retain `[hidden]` behavior, button disabled states, the video element's `playsinline`, `autoplay`, `muted` attributes, and the account form's validation / password semantics. If replacing the controller, a visually equivalent screen alone is insufficient: port and verify its lifecycle obligations below.
 
@@ -87,17 +87,17 @@ Phases are `unplaced → leave → return → ready → collected`. Use the adap
 | No room / insecure origin | No hardware request; explain the required next step |
 | `unplaced` | Owner can place only when `snapshot.canPlace` is true |
 | `leave` | Explain the required departure; camera stays locked |
-| `return` | Show return / stable-position progress; rendering or a timer cannot advance the server's observation |
-| `ready` | Offer camera only while `snapshot.eligible` is true; stale, inaccurate, boundary or offline readings block it |
+| `return` | Offer direction camera when `snapshot.canNavigate`; render stable-return progress; timers cannot advance server observation |
+| `ready` | Keep navigation and claim gates separate: `canNavigate` for camera, `eligible` for nearby reveal, `canClaim` plus local aim / frames for Claim |
 | Camera permission / pending stream | Ask only on an explicit tap; a late stream after cancellation or backgrounding must have every track stopped |
 | Video available | A stream or granted permission is not enough: require observed frame updates / advancing video time before making the chest collectible |
-| Collection | Require fresh location, eligibility and a live frame, then await `collect()` success; release camera after confirmation |
+| Collection | Require fresh location, live frames, current orientation, completed local hold and server `canClaim`, then await `collect()` success; release camera after confirmation |
 | Denied permission / blocked playback | Show actionable English retry messages; retain the explicit Resume video action when needed |
-| Location expires / loses validity | Close the camera and disable collection |
+| Location expires / loses validity | Retain active capture, show the GPS spinner, pause Claim and reconnect; explicit stop / denied permission still releases capture |
 | Background / pagehide / unmount / identity change | Clear location watch (including ID `0`), cancel frame callbacks and stop media tracks; call `session.stop(now)` |
 | Foreground / restore | Show paused state; restart location / camera only after another user action |
 
-Current defaults: radius 30 m (15–100 adjustable), reported accuracy at most 20 m, exit buffer 10 m, fix lifetime 15 s, return observation at least 2 s across distinct timestamps. These are experimental settings awaiting field validation. Preserve them during this visual handoff. Camera display is an overlay, not world-anchored AR, and client location / `cameraLive` are not anti-cheat evidence.
+Current defaults: radius 3 m (3–100 adjustable), reported accuracy at most 20 m, exit buffer 10 m, fix lifetime 15 s, return observation at least 2 s across distinct timestamps. These are experimental settings awaiting field validation. Preserve them during this visual handoff. Camera display is an overlay, not world-anchored AR, and client location / `cameraLive` are not anti-cheat evidence.
 
 ## Running and validation
 
@@ -109,7 +109,7 @@ npm ci
 npm start
 ```
 
-For the user's phone, follow [LAN HTTPS](lan-access.en.md). The last verified address on 2026-11-03 was `https://192.168.50.136:4443/treasure-lab/`; recheck the Wi-Fi IP and service health before using it. The phone needs the same reachable network and manually trusted development certificate. Do not bypass a certificate warning, change device permissions or enable an external relay on the user's behalf.
+For one-command background startup use `./start.sh`; `./start.sh status`, `restart` and `stop` manage the two services. See [launcher details](lan-access.en.md#one-command-startup). For the user's phone, follow [LAN HTTPS](lan-access.en.md). The last verified address on 2026-11-03 was `https://192.168.50.136:4443/treasure-lab/`; recheck the Wi-Fi IP and service health before using it. The phone needs the same reachable network and manually trusted development certificate. Do not bypass a certificate warning, change device permissions or enable an external relay on the user's behalf.
 
 After frontend code changes, run `npm test` and `npm run build` as required by [AGENTS](../AGENTS.md). The latest recorded baseline has **48 passing tests** and a successful build; this documentation handoff does not rerun or replace that evidence. The old prototype has an approximately 520 kB chunk warning; the last install reported 10 moderate dependency advisories. Neither is silently resolved by a redesign.
 
@@ -126,3 +126,11 @@ Return a changed-file summary, actual checks / outcomes, screenshots, remaining 
 ## Working tree and handoff transport
 
 The backend, treasure UI, tests and docs are committed on local `main` (057b9d9) and not yet pushed; later frontend changes are in subsequent commits. Do not reset, clean, overwrite or switch away from them blindly. A fresh remote clone does not contain this complete baseline until it is pushed. If Claude works in this same directory, use these actual files; if it works elsewhere, transfer the required current source / tests / docs or establish an explicit Git checkpoint first. Exclude `.local/`, credentials, certificate private keys and raw phone reports. No commit or push was made by this documentation task.
+
+## AR integration revision
+
+CQ-20261104-008 adds functional AR guidance while preserving Claude's forest design. Use [AR contract](backend-api.en.md#ar-guidance-and-aim-contract-2026-11-04) and [field procedure](treasure-lab.en.md). Preserve new IDs in the updated DOM contract: `treasure` is now a non-clickable target image; `claim` is the separate action; `ar-guidance`, `ar-arrow`, `ar-message`, `ar-distance`, `aim-reticle` and `direction-retry` are controller-owned. `ar.js` contains geometry / hold logic shared by frontend and server. Do not return to a fixed centred clickable chest. Clean up orientation listeners and pending permissions with the existing camera token on stop / background. The 1200 ms / 10° hold and nearby bearing lock are experimental; Safari alignment and field feel remain unverified. Current validation is recorded in E-20261104-007; the older 48-test handoff figure above is historical.
+
+## Camera guide and small-range revision
+
+CQ-20261104-010 adds `guide.js`, English camera chat / proactive notices, `gps-spinner` and the `guide-*` DOM contract. Default departure / collection is 3 m with centre-distance classification, no 10 m buffer at 3 m. Do not restore the previous automatic camera exit on transient GPS loss. Guide open pauses aiming / Claim; closing requires another hold. Preserve typing during background polling and visual-viewport keyboard adjustment. Reuse `guideRequest` without blocking game requests or turning a guide-only failure into a gameplay disconnection. [Guide configuration / API](ai-guide.en.md) describes role, FAQ, building / course data and private Key setup. No live-model or real-phone acceptance is claimed; presets must remain labelled.

@@ -34,6 +34,15 @@ export class GameStore {
       this.db.exec('ALTER TABLE players ADD COLUMN account_id TEXT REFERENCES accounts(id)');
     }
     this.db.exec('CREATE UNIQUE INDEX IF NOT EXISTS account_room ON players(room,account_id) WHERE account_id IS NOT NULL');
+    // Apply the user's new test range to pre-existing points once, preserving IDs and receipts.
+    this.db.exec('BEGIN');
+    try {
+      for(const room of this.db.prepare('SELECT code,zone FROM rooms WHERE zone IS NOT NULL').all()) {
+        const zone=JSON.parse(room.zone);
+        if(zone.rangeVersion!==2)this.db.prepare('UPDATE rooms SET zone=? WHERE code=?').run(JSON.stringify({...zone,radius:3,rangeVersion:2}),room.code);
+      }
+      this.db.exec('COMMIT');
+    } catch(error) {this.db.exec('ROLLBACK');throw error;}
   }
   close() { this.gates.clear(); this.db.close(); }
   name(value) {
@@ -191,11 +200,15 @@ export class GameStore {
     return gate.receive(fix, now);
   }
   stop(player) { this.gate(player).stop(this.now()); }
+  aim(player, body) {
+    const room = this.room(player.room); this.expected(room, body.treasureId);
+    return this.gate(player, room).aim(body.sample, this.now());
+  }
   place(player, body) {
     const room = this.room(player.room); this.expected(room, body.treasureId);
     if (room.owner_id !== player.id) fail(403, 'OWNER_REQUIRED', 'Only the session creator can place the shared treasure.');
     const current = this.gate(player, room), now = this.now();
-    if (!current.place(body.radius, now)) fail(409, 'LOCATION_REQUIRED', 'Wait for a fresh accurate position and use a radius between 15 and 100 m.');
+    if (!current.place(body.radius, now)) fail(409, 'LOCATION_REQUIRED', 'Wait for a fresh accurate position and use a radius between 3 and 100 m.');
     const treasureId = randomUUID();
     this.db.prepare('UPDATE rooms SET treasure_id=?,zone=? WHERE code=?').run(treasureId, JSON.stringify(current.zone), room.code);
     for (const p of this.db.prepare('SELECT id FROM players WHERE room=?').all(room.code)) this.gates.delete(p.id);
@@ -211,6 +224,7 @@ export class GameStore {
     if (body.cameraLive !== true) fail(400, 'CAMERA_REQUIRED', 'Open the live camera before collecting.');
     const gate = this.gate(player, room), createdAt = this.now();
     if (!gate.snapshot(createdAt).eligible) fail(409, 'NOT_ELIGIBLE', 'A fresh position and confirmed departure and return are required.');
+    if (!gate.snapshot(createdAt).canClaim) fail(409, 'AIM_REQUIRED', 'Centre the treasure in the reticle and hold it steady before claiming.');
     const id = randomUUID();
     this.db.prepare('INSERT INTO claims VALUES(?,?,?,?,?)').run(id, room.code, room.treasure_id, player.id, createdAt);
     gate.collect(createdAt);

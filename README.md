@@ -8,12 +8,12 @@ A collaborative campus treasure-hunt project for new students and visitors at XJ
 
 - Vite prototype `/` (`npm run dev`): retained six-screen frontend demonstration. Rooms, AR, voice, teammates, leaderboards and AI are still simulated. The backend root (`npm start`) redirects to `/treasure-lab/`.
 - `/device-check/`: standalone Safari diagnostics for the rear camera, orientation, rotation rate, location, manual restart after backgrounding and JSON report export.
-- `/treasure-lab/`: computer-hosted treasure experiment with guest sessions, shared placement and persistent per-player collection; see the [test procedure](docs/treasure-lab.en.md). Physical Safari acceptance remains pending.
+- `/treasure-lab/`: computer-hosted treasure experiment with guest sessions, shared test placement, camera direction arrows, nearby targets, aim-to-claim and persistent per-player collection; see the [test procedure](docs/treasure-lab.en.md). Physical Safari acceptance remains pending.
 - The experiment has a real backend. Local username / password accounts are implemented; student verification, final multiplayer gameplay and spatial AR tracking remain unimplemented; the original six-screen demo still uses simulated features.
 
 ## Local development
 
-For the shared experiment, use the validated Node.js 24.19.0 runtime and run `npm start`. Open `http://127.0.0.1:4180/treasure-lab/`; the computer serves both the page and the [business API](docs/backend-api.en.md). Phone access uses [direct LAN HTTPS](docs/lan-access.en.md), a matching `PUBLIC_ORIGIN` and manually trusted development certificate. Cloudflare remains off; phone trust and connectivity are still pending.
+For the shared experiment, use the validated Node.js 24.19.0 runtime and run `./start.sh` to bring up the backend and LAN HTTPS together. Use `./start.sh status`, `restart` or `stop` to manage them; the script prints the current phone URL. Manual backend-only startup remains `npm start`. Open `http://127.0.0.1:4180/treasure-lab/`; the computer serves both the page and the [business API](docs/backend-api.en.md). Phone access uses [direct LAN HTTPS](docs/lan-access.en.md), a matching `PUBLIC_ORIGIN` and manually trusted development certificate. Cloudflare remains off; phone trust and connectivity are still pending.
 
 Frontend handoff: start with the [Claude brief](docs/claude-frontend-brief.en.md), [edit / acceptance guide](docs/frontend-handoff.en.md) and [API contract](docs/backend-api.en.md). The page now uses non-scrolling screens; see the [2026-11-04 record](progress/en/daily/2026-11-04.md).
 
@@ -45,7 +45,7 @@ Follow the [Safari checklist](docs/safari-device-check.en.md). The user grants c
 
 Separate automated logic tests, desktop-browser checks and physical iPhone tests. The first two do not establish phone hardware acceptance. See [project status](docs/project-status.en.md) for the latest retained evidence.
 
-Exact coordinates are excluded from exported reports by default. Reports and camera frames do not upload automatically. In the shared experiment, starting location sends positions to the computer for range checks; shared-point coordinates persist in ignored SQLite, while latest player fixes stay in memory without movement histories. Guest identity and claims survive reloads. Diagnostic-page state still resets on reload. Do not commit private reports or databases.
+Exact coordinates are excluded from exported reports by default. Reports and camera frames do not upload automatically. In the shared experiment, starting location sends positions to the computer for range checks; shared-point coordinates persist in ignored SQLite, while latest player fixes stay in memory without movement histories. Aim readings also go to the computer for transient hold checks; video stays on the phone. Manual placement remains a test tool, with system-generated / staff-placed treasures intended later. Guest identity and claims survive reloads. Diagnostic-page state still resets on reload. Do not commit private reports or databases.
 
 ## Process records and guidelines
 
@@ -59,10 +59,14 @@ Exact coordinates are excluded from exported reports by default. Reports and cam
 - `public/device-check/`: diagnostics with no third-party runtime dependencies.
 - `public/treasure-lab/`: English functional view, same-origin API adapter, live location and camera lifecycle.
 - `server/`: Node HTTP backend, SQLite accounts / guest sessions / shared points / claim receipts; private data lives under ignored `.local/`.
-- `scripts/`: server exposing only diagnostic assets.
+- `scripts/`: diagnostic server, LAN certificate setup and background service manager.
 - `tests/`: data validity, permission and lifecycle checks.
 - `docs/archive/`: original proposal, handoff notes and source checksums.
 - `docs/`: bilingual guidelines, confirmed scope, methods and retained results.
 - `progress/`: bilingual daily records, weekly templates, indexes and shared sanitized evidence.
 
 The original Rokid-glasses proposal is historical context; current mobile-web decisions are in project status. Course material containing API keys or personal information stays outside this repository.
+
+Camera guide: text conversation, quick questions, configured-building / course introductions and periodic distance notices are integrated; see [AI / content setup](docs/ai-guide.en.md). Replies distinguish presets from DeepSeek; building geofences remain pending. Departure and collection now default to 3 m. Transient GPS loss keeps the camera open with a reconnecting spinner and pauses Claim; see CQ-20261104-010.
+
+Preset v0.1 is imported: the role, four named buildings and eight programmes are available to the guide’s knowledge retrieval; GPS geofences are still pending. The replacement Key passed official DeepSeek authentication and one real guide answer; services were restarted to load it. See [current setup status](docs/ai-guide.en.md).

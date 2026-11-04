@@ -1,16 +1,24 @@
 import http from 'node:http';
-import { mkdirSync, chmodSync } from 'node:fs';
+import { mkdirSync, chmodSync, readFileSync, existsSync } from 'node:fs';
+import { parseEnv } from 'node:util';
 import { resolve } from 'node:path';
 import { isIP } from 'node:net';
 import { GameStore } from './store.mjs';
 import { createApplication } from './app.mjs';
+import { CampusGuide } from './guide.mjs';
 
 const port = Number(process.env.PORT || 4180);
 const directory = resolve('.local'); mkdirSync(directory, { recursive: true, mode: 0o700 });
 chmodSync(directory, 0o700);
 const database = resolve(directory, 'campus-quest.sqlite');
 const store = new GameStore(database); chmodSync(database, 0o600);
-const handle = createApplication({ store, localPort: port, publicOrigin: process.env.PUBLIC_ORIGIN || '' });
+// Load only guide settings; do not override the launcher's network configuration.
+if(existsSync('.env'))for(const [key,value] of Object.entries(parseEnv(readFileSync('.env','utf8')))) {
+  if(['DEEPSEEK_API_KEY','CQ_AI_BASE_URL','CQ_AI_MODEL','CQ_GUIDE_CONFIG'].includes(key)&&process.env[key]===undefined)process.env[key]=value;
+}
+const guide=new CampusGuide({apiKey:process.env.DEEPSEEK_API_KEY||'',baseUrl:process.env.CQ_AI_BASE_URL||'https://api.deepseek.com',
+  model:process.env.CQ_AI_MODEL||'deepseek-flash',...(process.env.CQ_GUIDE_CONFIG?{loadConfig:()=>JSON.parse(readFileSync(process.env.CQ_GUIDE_CONFIG,'utf8'))}:{})});
+const handle = createApplication({ store, guide, localPort: port, publicOrigin: process.env.PUBLIC_ORIGIN || '' });
 const server = http.createServer(async (request, response) => {
   const chunks = []; let bytes = 0;
   try {

@@ -4,7 +4,7 @@
 
 ## 运行与身份
 
-使用已验证的 Node.js 24.19.0，在仓库运行 `npm start`。应用监听 `http://127.0.0.1:4180/treasure-lab/`，英文页面和 API 同源。SQLite 数据保存于被忽略的 `.local/campus-quest.sqlite`。Python 诊断服务单独运行，不提供业务 API。
+使用已验证的 Node.js 24.19.0，在仓库运行 `./start.sh` 可后台拉起后端及局域网 HTTPS，并检查健康状态、管理日志，见 [启动器命令](lan-access.md#一键启动)；手动只开后端仍可用 `npm start`。应用监听 `http://127.0.0.1:4180/treasure-lab/`，英文页面和 API 同源。SQLite 数据保存于被忽略的 `.local/campus-quest.sqlite`。Python 诊断服务单独运行，不提供业务 API。
 
 玩家可以注册本地用户名 / 密码账号，也可以继续临时访客模式。账号支持跨设备恢复场次成员与领取记录；访客仍使用昵称与八位场次码。两种方式均不验证学生身份。浏览器会话有效期 24 小时，账号凭据和成员关系持久保存在 SQLite。不同账号使用不同手机或独立浏览器配置。
 
@@ -46,12 +46,15 @@
 | `POST /api/rooms` | 访客 `{ name }`；账号 `{}` 并携带账号 CSRF。创建房间与房主，HTTP 201 状态包 |
 | `POST /api/rooms/join` | 访客 `{ name, code }`；账号 `{ code }` 并携带账号 CSRF。HTTP 201 状态包，账号恢复已有成员 |
 | `GET /api/state` | 当前玩家、场次、名单、定位判定和收集凭据 |
+| `GET /api/guide` | 独立认证向导上下文 / 记录，见 [向导契约](ai-guide.md) |
+| `POST /api/guide` | `{ roomCode, treasureId, message }` 或 `{ roomCode, treasureId, event }`，返回独立向导状态 |
 | `POST /api/location` | `{ roomCode, treasureId, fix: { latitude, longitude, accuracy, timestamp } }`；HTTP 200 状态及 `accepted: boolean` |
 | `POST /api/location/stop` | `{ roomCode }`；HTTP 200 状态，清除本会话最近位置 / 进入观察 |
 | `POST /api/treasure` | `{ roomCode, treasureId, radius }`；仅房主，HTTP 200 新共享轮次状态，按最近有效位置放置 |
+| `POST /api/aim` | `{ roomCode, treasureId, sample }`；HTTP 200 状态及 `accepted: boolean`；`sample: null` 清空瞄准 |
 | `POST /api/collect` | `{ roomCode, treasureId, cameraLive: true }`；HTTP 200 状态及 `collection: { id, collectedAt, repeated }` |
 
-创建与加入返回 HTTP 201，其他成功返回 200。状态包包含 `serverTime`、`csrfToken`、`room`、`player`、`state`、`report`、`receipt` 与 `players`。场次信息含八位场次码、当前 `treasureId`、半径、放置状态、人数和 `one-claim-per-player` 策略。接口不返回已保存的宝藏坐标或其他玩家的最近坐标。`state` 包含 `kind`、`phase`、`distance`、`eligible`、`canPlace`、`expiresInMs`。凭据字段为 `id`、`collectedAt`；重复领取返回原凭据及 `repeated: true`。
+创建与加入返回 HTTP 201，其他成功返回 200。状态包包含 `serverTime`、`csrfToken`、`room`、`player`、`state`、`report`、`receipt` 与 `players`。场次信息含八位场次码、当前 `treasureId`、半径、放置状态、人数和 `one-claim-per-player` 策略。接口不返回已保存的宝藏坐标或其他玩家的最近坐标。`state` 包含 `kind`、`phase`、`distance`、`eligible`、`canNavigate`、`guidance`、`aim`、`canClaim`、`canPlace`、`expiresInMs`。凭据字段为 `id`、`collectedAt`；重复领取返回原凭据及 `repeated: true`。
 
 尚未放置时 `treasureId` 为 null。变更请求携带当前已知值；宝藏更换后，旧值请求返回 409 `TREASURE_CHANGED`。重新读取状态后再发送新位置。重新放置开始新轮次，不删除旧凭据。只有创建者可更换宝藏，每位玩家独立领取一次；这是实验规则，尚未确定最终多人玩法。
 
@@ -59,11 +62,11 @@
 
 ## 前端适配与定位行为
 
-前端使用 [RemoteTreasureSession](../public/treasure-lab/client.js)，不能将浏览器本地 `TreasureSession` 当成产品权威状态。适配器提供异步 `resume()`、`connect(name, code)`、`receive(fix)`、`place(radius)`、`collect()`、`refresh()`；`start(now)` / `stop(now)` 对应硬件启停，`snapshot(now)` / `report(now)` 显示缓存的后端结果。当前控制器在前台每 2 秒轮询。网络错误暂停领取，停止后的迟到响应不能重新激活本地采集。相机生命周期仍在手机端，需保留权限、画面更新和后台停止判定。
+前端使用 [RemoteTreasureSession](../public/treasure-lab/client.js)，不能将浏览器本地 `TreasureSession` 当成产品权威状态。适配器提供异步 `resume()`、`connect(name, code)`、`receive(fix)`、`place(radius)`、`aim(sample)`、`collect()`、`refresh()`；`start(now)` / `stop(now)` 对应硬件启停，`snapshot(now)` / `report(now)` 显示缓存的后端结果。当前控制器在前台每 2 秒轮询。网络错误暂停领取，停止后的迟到响应不能重新激活本地采集。相机生命周期仍在手机端，需保留权限、画面更新和后台停止判定。
 
 账号使用 `authenticate('register' | 'login', username, password)` 和 `logout()`，显示 `account` 与 `accountRooms`；`resume()` 先获取账号状态，再恢复游戏。CSRF 只放内存，Cookie 保持 HttpOnly，页面提交后立即清空密码框。切换身份和登录过期均停止硬件；不将密码或令牌写入 localStorage、报告或界面错误信息。
 
-后端复用已测定位模型：初始半径 30 米，可设 15–100 米；精度门槛 20 米、退出缓冲 10 米、有效位置最长 15 秒、返回观察至少 2 秒且使用不同时间戳。均为实验参数。客户端坐标及 `cameraLive` 都是不可信上报，因此不构成防作弊或真实相机使用证明；后端可防止正常界面绕过流程和重复领奖，实际精度仍需走测。
+后端复用已测定位模型：初始半径 3 米，可设 3–100 米；精度门槛 20 米、退出缓冲 10 米、有效位置最长 15 秒、返回观察至少 2 秒且使用不同时间戳。均为实验参数。客户端坐标及 `cameraLive` 都是不可信上报，因此不构成防作弊或真实相机使用证明；后端可防止正常界面绕过流程和重复领奖，实际精度仍需走测。
 
 ## 持久化、隐私与 HTTPS
 
@@ -71,7 +74,7 @@ SQLite 保存账号、密码哈希、登录会话、访客身份、场次成员�
 
 当前手机方案改为 [局域网 HTTPS 直连](lan-access.md)，不使用外部转发。电脑提供本地证书安装页与 HTTPS 代理，手机用户须亲自安装并信任开发证书后再测硬件。将 `PUBLIC_ORIGIN` 设为准确的 HTTPS 来源，无路径、无末尾斜线，后端仍使用端口 4180。手机信任与网络可达尚未确认。此前 Cloudflare Quick Tunnel 已被自动审批拒绝且保持关闭；今后如启用外部提供方，仍需明确许可其数据处理。
 
-服务仅提供九个公开静态文件及上述 API，不暴露仓库源码、私密存储或配置。当前是用户电脑上的开发服务，不是生产部署，也不是完整的正式多人产品。
+服务仅提供十一个公开静态文件及上述 API，不暴露仓库源码、私密存储或配置。当前是用户电脑上的开发服务，不是生产部署，也不是完整的正式多人产品。
 
 
 ## 前端请求顺序
@@ -100,7 +103,7 @@ async function joinRoom(code, guestNickname = '') {
 
 若直接请求：使用同源相对地址与 `credentials: 'same-origin'`，POST 仅发送 JSON；浏览器自行设置 `Origin`。将最近成功账号 / 游戏响应的 `csrfToken` 放内存，用 `X-CSRF-Token` 发送。Cookie、密码和 CSRF 不进入查询参数、localStorage 或共享日志。注册关联有效访客时需要访客 CSRF，账号切房使用账号会话 CSRF，游戏 POST 使用当前身份 CSRF 并携带 `roomCode`（账号必需，旧访客可选）；适配器自动完成。
 
-换身份或房间前停止硬件并调用 `stop(now)`；主动开启真实浏览器定位 watch 后，以 `start(now)` / `receive(fix)` 对应其生命周期。停止时清除 watch 并调用 `stop(now)`，不存在 `/api/location/start` 接口。放置成功后使用新 `treasureId`，重新经历离开 / 返回。调用 `collect()` 前，调用者必须检查实时帧及 `snapshot(now).eligible`；适配器会发 `cameraLive: true`，但不能替调用者检查视频。成功后才能显示完成。在已连接 / 前台时用 `refresh()` 轮询，现有控制器每 2 s 轮询、每 500 ms 渲染；没有 WebSocket 或服务端推送。
+换身份或房间前停止硬件并调用 `stop(now)`；主动开启真实浏览器定位 watch 后，以 `start(now)` / `receive(fix)` 对应其生命周期。停止时清除 watch 并调用 `stop(now)`，不存在 `/api/location/start` 接口。放置成功后使用新 `treasureId`，重新经历离开 / 返回。确认离开后 `snapshot(now).canNavigate` 可允许开启方向相机，进入范围后以 `aim(sample)` 上报新鲜瞄准读数。调用 `collect()` 前，调用者必须检查实时帧、本地当前瞄准及 `snapshot(now).canClaim`；适配器会发 `cameraLive: true`，但不能替调用者检查视频。成功后才能显示完成。在已连接 / 前台时用 `refresh()` 轮询，现有控制器每 2 s 轮询、每 500 ms 渲染；没有 WebSocket 或服务端推送。
 
 ## 适配器返回值与缓存
 
@@ -112,6 +115,7 @@ async function joinRoom(code, guestNickname = '') {
 | `connect(name, code = '')` | `Promise<boolean>`，空码建房、非空码加入；账号使用服务端用户名 |
 | `start(now)` / `stop(now)` | 同步对应本地生命周期；`stop` 将服务端停止排队，并非等待停止完成 |
 | `receive(fix)` | `Promise<boolean>`；false 可能是跳过进行中读数、重复时间戳被拒绝或请求失败，结合 `lastError` |
+| `aim(sample)` | `Promise<boolean>`，发送新瞄准读数或 null 清空，并发跳过返回 false；适配器不负责传感器采集 |
 | `place(radius)` / `collect()` | `Promise<boolean>`，成功应用后端状态包，false 不能视为完成 |
 | `refresh()` | 无返回载荷的 Promise，已连接且非忙碌 / 轮询中时更新游戏状态 |
 | `snapshot(now)` | 缓存显示状态，加本地 active / online / 时效 / busy 门槛；按钮启用优先读它，不直接读 `data.state` |
@@ -134,7 +138,7 @@ async function joinRoom(code, guestNickname = '') {
     "code": "ABCDEFGH",
     "treasureId": null,
     "placed": false,
-    "radius": 30,
+    "radius": 3,
     "policy": "one-claim-per-player",
     "playerCount": 1
   },
@@ -144,11 +148,15 @@ async function joinRoom(code, guestNickname = '') {
     "distance": null,
     "phase": "unplaced",
     "eligible": false,
+    "canNavigate": false,
+    "guidance": null,
+    "aim": { "ready": false, "heldMs": 0, "requiredMs": 1200, "expiresInMs": 0 },
+    "canClaim": false,
     "canPlace": false,
     "expiresInMs": 0
   },
   "report": {
-    "config": { "radius": 30, "exitMargin": 10, "maxAccuracy": 20, "maxAge": 15000, "dwell": 2000 },
+    "config": { "radius": 3, "exitMargin": 10, "maxAccuracy": 20, "maxAge": 15000, "dwell": 2000 },
     "phase": "unplaced",
     "treasurePlaced": false,
     "placementAccuracyMeters": null,
@@ -172,7 +180,7 @@ async function joinRoom(code, guestNickname = '') {
 
 `state.kind` 为 `stopped | waiting | stale | imprecise | unplaced | inside | outside | boundary`，`state.phase` 为 `unplaced | leave | return | ready | collected`。`eligible` 是定位资格，不证明相机实时。`expiresInMs` 是响应生成时服务端位置的剩余有效期，不可据此延长，适配器会在本地使缓存按钮过期。`canPlace` 已包括房主权限。停止或恢复的会话可以 `phase: collected`、`eligible: false` 且凭据非 null。
 
-`receipt` 为 null 或 `{ id: string, collectedAt: number }`；`/api/collect` 另含 `collection: { id: string, collectedAt: number, repeated: boolean }`，`/api/location` 另含 `accepted: boolean`，其他游戏变更成功仅含同一基础状态包。`players` 是未过期成员，不是已验证在线状态；`player.role: 'guest'` 表示非房主，可能是已登录账号。`report.collectionCount` 为当前玩家 / 轮次 0 或 1，不是历史总数。`/api/auth/session` 的房间项 `{ code, role }` 没有背包或坐标。事件为 `{ at: ISO8601-string, event: string }`，仅诊断，不作为界面流程权威。成功游戏响应均不含原始经纬度。
+`receipt` 为 null 或 `{ id: string, collectedAt: number }`；`/api/collect` 另含 `collection: { id: string, collectedAt: number, repeated: boolean }`，`/api/location` 与 `/api/aim` 另含 `accepted: boolean`，其他游戏变更成功仅含同一基础状态包。`players` 是未过期成员，不是已验证在线状态；`player.role: 'guest'` 表示非房主，可能是已登录账号。`report.collectionCount` 为当前玩家 / 轮次 0 或 1，不是历史总数。`/api/auth/session` 的房间项 `{ code, role }` 没有背包或坐标。事件为 `{ at: ISO8601-string, event: string }`，仅诊断，不作为界面流程权威。成功游戏响应均不含原始经纬度。
 
 ## 界面错误恢复
 
@@ -192,6 +200,7 @@ async function joinRoom(code, guestNickname = '') {
 | 409 `ROOM_REQUIRED` | 已登录但无当前房间，显示选房 |
 | 409 `ROOM_CHANGED`、`TREASURE_CHANGED` | 刷新状态，丢弃旧假设，切房时停硬件并观察当前轮次 |
 | 409 `LOCATION_REQUIRED`、`NOT_ELIGIBLE` | 保留定位 / 离开返回条件，说明下一步 |
+| 409 `AIM_REQUIRED` | 禁用 Claim，取得新鲜姿态和视频，重新对准宝箱并完成停留 |
 | 413 `BODY_TOO_LARGE` | 修正请求序列化，不发送图像 / 视频流或整个适配器 |
 | 429 `RATE_LIMIT`、`AUTH_BUSY` | 暂停尝试，之后手动重试，目前不提供 `Retry-After` 值 |
 | 429 `ACCOUNT_LIMIT`、`ROOM_LIMIT` | 测试服务容量已满，与后端负责人对接 |
@@ -199,3 +208,39 @@ async function joinRoom(code, guestNickname = '') {
 | 500 `SERVER_ERROR`、超时 / 网络失败 | 禁止领取，显示服务恢复入口并谨慎重试 |
 
 2026-11-03 已按 `server/app.mjs`、`server/store.mjs`、`server/index.mjs`、`public/treasure-lab/client.js` 和 `model.js` 核对本文。[前端交接](frontend-handoff.md) 列明修改范围与硬件验收边界。该基线已提交到本地 `main`（057b9d9），推送前远程克隆不包含它。
+
+## AR 方向与瞄准契约（2026-11-04）
+
+当前共有 15 个 API 路由、十一个静态文件；本轮新增 `ar.js` 与 `/api/aim`，数据库表结构不变。同源 Permissions-Policy 允许 accelerometer、gyroscope、magnetometer，但不代替设备授权。手动埋藏保留为测试工具，正式产品方向为系统生成或工作人员布置；后两者接口尚未实现。
+
+`state.eligible` 仅表示确认离开 / 返回后的新鲜范围内定位，不包含瞄准。`canNavigate` 在确认离开、位置有效后允许方向相机，包含 outside 和 boundary；过期、精度不足、停止定位或断网均阻止导航，适配器还要求本地采集处于 active。`guidance` 为 null 或 `{ bearingDegrees, distanceMeters, mode: 'approach' | 'nearby' }`，角度从正北顺时针、距离单位米。该字段返回推导方位，不返回保存坐标。进入近处时锁定最近可靠的接近方位，减少近距离 GPS 摆动；确认重新处于 outside 后解除锁定。这是地平线附近的虚拟目标，不是测绘物理点锚定。重新放置及各玩家会话分别重置相关门槛。
+
+`POST /api/aim` 保留 CSRF / room / 轮次校验，sample 格式如下（仅文档示例）：
+
+```json
+{
+  "roomCode": "ABCDEFGH",
+  "treasureId": "<current-round-id>",
+  "sample": {
+    "heading": 180, "pitch": 0, "timestamp": 1800000000000,
+    "source": "webkit-compass", "accuracy": 5,
+    "cameraLive": true, "videoAgeMs": 0
+  }
+}
+```
+
+`heading` 为后置相机视线方位 [0,360)，`pitch` 为仰角 [-90,90]，均为有限角度。`source` 只能是 `webkit-compass` 或 `absolute-orientation`；相对 alpha 与行进方向不够。`accuracy` 不可用时为 null / 缺省，否则为有限的 0–25 度。timestamp 是 Unix 毫秒，距服务端当前时间不能超过 1500 ms，也不能超前 5000 ms。`videoAgeMs` 为 0–750，`cameraLive` 必须 true。无效、偏离目标或 null 读数清空停留，通常返回 HTTP 200、`accepted: false`；重复 / 较旧时间戳不能推进停留。
+
+后端按收到读数的时间计算：至少 1200 ms、至少三个不同时间戳、相邻间隔不超过 900 ms。后置相机视线总角误差（包含方位和仰角）保持在 10 度以内；忽略客户端自报停留时长。`state.aim` 为 `{ ready, heldMs, requiredMs, expiresInMs }`；`canClaim` 还要求定位资格。适配器按位置和瞄准有效期使缓存过期。控制器每 250 ms 最多发送一次，不并发发送瞄准，并在 Claim 点击前独立检查本地停留和新鲜视频帧。仅渲染不能完成停留。这些是实验初值，不是已验收的实地性能。
+
+从相机按钮的同一用户手势申请 Motion & Orientation，再等待相机获取。`ar.js` 将绝对姿态转换为后置相机射线，包含倾斜和屏幕旋转、跨正北平滑，采用近似水平 60 度虚拟视场。过期、精度不足或缺失指南针时提示恢复并禁止目标 / Claim。远处显示方向箭头，近处宝箱只有进入视野才出现，对准并停留后手动 Claim。停止 / 后台会清除传感器监听与本地 / 后端瞄准，并释放相机和定位。导出增加 AR 参数及状态，不自动含原始 heading、bearing 或坐标；相机画面不上传，瞄准读数发送电脑且仅临时保留。
+
+客户端定位、姿态和视频时效仍是不可信交互信号，不构成防作弊或实际瞄准证明。投影不提供标定相机跟踪、楼层检测、道路路线、世界锚定或 SLAM。后置相机变换参考 [W3C 示例 A.1](https://www.w3.org/TR/orientation-event/#worked-example)，竖持 Safari 指南针对齐、漂移、磁场干扰和室外瞄准仍待用户实测。见 CQ-20261104-008 / E-20261104-007。
+
+## GPS 恢复与向导更新
+
+CQ-20261104-010 替代此前默认范围及失去定位自动关相机的行为。开启寻宝与领取默认均为 3 米，在此设置下按报告中心距离、不附加退出缓冲 / 误差圈；更大半径保留保守规则。旧未标记存储点一次性迁移，不删除坐标、轮次或领取结果，实际迁移前已有私密备份。GPS 不保证实际 3 米精度。
+
+暂时失去 GPS 会暂停目标 / Claim，但保留已开启的相机和姿态，箭头变为重连转圈，并约每十秒重新建立定位 watch。主动停止、后台及权限撤销仍释放硬件。适配器新增 `loseLocation(now)`，使旧响应失效、清后端位置但不关闭本地采集；新接受位置清除中断标记。相机尚未真正取得视频流前若定位无效，仍取消这次获取。
+
+新增 `GET /api/guide`、`POST /api/guide` 返回独立向导状态，不是游戏状态包，保留既有认证房间 / CSRF / Origin / JSON / 当前轮次校验。`guideRequest(body?, signal?)` 独立于定位 / 瞄准队列，向导失败本身不将玩法标记断线。Key、角色、资料、请求字段、超时 / 限流 / 隔离规则及完整响应契约见 [AI 向导配置](ai-guide.md)。当前校园 / 课程内容为空、运行环境未配 Key，回复明确区分预设与 DeepSeek，没有加入解谜门槛或语音。产品代码 / 测试已实现，真实模型和 Safari 实地验收仍待进行。

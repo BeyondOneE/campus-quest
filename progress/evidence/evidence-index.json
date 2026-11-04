@@ -286,6 +286,78 @@
         "zh-CN": "../zh-CN/evidence/README.md",
         "en": "../en/evidence/README.md"
       }
+    },
+    {
+      "id": "E-20261104-005",
+      "eventDate": "2026-11-04",
+      "type": "independent-frontend-review",
+      "committed": false,
+      "artifact": "2026-11-04/codex-review-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261104-006",
+      "eventDate": "2026-11-04",
+      "type": "one-command-service-launcher-validation",
+      "committed": false,
+      "artifact": "2026-11-04/service-launcher-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261104-007",
+      "eventDate": "2026-11-04",
+      "type": "ar-direction-and-aim-validation",
+      "committed": false,
+      "artifact": "2026-11-04/ar-guidance-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261104-008",
+      "eventDate": "2026-11-04",
+      "type": "camera-guide-gps-and-small-range-validation",
+      "committed": false,
+      "artifact": "2026-11-04/camera-guide-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261104-009",
+      "eventDate": "2026-11-04",
+      "type": "preset-and-private-api-integration",
+      "committed": false,
+      "artifact": "2026-11-04/preset-integration-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261104-010",
+      "eventDate": "2026-11-04",
+      "type": "replacement-key-live-guide-check",
+      "committed": false,
+      "artifact": "2026-11-04/replacement-key-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
     }
   ]
 }

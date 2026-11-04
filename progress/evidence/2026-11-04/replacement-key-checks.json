@@ -1,0 +1,32 @@
+{
+  "id": "E-20261104-010",
+  "checkedOn": "2026-11-04",
+  "type": "replacement-key-live-guide-check",
+  "privateEnvMode": "600",
+  "authenticationHttpStatus": 200,
+  "model": "deepseek-flash",
+  "liveGuide": {
+    "httpStatus": 200,
+    "source": "deepseek",
+    "status": "ready",
+    "mentionsBuildingC": true,
+    "mentionsExampleModule": true,
+    "inMemorySession": true,
+    "gpsOrCameraUsed": false
+  },
+  "runtime": {
+    "restart": true,
+    "backendHealth": true,
+    "trustedLanHttpsHealth": true,
+    "certificateSetupHealth": true
+  },
+  "applicationSourceChanged": false,
+  "priorTests": {
+    "passed": 80,
+    "failed": 0,
+    "rerunThisTurn": false,
+    "validatedSourceUnchanged": true
+  },
+  "credentialsExported": false,
+  "physicalSafariAcceptance": false
+}

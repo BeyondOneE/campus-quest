@@ -64,7 +64,7 @@ test('same account restores room identity, ownership and receipts across devices
     assert.equal(b.data.state.eligible,false);assert.equal(b.collect().status,409);
     assert.equal(b.join(code,'Other nickname').status,201);
     assert.equal(b.data.player.id,id);assert.equal(b.data.players.length,1);
-    const first=a.collect();assert.equal(first.status,200);
+    a.aimAtTreasure();const first=a.collect();assert.equal(first.status,200);
     const duplicate=b.collect();assert.equal(duplicate.data.collection.id,first.data.collection.id);
     assert.equal(duplicate.data.collection.repeated,true);
     b.create();assert.notEqual(b.data.room.code,code);

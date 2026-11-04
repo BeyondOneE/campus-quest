@@ -1,4 +1,6 @@
+import { mountGuide } from './guide.js';
 import { RemoteTreasureSession } from './client.js';
+import { AR_DEFAULTS, AimHold, cameraPose, projectTreasure } from './ar.js';
 
 // Motion only decorates. State, text and [hidden] always change synchronously first, and
 // every effect here does nothing when the browser lacks it or asks for reduced motion.
@@ -138,6 +140,7 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
   const motion = createMotion({ document, window, canvas: $('fx') });
   const createdAt = new Date(now()).toISOString();
   const video = $('camera');
+  const guide = mountGuide({ document, session, window, now, onToggle: () => render() });
   let watch = null, locationToken = 0, stream = null, cameraToken = 0, frameCallback = null;
   let cameraPending = false, cameraError = null, cameraSettings = null;
   let frames = 0, lastFrameAt = null, lastVideoTime = -1, timer = null;
@@ -145,6 +148,9 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
   // Which screen is showing follows session state; these only track what the player has opened.
   let booted = !session.connect, entryMode = 'home', switching = false, placing = false, sheet = '', sheetOpener = null;
   let playersKey = '', shortcutsKey = '', shownScreen = '', shownRound = null;
+  let pose = null, directionPermission = 'off', directionMessage = '', directionSamples = 0, lastDirectionRender = -Infinity;
+  let lastAimSend = -Infinity, lastAimTimestamp = null, aimWasSent = false;
+  const localAim = new AimHold();
   const phaseOrder = ['unplaced', 'leave', 'return', 'ready', 'collected'];
   // Text in the field screen eases in when it actually changes; the value itself is set immediately.
   const swapText = (id, text) => { const el = $(id); if (el.textContent !== text) { el.textContent = text; motion.swapIn(el); } };
@@ -156,9 +162,108 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
   const secure = () => window.isSecureContext === true;
   const cameraLive = () => Boolean(stream && !document.hidden && !video.paused && frames > 0
     && lastFrameAt !== null && now() - lastFrameAt < 2500);
+  const screenAngle = () => window.screen?.orientation?.angle ?? window.orientation ?? 0;
+  const aspect = () => {
+    const screen = $('screen-camera');
+    return screen.clientWidth && screen.clientHeight ? screen.clientWidth / screen.clientHeight : 9 / 16;
+  };
+  function clearDirection() {
+    window.removeEventListener?.('deviceorientation', receiveDirection);
+    window.removeEventListener?.('deviceorientationabsolute', receiveDirection);
+    pose = null; localAim.reset(); lastAimTimestamp = null; directionPermission = 'off'; directionMessage = '';
+    if (aimWasSent) { aimWasSent = false; Promise.resolve(session.aim?.(null, now())).catch(() => {}); }
+  }
+  function receiveDirection(event) {
+    if (document.hidden || (!stream && !cameraPending) || directionPermission !== 'granted') return;
+    // Some browsers fire relative and absolute streams together. Never downgrade a fresh absolute reading.
+    if (event.type === 'deviceorientation' && event.absolute !== true && typeof event.webkitCompassHeading !== 'number'
+      && pose && now() - pose.at <= AR_DEFAULTS.maxAge) return;
+    const next = cameraPose(event, now(), screenAngle(), pose);
+    if (next.error) { pose = null; localAim.reset(); directionMessage = next.error; }
+    else { pose = next; directionMessage = ''; directionSamples++; }
+    if (now() - lastDirectionRender >= 50) { lastDirectionRender = now(); render(); }
+  }
+  async function beginDirection(token) {
+    directionPermission = 'requesting'; directionMessage = 'Allow Motion & Orientation to show the treasure direction.';
+    const api = window.DeviceOrientationEvent;
+    if (!api) { directionPermission = 'unsupported'; directionMessage = 'Compass direction is unavailable in this browser. Use iPhone Safari with Motion & Orientation access.'; return; }
+    try {
+      // Called directly from the camera / retry tap before awaiting camera acquisition.
+      const permission = typeof api.requestPermission === 'function' ? await api.requestPermission(true) : 'granted';
+      if (token !== cameraToken || document.hidden || (!stream && !cameraPending)) return;
+      directionPermission = permission === 'granted' ? 'granted' : 'denied';
+      if (permission === 'granted') {
+        directionMessage = 'Waiting for compass readings. Hold the rear camera towards the horizon.';
+        window.removeEventListener?.('deviceorientation', receiveDirection);
+        window.removeEventListener?.('deviceorientationabsolute', receiveDirection);
+        window.addEventListener('deviceorientation', receiveDirection);
+        window.addEventListener('deviceorientationabsolute', receiveDirection);
+      } else directionMessage = 'Direction permission denied. Allow Motion & Orientation in Safari, then retry.';
+    } catch {
+      if (token !== cameraToken) return;
+      directionPermission = 'denied'; directionMessage = 'Direction could not start. Check Safari Motion & Orientation access and retry.';
+    }
+    if (token === cameraToken) render();
+  }
+  function sendAim(sample) {
+    if (!session.aim || collecting) return;
+    if (sample === null) {
+      if (!aimWasSent) return;
+      aimWasSent = false;
+    } else {
+      if (sample.timestamp === lastAimTimestamp) return;
+      if (now() - lastAimSend < 250) return;
+      lastAimSend = now(); lastAimTimestamp = sample.timestamp; aimWasSent = true;
+    }
+    settle(session.aim(sample, now()), () => render());
+  }
+  function currentProjection(reading) {
+    return pose && now() - pose.at <= AR_DEFAULTS.maxAge && pose.screenAngle === screenAngle() && reading.guidance
+      ? projectTreasure(pose, reading.guidance.bearingDegrees, aspect()) : null;
+  }
+  function renderAR(reading, live) {
+    const projection = reading.canNavigate ? currentProjection(reading) : null;
+    const recentVideo = live && lastFrameAt !== null && now() - lastFrameAt <= AR_DEFAULTS.maxVideoAge;
+    const near = Boolean(reading.eligible && projection?.visible && recentVideo && !guide.isOpen());
+    const targetVisible = Boolean(live && reading.eligible && projection?.visible);
+    show('treasure', targetVisible); show('aim-reticle', live && reading.eligible && Boolean(projection));
+    show('ar-guidance', live);
+    show('ar-arrow', Boolean(projection) && !targetVisible);
+    show('gps-spinner', live && !reading.canNavigate);
+    show('direction-retry', Boolean(stream) && directionPermission === 'denied');
+    $('direction-retry').disabled = directionPermission === 'requesting';
+    if (projection) {
+      $('ar-arrow').style?.setProperty('--bearing-delta', `${projection.arrowAngle}deg`);
+      if (targetVisible) {
+        $('treasure').style?.setProperty('--target-x', `${50 + projection.x * 50}%`);
+        $('treasure').style?.setProperty('--target-y', `${50 + projection.y * 50}%`);
+      }
+    }
+    const sample = near ? { heading: pose.heading, pitch: pose.pitch, source: pose.source, accuracy: pose.accuracy,
+      timestamp: pose.at, cameraLive: true, videoAgeMs: Math.max(0, now() - lastFrameAt) } : null;
+    if (sample) localAim.observe(sample, reading.guidance.bearingDegrees, now());
+    else localAim.reset();
+    sendAim(sample);
+    const hold = localAim.snapshot(now()), ready = hold.ready && reading.canClaim && near;
+    $('aim-reticle').dataset.ready = ready ? '1' : '';
+    $('aim-reticle').style?.setProperty('--aim-progress', `${Math.min(100, hold.heldMs / hold.requiredMs * 100)}%`);
+    show('claim', live && reading.eligible && !guide.isOpen());
+    $('claim').disabled = !ready || collecting;
+    $('claim').textContent = collecting ? 'Claiming…' : ready ? 'Claim treasure' : hold.heldMs > 0 ? 'Hold steady…' : 'Aim to claim';
+    $('ar-distance').textContent = reading.distance == null ? '' : `${Math.round(reading.distance)} m away`;
+    let message;
+    if (!reading.canNavigate) message = 'GPS signal lost. Reconnecting…';
+    else if (!projection) message = directionMessage || 'Direction reading expired. Hold the phone upright and move it gently to recalibrate.';
+    else if (targetVisible) message = ready ? 'Target locked. Tap Claim treasure.' : 'Centre the chest in the reticle and hold steady.';
+    else if (Math.abs(projection.delta) > 135) message = 'Turn around to face the treasure.';
+    else if (Math.abs(projection.delta) > 15) message = `Turn ${projection.delta < 0 ? 'left' : 'right'} towards the treasure.`;
+    else if (!reading.eligible) message = 'Follow this direction. The chest appears when you are in range.';
+    else message = pose.pitch > 10 ? 'Lower the camera towards the horizon.' : 'Raise the camera towards the horizon.';
+    $('ar-message').textContent = message;
+  }
   function stopCamera(reason = 'Camera closed.') {
     if ((stream || cameraPending) && reason !== 'Camera closed.') cameraNotice = reason;
-    cameraToken += 1; cameraPending = false;
+    cameraToken += 1; cameraPending = false; clearDirection(); guide.stop();
     if (frameCallback !== null && typeof video.cancelVideoFrameCallback === 'function') video.cancelVideoFrameCallback(frameCallback);
     frameCallback = null;
     const previous = stream; stream = null;
@@ -173,11 +278,16 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
     stopCamera('Location stopped and camera released. Turn location back on when ready.');
     render();
   }
+  let nextGpsRetry = 0;
   function startLocation() {
     if (!secure() || document.hidden || session.connected === false) return;
     stopLocation(); locationError = ''; cameraNotice = '';
     if (!navigator.geolocation) { locationError = 'Location is unavailable in this browser. Use iPhone Safari.'; render(); return; }
-    const token = locationToken; session.start(now());
+    session.start(now()); installLocationWatch(); render();
+  }
+  function installLocationWatch() {
+    if (watch !== null) navigator.geolocation?.clearWatch(watch);
+    watch = null; const token = ++locationToken; nextGpsRetry = now() + 10000;
     try {
       watch = navigator.geolocation.watchPosition(position => {
         if (token !== locationToken || document.hidden) return;
@@ -192,12 +302,10 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
         const reasons = { 1: 'Location permission denied. Check Safari website and system settings, then retry.',
           2: 'Location unavailable. Try again in an open outdoor area.', 3: 'Location timed out. Wait for an update or restart location.' };
         // An error invalidates the last position immediately; never collect using it.
-        session.fix = null; session.clearDwell();
-        if (session.connected !== undefined) session.stop(now());
-        if (session.phase === 'ready') session.phase = 'return';
+        session.loseLocation(now());
         session.log(`location-error:${error.code}`, now());
         if (error.code === 1) stopLocation(reasons[1]);
-        else { locationError = reasons[error.code] || 'Location failed. Please retry.'; stopCamera('Location is unavailable. Wait for a fresh reading, then reopen the camera.'); render(); }
+        else { locationError = 'GPS signal lost. Reconnecting…'; render(); }
       }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 });
     } catch {
       stopLocation('Location could not start. Check website permissions, then retry.');
@@ -216,18 +324,22 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
     });
   }
   async function startCamera() {
-    if (!secure() || document.hidden || !session.snapshot(now()).eligible) return;
+    if (!secure() || document.hidden || !session.snapshot(now()).canNavigate) return;
     cameraNotice = ''; cameraFailure = '';
     if (!navigator.mediaDevices?.getUserMedia) { cameraFailure = 'Camera is unavailable. Open a trusted HTTPS address.'; render(); return; }
     stopCamera(); const token = cameraToken; cameraPending = true; cameraError = null;
     frames = 0; lastFrameAt = null; cameraSettings = null; lastVideoTime = -1;
-    cameraMessage = 'Allow the rear camera to continue.'; render();
+    cameraMessage = 'Allow the rear camera and Motion & Orientation to continue.';
+    beginDirection(token); render();
     try {
       const acquired = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' },
         width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
-      if (token !== cameraToken || document.hidden || !session.snapshot(now()).eligible) {
+      if (token !== cameraToken || document.hidden || !session.snapshot(now()).canNavigate) {
         acquired.getTracks().forEach(track => track.stop());
-        if (token === cameraToken) { cameraPending = false; cameraNotice = 'Location changed. Confirm you are still within treasure range.'; render(); }
+        if (token === cameraToken) {
+          stopCamera('Location changed. Wait for a fresh accurate reading, then reopen AR directions.');
+          render();
+        }
         return;
       }
       stream = acquired; cameraPending = false;
@@ -253,7 +365,7 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
     }
   }
   function exitDistance() {
-    return (session.zone?.radius ?? 30) + (session.data?.report.config.exitMargin ?? 10);
+    return session.zone?.radius === 3 ? 3 : (session.zone?.radius ?? 3) + (session.data?.report.config.exitMargin ?? 10);
   }
   // One title and one sentence for the current moment of the round.
   function guidance(reading, tracking, owner, collected) {
@@ -269,8 +381,8 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
     if (held) return [title, held];
     if (placing || !session.zone) return [title, placing ? 'It moves to where you’re standing, and everyone starts over.' : 'The treasure goes right where you’re standing. Everyone in this room hunts the same spot.'];
     return [title, { leave: `Go at least ${exitDistance()} m from the treasure. We’ll tell you when to turn back.`,
-      return: reading.kind === 'inside' ? 'Almost there. Hold still for a few seconds.' : 'You’re far enough. Go back to where it was hidden.',
-      ready: reading.eligible ? 'Open the camera to spot it and claim it.' : 'Your position needs to settle before the camera can open.',
+      return: reading.kind === 'inside' ? 'Almost there. Hold still for a few seconds.' : 'Open AR directions and follow the arrow back to the treasure.',
+      ready: reading.eligible ? 'Find the chest in AR, centre it and hold steady to claim.' : 'Your position needs to settle before you can claim.',
       unplaced: '', collected: '' }[session.phase]];
   }
   function gaugeFill(reading, collected) {
@@ -351,7 +463,10 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
       lastVideoTime = video.currentTime; frameArrived(cameraToken);
     }
     const reading = session.snapshot(now());
-    if ((stream || cameraPending) && !reading.eligible) stopCamera('Your position no longer qualifies, so the camera closed. Reopen it near the treasure.');
+    const recovering = Boolean(stream && session.zone && ['return', 'ready'].includes(session.phase)
+      && (session.active ?? session.tracking) && session.connected !== false);
+    if ((stream || cameraPending) && !reading.canNavigate && !recovering) stopCamera('Location is no longer suitable for direction guidance. Wait for a fresh accurate reading, then reopen the camera.');
+    if (recovering && !reading.canNavigate && now() >= nextGpsRetry && !document.hidden) installLocationWatch();
     if (reading.eligible) cameraNotice = '';
     const live = cameraLive(), collected = session.phase === 'collected', data = session.data;
     const tracking = session.active ?? session.tracking, owner = data ? data.player.role === 'owner' : true;
@@ -414,17 +529,19 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
     $('place').disabled = !reading.canPlace;
     $('place').textContent = session.zone ? 'Move treasure here' : 'Hide treasure here';
     $('radius-value').textContent = `${$('radius').value} m`;
-    show('start-camera', tracking && !wantsPlacement && session.phase === 'ready');
-    $('start-camera').disabled = !reading.eligible || cameraPending || Boolean(stream);
+    show('start-camera', tracking && !wantsPlacement && ['return', 'ready'].includes(session.phase));
+    $('start-camera').disabled = !reading.canNavigate || cameraPending || Boolean(stream);
+    $('start-camera').textContent = reading.eligible ? 'Find treasure in AR' : 'Open AR directions';
     show('rehide', showCollected && owner);
     show('move-treasure', owner && Boolean(session.zone));
 
     show('camera-placeholder', !live);
-    $('treasure').hidden = !live || !reading.eligible; $('treasure').disabled = !live || !reading.eligible || collecting;
+    guide.sync(Boolean(stream) && !document.hidden, reading);
+    renderAR(reading, live);
     $('stop-camera').disabled = !stream && !cameraPending;
     chip('camera-status', live ? 'Live video' : cameraPending ? 'Waiting for permission' : 'Starting video', live ? 'good' : '');
     $('camera-message').textContent = !$('retry-playback').hidden ? 'Tap Resume video. Claiming needs a live picture.'
-      : live ? 'Your treasure is here. Tap it to claim.' : cameraMessage;
+      : live ? (!reading.canNavigate ? 'GPS signal lost. Reconnecting…' : 'Follow the arrow, then centre the chest.') : cameraMessage;
 
     renderRooms(data, tracking); renderEntry(data); renderAccount();
 
@@ -474,8 +591,8 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
   listen('stop-location', 'click', () => { stopLocation(); closeSheet(); });
   listen('place', 'click', () => {
     settle(session.place(Number($('radius').value), now()), success => {
-      if (success) { stopCamera('Treasure moved. Leave and return before opening the camera.'); cameraNotice = ''; locationError = ''; placing = false; }
-      else locationError = session.lastError || 'Wait for a valid position and use a radius between 15 and 100 m.';
+      if (success) { stopCamera('Treasure moved. Walk away to unlock AR directions.'); cameraNotice = ''; locationError = ''; placing = false; }
+      else locationError = session.lastError || 'Wait for a valid position and use a radius between 3 and 100 m.';
       render();
     });
     render();
@@ -487,12 +604,15 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
   listen('start-camera', 'click', startCamera);
   listen('stop-camera', 'click', () => { stopCamera(); session.log('camera-stopped', now()); render(); });
   listen('retry-playback', 'click', async () => {
-    if (!stream || document.hidden || !session.snapshot(now()).eligible) return;
+    if (!stream || document.hidden || !session.snapshot(now()).canNavigate) return;
     try { await video.play(); $('retry-playback').hidden = true; } catch { cameraMessage = 'Playback is still blocked. Close and reopen the camera.'; }
     render();
   });
-  listen('treasure', 'click', () => {
-    if (cameraLive() && !collecting) {
+  listen('direction-retry', 'click', () => { if (stream && !document.hidden) { pose = null; localAim.reset(); beginDirection(cameraToken); render(); } });
+  listen('claim', 'click', () => {
+    const reading = session.snapshot(now()), projection = currentProjection(reading);
+    if (!guide.isOpen() && cameraLive() && lastFrameAt !== null && now() - lastFrameAt <= AR_DEFAULTS.maxVideoAge
+      && projection?.visible && projection.error <= AR_DEFAULTS.angle && localAim.snapshot(now()).ready && reading.canClaim && !collecting) {
       collecting = true;
       settle(session.collect(now()), success => { collecting = false; if (success) { stopCamera('Collection saved by the server.'); cameraNotice = ''; } render(); });
     }
@@ -505,6 +625,8 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
         browserIdentity: 'must-be-confirmed-by-user' },
       ...session.report(now()), camera: { running: Boolean(stream), pending: cameraPending, framesObserved: frames,
         live: cameraLive(), settings: cameraSettings, lastFrameAgeMs: lastFrameAt === null ? null : now() - lastFrameAt, error: cameraError },
+      ar: { permission: directionPermission, validSamples: directionSamples, source: pose?.source ?? null,
+        orientationAgeMs: pose ? Math.max(0, now() - pose.at) : null, aim: localAim.snapshot(now()), config: AR_DEFAULTS, worldAnchored: false },
       includesCoordinates: false, notes: $('notes').value,
       limitations: ['Camera overlay has no world anchoring or spatial tracking.', 'Location accuracy is provider-reported, not measured error.',
         'The user must confirm Safari and physical field observations.', 'Accounts do not verify student identity. Client location and camera claims are not anti-cheat proof.'] };

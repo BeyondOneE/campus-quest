@@ -1,0 +1,125 @@
+{
+  "id": "E-20261104-008",
+  "checkedOn": "2026-11-04",
+  "type": "camera-guide-gps-and-small-range-validation",
+  "baseline": "99bb3fb",
+  "workingTree": "uncommitted-prior-work-preserved",
+  "automated": {
+    "nodeTests": 77,
+    "passed": 77,
+    "failed": 0,
+    "newCases": 15,
+    "updatedGpsCameraExpectations": 2,
+    "npmCi": "passed",
+    "build": "passed-with-existing-prototype-chunk-warning",
+    "dependencyOrLockfileChanged": false,
+    "moderateDependencyAdvisories": 10,
+    "pythonLauncherChecksWithinNodeSuite": 7
+  },
+  "isolatedHttp": {
+    "realNodeHttp": true,
+    "temporaryDatabase": true,
+    "threeMetreDepartureAndReturn": true,
+    "guideDistanceAndMissingContent": true,
+    "claimAimAndIdempotence": true,
+    "providerCallsExplicitlyDisabled": true,
+    "testProcessAndDatabaseCleaned": true
+  },
+  "provider": {
+    "configuredInActualRuntime": false,
+    "realModelCalls": 0,
+    "fixturesCover": "valid JSON, unavailable, malformed, oversized, late context, private payload, concurrency and rate limits",
+    "realEntitlementLatencyAndAnswerQualityVerified": false
+  },
+  "runtime": {
+    "privateConsistentBackup": true,
+    "backupMode": "600",
+    "restartThroughLauncher": true,
+    "backendHealth": true,
+    "trustedLanHttps": true,
+    "certificateSetup": true,
+    "guideModuleAndMarkup": true,
+    "aggregateRowsPreserved": true,
+    "pointCoordinatesAndRoundIdsPreserved": true,
+    "developmentCaPreserved": true,
+    "existingPointsMigratedTo3m": true,
+    "leftRunning": true
+  },
+  "desktop": {
+    "isolatedComponentPreview": true,
+    "fixtureWasExplicitlyLabelled": true,
+    "fixtureCameraGpsAndProviderUsed": false,
+    "viewports": [
+      [
+        390,
+        780
+      ],
+      [
+        320,
+        500
+      ],
+      [
+        320,
+        250
+      ]
+    ],
+    "pageMatchesViewport": true,
+    "inputAndSendOnScreen": true,
+    "realEntryViewport": [
+      320,
+      500
+    ],
+    "realEntryRadiusDefault": 3,
+    "realEntryLoads": true,
+    "realEntryConsoleWarningsOrErrors": 0,
+    "realEntryInheritedExpiredAccountMessage": true,
+    "realPageHardwareRequestedOrReplaced": false,
+    "previewServerAndTabClosed": true,
+    "viewportReset": true,
+    "newScreenshotFileRetained": false
+  },
+  "content": {
+    "places": "empty",
+    "faq": "empty",
+    "roleAndPresets": "generic-configurable-English",
+    "unknownFacts": "explicit-preset",
+    "voice": false,
+    "puzzleGate": false,
+    "cameraImageAnalysis": false
+  },
+  "physicalSafariAcceptance": false,
+  "phoneTrustOrPermissionsChanged": false,
+  "externalRelay": false,
+  "limits": [
+    "GPS centre distance in 3 m mode is not measured physical accuracy.",
+    "Real Safari GPS recovery, orientation and keyboard behavior remain unverified.",
+    "No actual DeepSeek Key, entitlement, latency or real generated answer was tested.",
+    "Campus building and course introductions require verified content."
+  ],
+  "validatedFileSha256": {
+    "public/treasure-lab/model.js": "0fe609dd59de5bdbd105cccb5c94c98526172ef9e5c9bc966eee0de978c5d44d",
+    "public/treasure-lab/app.js": "b0e3e67ef4be1aa0ed5ea79030ac90c6b49a127c05400fd6aa0dc37003c19641",
+    "public/treasure-lab/client.js": "188493c790963ed4a23ae4e43c30548a0d1e832af6db5e456b8f7aecfdf56b42",
+    "public/treasure-lab/guide.js": "315aafb53bf27f4636fb88ec77a3fa77c45016387ed81db7e015f153be1ee76c",
+    "public/treasure-lab/index.html": "1f3100110e48f95fa90d4bd0e918c3ef716b9d25e4806801e4b747813732b150",
+    "public/treasure-lab/style.css": "2cd3f64f0ab1407ec629e4c7299d1387694c30e17148eb7722094eace840827e",
+    "server/guide.mjs": "ef96cf63393228b1446ce63cb9cc049867550d40bc0055279e647b7dce8c7bfb",
+    "server/guide-config.json": "19762a9775c4415fa689246187ab8d5b6def9fb37ada23257b15d10c6dd7f080",
+    "server/app.mjs": "4c21428d11b83ce37272fa8ecd2252b442e73d9bd62e467075f1c8f6c4f0598a",
+    "server/store.mjs": "2b02652987613c3b59148c2dfe812a8bc3c1ef6d6497dce12ebec2a8b76ecef4",
+    "server/index.mjs": "cdefa7e6bb0d98aaccfdebc870707996d30636d03642184880caa7f5b53b36bf",
+    "tests/campus-guide.test.mjs": "e236865c23ebcd6cba7029be3938989fb6220dd53fbc2e471140350c20eaee96",
+    "tests/treasure-lab.test.mjs": "68d12865de2fdcc1038f005d1ebef175fd214fd1323a53222f5a8de4420ef014",
+    "tests/helpers/treasure-harness.mjs": "f46b6d76f41d1b006b04159e75e294de3c7e6481c916fa081c66aa824f2b97c3"
+  },
+  "documentation": {
+    "languagePairs": 11,
+    "relativeLinks": 266,
+    "pairedIds": "passed",
+    "domElementsChecked": 115,
+    "uniqueRecordIds": "passed",
+    "validatedSourceHashes": "passed",
+    "diffWhitespace": "passed",
+    "javascriptSyntax": "passed"
+  }
+}

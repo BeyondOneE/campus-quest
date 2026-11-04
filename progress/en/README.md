@@ -8,7 +8,7 @@ Records follow the bilingual policy from 2026-11-03. Historical work is explicit
 | --- | --- | --- | --- |
 | 2026-10-28 | 2026-11-03 | [Prototype baseline, mobile-web decision and Brave testing](daily/2026-10-28.md) | Retrospective, CQ-20261028-001 |
 | 2026-11-03 | 2026-11-03 | [English treasure experiment, LAN access, accounts and Claude handoff](daily/2026-11-03.md) | Same-day, CQ-20261103-001, CQ-20261103-002, CQ-20261103-003, CQ-20261103-004, CQ-20261103-005, CQ-20261103-006, CQ-20261103-007, CQ-20261103-008, CQ-20261103-009, CQ-20261103-010, CQ-20261103-011, CQ-20261103-012 |
-| 2026-11-04 | 2026-11-04 | [Non-scrolling screens, password rule, visual / motion redesign, simplification and fantasy background](daily/2026-11-04.md) | Same-day, CQ-20261104-001, CQ-20261104-002, CQ-20261104-003, CQ-20261104-004 |
+| 2026-11-04 | 2026-11-04 | [Screens and forest visuals, password rule, service startup and AR aim-to-claim](daily/2026-11-04.md) | Same-day, CQ-20261104-001, CQ-20261104-002, CQ-20261104-003, CQ-20261104-004, CQ-20261104-005, CQ-20261104-006, CQ-20261104-007, CQ-20261104-008, CQ-20261104-009, CQ-20261104-010, CQ-20261104-011, CQ-20261104-012, CQ-20261104-013 |
 
 - [Course requirements map](course-requirements.md)
 - [Daily template](templates/daily.md) / [Weekly template](templates/weekly.md)

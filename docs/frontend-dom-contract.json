@@ -396,9 +396,9 @@
       "initiallyDisabled": false,
       "attributes": {
         "type": "range",
-        "min": "15",
+        "min": "3",
         "max": "100",
-        "step": "5"
+        "step": "1"
       }
     },
     {
@@ -505,11 +505,177 @@
     },
     {
       "id": "treasure",
-      "tag": "button",
+      "tag": "div",
       "initiallyHidden": true,
-      "initiallyDisabled": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "img"
+      }
+    },
+    {
+      "id": "ar-guidance",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "ar-arrow",
+      "tag": "span",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "gps-spinner",
+      "tag": "span",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "img"
+      }
+    },
+    {
+      "id": "ar-message",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "ar-distance",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "aim-reticle",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "guide-controls",
+      "tag": "aside",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "guide-preview",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
       "attributes": {
         "type": "button"
+      }
+    },
+    {
+      "id": "open-guide",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "guide-panel",
+      "tag": "section",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "guide-name",
+      "tag": "strong",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "guide-status",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "close-guide",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "guide-messages",
+      "tag": "div",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "log"
+      }
+    },
+    {
+      "id": "guide-distance",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "guide-place",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "guide-courses",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "guide-form",
+      "tag": "form",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "guide-input",
+      "tag": "input",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "text",
+        "maxlength": "500",
+        "autocomplete": "off"
+      }
+    },
+    {
+      "id": "guide-send",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "submit"
       }
     },
     {
@@ -519,6 +685,24 @@
       "initiallyDisabled": false,
       "attributes": {
         "role": "status"
+      }
+    },
+    {
+      "id": "claim",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": true,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "direction-retry",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
       }
     },
     {

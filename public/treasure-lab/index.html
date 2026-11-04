@@ -156,14 +156,14 @@
 
         <div class="dock">
           <div id="place-panel" class="place-panel" hidden>
-            <label for="radius">Claim radius <output id="radius-value" for="radius">30 m</output></label>
-            <input id="radius" type="range" min="15" max="100" step="5" value="30">
+            <label for="radius">Claim radius <output id="radius-value" for="radius">3 m</output></label>
+            <input id="radius" type="range" min="3" max="100" step="1" value="3">
             <p id="place-note" class="quiet" hidden>This starts a new round for everyone in the room.</p>
             <button id="place" class="primary" type="button" disabled>Hide treasure here</button>
           </div>
           <button id="start-location" class="primary" type="button">Turn on location</button>
           <button id="place-cancel" class="link" type="button" hidden>Cancel</button>
-          <p id="location-note" class="quiet">Your coordinates go to the host computer to check range. Camera video stays on this phone.</p>
+          <p id="location-note" class="quiet">Your coordinates and aiming readings go to the host computer for this test. Camera video stays on this phone.</p>
           <button id="start-camera" class="primary primary-call" type="button" disabled hidden>Open camera</button>
           <button id="rehide" class="secondary" type="button" hidden>Hide a new treasure</button>
         </div>
@@ -177,9 +177,29 @@
           <span class="spacer"></span>
           <button id="stop-camera" class="icon-button" type="button" aria-label="Close camera"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </header>
-        <button id="treasure" class="treasure" type="button" hidden disabled aria-label="Claim treasure"><i class="shock"></i><svg class="art" aria-hidden="true"><use href="#chest"/></svg><span>Tap to claim</span></button>
+        <div id="treasure" class="treasure ar-target" role="img" aria-label="Treasure target" hidden><svg class="art" aria-hidden="true"><use href="#chest"/></svg></div>
+        <div id="ar-guidance" class="ar-guidance" hidden>
+          <span id="ar-arrow" class="ar-arrow" aria-hidden="true">↑</span>
+          <span id="gps-spinner" class="gps-spinner" role="img" aria-label="Reconnecting GPS" hidden></span>
+          <p id="ar-message" role="status">Waiting for compass readings.</p>
+          <p id="ar-distance"></p>
+        </div>
+        <div id="aim-reticle" class="aim-reticle" aria-hidden="true" hidden><span>+</span></div>
+        <aside id="guide-controls" class="guide-controls" aria-label="Campus guide" hidden>
+          <button id="guide-preview" class="guide-preview" type="button" aria-live="polite">Ask about your surroundings or the treasure.</button>
+          <button id="open-guide" class="chip" type="button" aria-controls="guide-panel" aria-expanded="false">Chat with guide</button>
+        </aside>
+        <section id="guide-panel" class="guide-panel" aria-label="Guide conversation" hidden>
+          <header><div><strong id="guide-name">Campus Guide</strong><p id="guide-status" role="status">Connecting…</p></div><button id="close-guide" class="chip" type="button">Close</button></header>
+          <div id="guide-messages" class="guide-messages" role="log" aria-live="polite" aria-label="Conversation"></div>
+          <div class="guide-questions"><button id="guide-distance" class="chip" type="button">How far?</button><button id="guide-place" class="chip" type="button">This building</button><button id="guide-courses" class="chip" type="button">Courses here</button></div>
+          <form id="guide-form" class="guide-form"><label for="guide-input" class="sr-only">Ask the campus guide</label><input id="guide-input" type="text" maxlength="500" autocomplete="off" placeholder="Ask your campus guide…" enterkeyhint="send"><button id="guide-send" class="chip" type="submit">Send</button></form>
+          <p class="guide-notice">Questions and selected building facts may go to DeepSeek. No camera frames or automatic GPS coordinates are sent. Distances are approximate.</p>
+        </section>
         <div class="camera-foot">
           <p id="camera-message" role="status"></p>
+          <button id="claim" class="primary" type="button" disabled hidden>Aim to claim</button>
+          <button id="direction-retry" class="secondary" type="button" hidden>Enable direction</button>
           <button id="retry-playback" class="primary" type="button" hidden>Resume video</button>
         </div>
       </section>

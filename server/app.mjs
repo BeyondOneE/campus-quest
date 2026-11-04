@@ -2,10 +2,11 @@ import { timingSafeEqual } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { ApiError } from './store.mjs';
+import { CampusGuide } from './guide.mjs';
 
 const publicRoot = fileURLToPath(new URL('../public/', import.meta.url));
 const files = new Map();
-for (const [folder, names] of Object.entries({ 'treasure-lab': ['index.html','app.js','model.js','client.js','style.css'],
+for (const [folder, names] of Object.entries({ 'treasure-lab': ['index.html','app.js','model.js','client.js','ar.js','guide.js','style.css'],
   'device-check': ['index.html','probe.js','measurements.js','style.css'] })) {
   for (const name of names) files.set(`/${folder}/${name}`, `${publicRoot}${folder}/${name}`);
   files.set(`/${folder}/`, `${publicRoot}${folder}/index.html`);
@@ -13,7 +14,7 @@ for (const [folder, names] of Object.entries({ 'treasure-lab': ['index.html','ap
 const equal = (a, b) => typeof a === 'string' && typeof b === 'string' && Buffer.byteLength(a) === Buffer.byteLength(b)
   && timingSafeEqual(Buffer.from(a), Buffer.from(b));
 
-export function createApplication({ store, publicOrigin = '', localPort = 4180 }) {
+export function createApplication({ store, publicOrigin = '', localPort = 4180, guide = new CampusGuide() }) {
   const allowed = new Set([`http://127.0.0.1:${localPort}`, `http://localhost:${localPort}`]);
   if (publicOrigin) {
     const origin = new URL(publicOrigin);
@@ -32,7 +33,7 @@ export function createApplication({ store, publicOrigin = '', localPort = 4180 }
   return function handle({ method = 'GET', path = '/', headers = {}, body = {}, clientKey = 'local' }) {
     const base = { 'Cache-Control': 'no-store', 'Referrer-Policy': 'no-referrer', 'X-Content-Type-Options': 'nosniff',
       'Content-Security-Policy': "default-src 'self'; connect-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
-      'Permissions-Policy': 'camera=(self), microphone=(), geolocation=(self)' };
+      'Permissions-Policy': 'camera=(self), microphone=(), geolocation=(self), accelerometer=(self), gyroscope=(self), magnetometer=(self)' };
     const json = (status, data, extra = {}) => ({ status, headers: { ...base, 'Content-Type': 'application/json; charset=utf-8', ...extra }, body: JSON.stringify(data) });
     const errorResponse = error => json(error.authBusy ? 429 : error instanceof ApiError ? error.status : 500,
       { error: { code: error.authBusy ? 'AUTH_BUSY' : error instanceof ApiError ? error.code : 'SERVER_ERROR',
@@ -103,13 +104,25 @@ export function createApplication({ store, publicOrigin = '', localPort = 4180 }
       }
       const player = account ? store.accountPlayer(account) : store.player(tokenFor('cq_session'));
       if (method === 'GET' && path === '/api/state') return json(200, store.state(player));
+      if (method === 'GET' && path === '/api/guide') return json(200, guide.read(store,player));
       if (method !== 'POST') throw new ApiError(404, 'NOT_FOUND', 'API route not found.');
       checkCsrf(player.csrf);
       if ((account || body.roomCode !== undefined) && body.roomCode !== player.room) {
         throw new ApiError(409, 'ROOM_CHANGED', 'The active room changed. Refresh before continuing.');
       }
+      if (path === '/api/guide') {
+        store.expected(store.room(player.room),body.treasureId);
+        rate(`guide:${player.gateKey||player.id}`,20,60000);
+        return guide.chat(store,player,body,()=>{
+          const latestAccount=store.accountContext(tokenFor('cq_account'));
+          const latest=latestAccount?store.accountPlayer(latestAccount):store.player(tokenFor('cq_session'));
+          if(latest.room!==player.room||latest.id!==player.id)throw new ApiError(409,'ROOM_CHANGED','The active room changed. Ask again.');
+          store.expected(store.room(player.room),body.treasureId);
+        }).then(data=>json(200,data)).catch(errorResponse);
+      }
       let extra = {};
       if (path === '/api/location') extra.accepted = store.location(player, body);
+      else if (path === '/api/aim') extra.accepted = store.aim(player, body);
       else if (path === '/api/location/stop') store.stop(player);
       else if (path === '/api/treasure') store.place(player, body);
       else if (path === '/api/collect') extra.collection = store.collect(player, body);
