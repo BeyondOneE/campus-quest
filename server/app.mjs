@@ -19,17 +19,15 @@ const signedOut = { account: null, activeRoom: null };
 
 export function createApplication({ store, publicOrigin = '', localPort = 4180, guide = new CampusGuide(), ronin }) {
   const allowed = new Set([`http://127.0.0.1:${localPort}`, `http://localhost:${localPort}`]);
-  const lanOrigins = new Set(allowed);
   if (publicOrigin) {
     const origin = new URL(publicOrigin);
     if (origin.protocol !== 'https:' || origin.origin !== publicOrigin) throw new Error('PUBLIC_ORIGIN must be an HTTPS origin without a path.');
     allowed.add(publicOrigin);
-    if (/^(127\.|10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.)[\d.]+$/.test(origin.hostname)) lanOrigins.add(publicOrigin);
   }
-  const requireRonin = (player, room, origin) => {
+  const requireRonin = (player, room) => {
     if (player.id !== room.owner_id) throw new ApiError(403, 'OWNER_REQUIRED', 'RoNIN uses the host phone.');
-    if (!lanOrigins.has(origin) || !ronin?.available) {
-      throw new ApiError(503, 'RONIN_UNAVAILABLE', 'Indoor mode is available on the host computer over the local network.');
+    if (!ronin?.available) {
+      throw new ApiError(503, 'RONIN_UNAVAILABLE', 'Indoor tracking is currently unavailable. Please try again later.');
     }
   };
   const limits = new Map();
@@ -185,7 +183,7 @@ export function createApplication({ store, publicOrigin = '', localPort = 4180, 
       }
       if (path === '/api/ronin') {
         const room = store.room(player.room);
-        requireRonin(player, room, headers.origin);
+        requireRonin(player, room);
         if (room.mode !== 'indoor-ronin') throw new ApiError(409, 'MODE_CHANGED', 'Select Indoor mode to use motion tracking.');
         const batch = { frames: body.frames, startMs: body.startMs, count: body.count };
         if (!validRoninBatch(batch)) throw new ApiError(400, 'INVALID_MOTION', 'Send a complete motion window.');
@@ -196,7 +194,7 @@ export function createApplication({ store, publicOrigin = '', localPort = 4180, 
       if (path === '/api/location') extra.accepted = store.location(player, body);
       else if (path === '/api/indoor') extra.accepted = store.indoor(player,body);
       else if (path === '/api/mode') {
-        if (body.mode === 'indoor-ronin') requireRonin(player, store.room(player.room), headers.origin);
+        if (body.mode === 'indoor-ronin') requireRonin(player, store.room(player.room));
         store.setMode(player,body);
       }
       else if (path === '/api/aim') extra.accepted = store.aim(player, body);

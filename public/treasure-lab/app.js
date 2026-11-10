@@ -496,7 +496,7 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
         render();
         return;
       }
-      if (!session.inferRonin) { locationError = 'RoNIN requires the host computer.'; render(); return; }
+      if (!session.inferRonin) { locationError = 'Indoor tracking requires a connection to the game server.'; render(); return; }
       const tracker = new IndoorRonin();
       locationError = 'Hold the phone upright and still while RoNIN starts.';
       indoorTracker = tracker; nextIndoorSend = 0; nextIndoorRender = 0; session.start(now());
@@ -837,8 +837,8 @@ export function mountTreasureLab({ document, window, navigator, now = () => Date
       notify('room-exit-error', roomExitError);
     }
     setText('start-location', indoorPending ? 'Waiting for permission…' : isIndoor() ? 'Enable motion' : 'Turn on location');
-    setText('location-note', isIndoor() ? 'Motion readings go to the host computer. Camera video stays on this phone.'
-      : 'Your location goes to the host computer. Camera video stays on this phone.');
+    setText('location-note', isIndoor() ? 'Motion readings go to the game server. Camera video stays on this phone.'
+      : 'Your location goes to the game server. Camera video stays on this phone.');
     const offerLocation = !observing && !tracking && (wantsPlacement || (Boolean(session.zone) && !collected));
     show('start-location', offerLocation); show('location-note', offerLocation);
     $('start-location').disabled = !secure() || !offerLocation || !inRoom || indoorPending || modeChanging || Boolean(session.busy);

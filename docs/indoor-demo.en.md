@@ -1,12 +1,14 @@
 # Indoor RoNIN and mode switching
 
-[中文](indoor-demo.md) · Updated 2026-11-10, CQ-20261110-007 through CQ-20261110-011
+[中文](indoor-demo.md) · Updated 2026-11-11, CQ-20261110-007 through CQ-20261110-011 and CQ-20261111-017
 
 In a room at `/treasure-lab/`, the host chooses **Outdoor** or **Indoor** from the top-right menu. If a treasure is already placed, **Keep current mode** returns to the menu and **Switch and reset round** removes the treasure and clears that round’s claims and eligibility. Mode persists across reload and server restart. On upgrade, rooms in either retired indoor mode reopen in GPS with a fresh round and an empty placement. The migration preserves room identity, ownership, memberships and historical receipts.
 
 ## Indoor RoNIN demo
 
-1. Open the game over trusted LAN HTTPS in iPhone Safari. Choose **Indoor**, tap **Enable motion**, and hold the phone upright and still until **Hide treasure here** is available.
+The backend accepts Indoor requests from its configured `PUBLIC_ORIGIN`, including a public HTTPS domain. The server needs the RoNIN Python environment, upstream model source and checkpoint. Motion windows go to that game server for inference. Camera video stays on the phone. Each request requires the room host and a valid session CSRF token.
+
+1. Open the game at its trusted HTTPS address in iPhone Safari. Choose **Indoor**, tap **Enable motion**, and hold the phone upright and still until **Hide treasure here** is available.
 2. Hide the treasure, open **AR radar** and walk away. Pause once the estimated offset reaches 0.7 m to confirm departure. Walk back towards the hiding spot. The search opens after one second within the estimated 0.5 m return radius. Keep the phone near the original height and tilt the camera to centre the chest. Keep pointing at the chest while the ring fills, then tap **Claim treasure** when it becomes available.
 3. If motion is interrupted, enable it again and hide the treasure in the new frame. The radar and camera use the same iPhone-corrected frame as the displacement estimate.
 

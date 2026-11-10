@@ -4,6 +4,8 @@
 
 更新于 2026-11-11（Asia/Shanghai）。英文寻宝通过电脑共享后端和局域网 HTTPS 运行。房间菜单提供 **Outdoor**（GPS）和 **Indoor**（RoNIN）。新房间默认 Indoor，使用四位数字。登录后可查看排行榜名次和宝藏图鉴。新版已通过自动化和桌面浏览器检查，可从局域网 HTTPS 访问。
 
+香港 ECS 已通过 systemd 运行后端和 CPU RoNIN 进程，已有 AI 配置返回了 DeepSeek 回答。Indoor 支持配置好的公网 HTTPS 来源。域名解析和公网 HTTPS 启用待完成，新服务器使用独立的新数据库。 [服务器部署](server-deployment.md) · CQ-20261111-017
+
 ## 已确认决策
 
 - 正式项目名 `campus-quest`，远程仓库 `BeyondOneE/campus-quest`。

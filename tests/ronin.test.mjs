@@ -76,7 +76,7 @@ test('RoNIN integrates buffered steps, then zeros biased velocity at rest and re
   assert(resume.y > settled.y + .1);
 });
 
-test('only the local room host can send valid RoNIN windows in RoNIN mode', async () => {
+test('only the room host can send valid RoNIN windows from an allowed origin', async () => {
   let calls = 0;
   const ronin = { available: true, async infer({ count }) { calls++; return Array.from({ length: count }, () => [0, 0]); } };
   const h = backendHarness(':memory:', { ronin });
@@ -88,14 +88,20 @@ test('only the local room host can send valid RoNIN windows in RoNIN mode', asyn
     owner.createOutdoor(); guest.join(owner.data.room.code);
     assert.equal((await post(owner, '/api/ronin', batch)).status, 409);
     assert.equal((await select(guest, 'indoor-ronin')).status, 403);
-    assert.equal((await select(owner, 'indoor-ronin', { origin: 'https://field.example.test' })).status, 503);
+    assert.equal((await select(owner, 'indoor-ronin', { origin: 'https://unknown.example.test' })).status, 403);
+    assert.equal((await select(owner, 'indoor-ronin', { origin: 'https://field.example.test' })).status, 200);
     assert.equal((await select(owner, 'indoor-ronin')).status, 200);
     assert.equal((await post(guest, '/api/ronin', batch)).status, 403);
+    assert.equal((await post(guest, '/api/ronin', batch, { origin: 'https://field.example.test' })).status, 403);
+    assert.equal((await post(owner, '/api/ronin', batch, { origin: 'https://unknown.example.test' })).status, 403);
     assert.equal((await post(owner, '/api/ronin', batch, { 'x-csrf-token': 'invalid' })).status, 403);
     assert.equal((await post(owner, '/api/ronin', { ...batch, frames: batch.frames.slice(1) })).status, 400);
     assert.equal(calls, 0);
     assert.deepEqual((await post(owner, '/api/ronin', batch)).data, { velocities: [[0, 0]] });
-    assert.equal(calls, 1);
+    assert.deepEqual((await post(owner, '/api/ronin', batch, { origin: 'https://field.example.test' })).data, { velocities: [[0, 0]] });
+    assert.equal(calls, 2);
+    ronin.available = false;
+    assert.equal((await post(owner, '/api/ronin', batch, { origin: 'https://field.example.test' })).status, 503);
   } finally { h.store.close(); }
 });
 

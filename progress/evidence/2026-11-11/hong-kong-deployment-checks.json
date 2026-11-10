@@ -1,0 +1,45 @@
+{
+  "id": "E-20261111-016",
+  "recordedAt": "2026-11-10T22:47:34.118196+00:00",
+  "baseCommit": "8f166b5",
+  "server": {
+    "region": "cn-hongkong",
+    "address": "47.243.250.52",
+    "signedInstanceIdentityVerified": true,
+    "os": "Ubuntu 24.04.5 LTS",
+    "node": "24.19.0",
+    "caddy": "2.11.9",
+    "torch": "2.15.0+cpu",
+    "numpy": "2.5.4"
+  },
+  "checks": {
+    "npmCi": true,
+    "testsPassed": 132,
+    "testsFailed": 0,
+    "build": true,
+    "backendHealth": true,
+    "roomCreated": true,
+    "secureSessionCookie": true,
+    "indoorModeFromConfiguredPublicOrigin": true,
+    "modelInference": true,
+    "singleSyntheticInferenceMilliseconds": 173,
+    "guideSource": "deepseek",
+    "guideStatus": 200,
+    "guideFailureCode": null,
+    "temporaryRoomRemoved": true,
+    "systemdActive": true,
+    "systemdEnabled": true
+  },
+  "modelCheckpointSha256": "5ae5c9e508f2dc9609c25b59d0e3dfd770ecbcde6920cbc5be3c6d9fed8a6346",
+  "publicEntry": {
+    "domain": "www.chenjiajun.com",
+    "authoritativeARecord": [],
+    "publicHttpsValidated": false
+  },
+  "physicalIphoneValidated": false,
+  "limits": [
+    "The inference check used a synthetic motion window.",
+    "The server uses a fresh independent database.",
+    "DNS, trusted public HTTPS and physical-phone checks remain pending."
+  ]
+}

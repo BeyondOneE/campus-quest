@@ -1,12 +1,14 @@
 # 室内 RoNIN 与模式切换
 
-[English](indoor-demo.en.md) · 更新于 2026-11-10，CQ-20261110-007 至 CQ-20261110-011
+[English](indoor-demo.en.md) · 更新于 2026-11-11，CQ-20261110-007 至 CQ-20261110-011 及 CQ-20261111-017
 
 在 `/treasure-lab/` 的房间内，房主从右上角菜单选择 **Outdoor** 或 **Indoor**。已有宝箱时，点 **Keep current mode** 返回菜单，点 **Switch and reset round** 则清除当前宝箱、该轮领取和临时领取资格。刷新和重启后会保留已选模式。升级时，使用两种旧室内模式的房间会转到 GPS，清除当前放置点并开启新轮次。迁移保留房间、房主、成员和历史领取记录。
 
 ## 室内 RoNIN 演示
 
-1. 在 iPhone Safari 用可信局域网 HTTPS 打开游戏。选择 **Indoor**，点 **Enable motion**，竖直拿稳手机，等到 **Hide treasure here** 可用。
+后端接受来自所配置 `PUBLIC_ORIGIN` 的 Indoor 请求，包括公网 HTTPS 域名。服务器需要配置 RoNIN 的 Python 环境、上游模型源码和权重。运动时间窗发送到该游戏服务器推理，相机画面留在手机。每次请求都要求房主身份和有效的会话 CSRF 令牌。
+
+1. 在 iPhone Safari 用可信 HTTPS 地址打开游戏。选择 **Indoor**，点 **Enable motion**，竖直拿稳手机，等到 **Hide treasure here** 可用。
 2. 放置宝箱，打开 AR 雷达并走开。估计偏移到 0.7 米后停一下，确认离开。朝放置点走回，在估计 0.5 米范围内持续一秒即可进入搜索。持机高度尽量接近起始高度，倾斜相机，将宝箱对准画面中心。保持朝向宝箱，等准星进度环填满，再点亮起的 **Claim treasure**。
 3. 如果运动读数中断，重新启用运动，在新坐标系内重新放置宝箱。雷达、相机和位移估计共用同一个修正后的 iPhone 坐标系。
 

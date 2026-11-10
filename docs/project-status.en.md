@@ -4,6 +4,8 @@
 
 Updated 2026-11-11 (Asia/Shanghai). The English treasure experiment runs on the shared computer backend with direct LAN HTTPS. The room menu offers **Outdoor** (GPS) and **Indoor** (RoNIN). New rooms start in Indoor and use four-digit codes. Signed-in players can view their leaderboard rank and Treasure Book. The current build passed automated and desktop checks and is available over LAN HTTPS.
 
+A Hong Kong ECS now runs the backend and CPU RoNIN worker under systemd. The existing AI configuration returned a DeepSeek response. The configured public HTTPS origin supports Indoor. Domain DNS and public HTTPS activation are pending. The new server has a fresh database. [Server deployment](server-deployment.en.md) · CQ-20261111-017
+
 ## Confirmed decisions
 
 - Project: `campus-quest`, remote repository `BeyondOneE/campus-quest`.

@@ -1,0 +1,26 @@
+[Unit]
+Description=Campus Quest game server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=campus-quest
+Group=campus-quest
+WorkingDirectory=/opt/campus-quest
+Environment=NODE_ENV=production
+Environment=PUBLIC_ORIGIN=https://www.chenjiajun.com
+Environment=PORT=4180
+ExecStart=/usr/local/bin/node /opt/campus-quest/server/index.mjs
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=10
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/opt/campus-quest/.local
+
+[Install]
+WantedBy=multi-user.target

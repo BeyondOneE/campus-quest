@@ -7,7 +7,7 @@ import { validRoninVelocities } from '../public/treasure-lab/ronin.js';
 import { ApiError } from './store.mjs';
 
 const workerScript = fileURLToPath(new URL('../scripts/serve-ronin.py', import.meta.url));
-const unavailable = () => new ApiError(503, 'RONIN_UNAVAILABLE', 'RoNIN inference is unavailable on the host computer.');
+const unavailable = () => new ApiError(503, 'RONIN_UNAVAILABLE', 'Indoor tracking is currently unavailable. Please try again later.');
 
 export class RoninWorker {
   constructor(root = fileURLToPath(new URL('../.local/ronin-research/', import.meta.url))) {

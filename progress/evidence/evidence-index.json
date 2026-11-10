@@ -792,6 +792,18 @@
         "zh-CN": "../zh-CN/evidence/README.md",
         "en": "../en/evidence/README.md"
       }
+    },
+    {
+      "id": "E-20261111-016",
+      "eventDate": "2026-11-11",
+      "type": "hong-kong-deployment-checks",
+      "committed": true,
+      "artifact": "2026-11-11/hong-kong-deployment-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
     }
   ]
 }

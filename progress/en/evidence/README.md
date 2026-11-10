@@ -66,3 +66,5 @@ Shared machine index: [evidence-index.json](../../evidence/evidence-index.json).
 Historical desktop screenshots were stored in `/tmp` and are no longer available; none is archived here. Do not take new screenshots and present them as October 28 originals. Put future small sanitized attachments in the shared `progress/evidence/YYYY-MM-DD/` directory, with equivalent Chinese and English descriptions.
 
 Raw JSON is not narrative text and is not duplicated for language coverage. Translations of human observations preserve meaning, source and uncertainty. For large videos or private material, record only a controlled location, hash and access note, never secrets or token-bearing URLs.
+
+E-20261111-016 records the Hong Kong backend, real CPU model and DeepSeek checks. Public DNS, HTTPS and physical iPhone checks are pending.
