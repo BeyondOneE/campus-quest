@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "reviewedOn": "2026-11-04",
+  "reviewedOn": "2026-11-11",
   "source": "public/treasure-lab/index.html",
   "controller": "public/treasure-lab/app.js",
   "mode": "retain-ids-and-element-semantics-when-reusing-controller",
@@ -36,15 +36,6 @@
       "initiallyHidden": true,
       "initiallyDisabled": false,
       "attributes": {}
-    },
-    {
-      "id": "entry-back",
-      "tag": "button",
-      "initiallyHidden": true,
-      "initiallyDisabled": false,
-      "attributes": {
-        "type": "button"
-      }
     },
     {
       "id": "open-account",
@@ -86,13 +77,6 @@
       "attributes": {
         "role": "status"
       }
-    },
-    {
-      "id": "room-shortcuts",
-      "tag": "div",
-      "initiallyHidden": true,
-      "initiallyDisabled": false,
-      "attributes": {}
     },
     {
       "id": "show-create",
@@ -149,7 +133,8 @@
       "initiallyDisabled": false,
       "attributes": {
         "maxlength": "32",
-        "autocomplete": "nickname"
+        "autocomplete": "nickname",
+        "enterkeyhint": "go"
       }
     },
     {
@@ -165,9 +150,17 @@
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {
-        "maxlength": "8",
-        "minlength": "8",
-        "autocomplete": "off"
+        "autocomplete": "off",
+        "aria-describedby": "room-code-error"
+      }
+    },
+    {
+      "id": "room-code-error",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "alert"
       }
     },
     {
@@ -192,29 +185,6 @@
       "id": "screen-field",
       "tag": "section",
       "initiallyHidden": true,
-      "initiallyDisabled": false,
-      "attributes": {}
-    },
-    {
-      "id": "open-room",
-      "tag": "button",
-      "initiallyHidden": false,
-      "initiallyDisabled": false,
-      "attributes": {
-        "type": "button"
-      }
-    },
-    {
-      "id": "room-label",
-      "tag": "b",
-      "initiallyHidden": false,
-      "initiallyDisabled": false,
-      "attributes": {}
-    },
-    {
-      "id": "player-count",
-      "tag": "span",
-      "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
     },
@@ -332,7 +302,9 @@
       "tag": "h2",
       "initiallyHidden": false,
       "initiallyDisabled": false,
-      "attributes": {}
+      "attributes": {
+        "tabindex": "-1"
+      }
     },
     {
       "id": "message",
@@ -346,9 +318,11 @@
     {
       "id": "readouts",
       "tag": "dl",
-      "initiallyHidden": false,
+      "initiallyHidden": true,
       "initiallyDisabled": false,
-      "attributes": {}
+      "attributes": {
+        "aria-label": "GPS readings"
+      }
     },
     {
       "id": "accuracy",
@@ -504,6 +478,50 @@
       }
     },
     {
+      "id": "motion-radar",
+      "tag": "aside",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "aria-label": "Indoor radar"
+      }
+    },
+    {
+      "id": "radar-chest",
+      "tag": "g",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "radar-edge",
+      "tag": "g",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "radar-you",
+      "tag": "g",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "radar-status",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "radar-offset",
+      "tag": "dd",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
       "id": "treasure",
       "tag": "div",
       "initiallyHidden": true,
@@ -580,7 +598,9 @@
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {
-        "type": "button"
+        "type": "button",
+        "aria-controls": "guide-panel",
+        "aria-label": "Chat with guide"
       }
     },
     {
@@ -588,7 +608,11 @@
       "tag": "section",
       "initiallyHidden": true,
       "initiallyDisabled": false,
-      "attributes": {}
+      "attributes": {
+        "role": "dialog",
+        "aria-labelledby": "guide-name",
+        "tabindex": "-1"
+      }
     },
     {
       "id": "guide-name",
@@ -681,7 +705,7 @@
     {
       "id": "camera-message",
       "tag": "p",
-      "initiallyHidden": false,
+      "initiallyHidden": true,
       "initiallyDisabled": false,
       "attributes": {
         "role": "status"
@@ -733,6 +757,13 @@
     {
       "id": "sheet-room-code",
       "tag": "b",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "player-count",
+      "tag": "span",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
@@ -799,12 +830,14 @@
       }
     },
     {
-      "id": "switch-room",
+      "id": "leave-room",
       "tag": "button",
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {
-        "type": "button"
+        "type": "button",
+        "aria-haspopup": "dialog",
+        "aria-controls": "sheet-room-exit"
       }
     },
     {
@@ -954,6 +987,483 @@
       "initiallyHidden": false,
       "initiallyDisabled": false,
       "attributes": {}
+    },
+    {
+      "id": "departure-setting",
+      "tag": "label",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "for": "radius"
+      }
+    },
+    {
+      "id": "mode-status",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "mode-options",
+      "tag": "div",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "group",
+        "aria-label": "Game mode"
+      }
+    },
+    {
+      "id": "mode-gps",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-pressed": "false"
+      }
+    },
+    {
+      "id": "mode-ronin",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-pressed": "true"
+      }
+    },
+    {
+      "id": "mode-confirm",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "group",
+        "aria-labelledby": "mode-question"
+      }
+    },
+    {
+      "id": "mode-question",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "mode-apply",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "mode-cancel",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "mode-error",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "alert"
+      }
+    },
+    {
+      "id": "open-reset",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "sheet-room-exit",
+      "tag": "section",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "room-exit-title",
+        "aria-describedby": "room-exit-details",
+        "tabindex": "-1"
+      }
+    },
+    {
+      "id": "room-exit-title",
+      "tag": "h2",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "room-exit-details",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "confirm-room-exit",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "cancel-room-exit",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "room-exit-error",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "alert"
+      }
+    },
+    {
+      "id": "open-tools",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-haspopup": "dialog",
+        "aria-controls": "sheet-tools"
+      }
+    },
+    {
+      "id": "sheet-tools",
+      "tag": "section",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "tools-title",
+        "tabindex": "-1"
+      }
+    },
+    {
+      "id": "tools-title",
+      "tag": "h2",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "tools-back",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-label": "Back to room menu"
+      }
+    },
+    {
+      "id": "notes-back",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-label": "Back to test tools"
+      }
+    },
+    {
+      "id": "indoor-readouts",
+      "tag": "dl",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "aria-label": "Motion readings"
+      }
+    },
+    {
+      "id": "departure-tools",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "open-progress-home",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-haspopup": "dialog",
+        "aria-controls": "sheet-progress"
+      }
+    },
+    {
+      "id": "treasure-reward",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "open-progress-claim",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-haspopup": "dialog",
+        "aria-controls": "sheet-progress"
+      }
+    },
+    {
+      "id": "open-progress-room",
+      "tag": "button",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-haspopup": "dialog",
+        "aria-controls": "sheet-progress"
+      }
+    },
+    {
+      "id": "sheet-progress",
+      "tag": "section",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "dialog",
+        "aria-modal": "true",
+        "aria-labelledby": "progress-title",
+        "tabindex": "-1"
+      }
+    },
+    {
+      "id": "progress-title",
+      "tag": "h2",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "progress-leaderboard",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-controls": "leaderboard-panel",
+        "aria-pressed": "true"
+      }
+    },
+    {
+      "id": "progress-book",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-controls": "treasure-book-panel",
+        "aria-pressed": "false"
+      }
+    },
+    {
+      "id": "progress-status",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "role": "status"
+      }
+    },
+    {
+      "id": "progress-summary",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "leaderboard-panel",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "leaderboard-empty",
+      "tag": "p",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "leaderboard-table",
+      "tag": "table",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "aria-label": "Top ten players"
+      }
+    },
+    {
+      "id": "leaderboard-rows",
+      "tag": "tbody",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "treasure-book-panel",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "treasure-book-cards",
+      "tag": "ul",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "aria-label": "Treasure cards"
+      }
+    },
+    {
+      "id": "ar-chest-art",
+      "tag": "use",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "href": "#chest"
+      }
+    },
+    {
+      "id": "claimed-chest-crest",
+      "tag": "use",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "assist-launchers",
+      "tag": "nav",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "open-tutorials",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button",
+        "aria-controls": "tutorial-card"
+      }
+    },
+    {
+      "id": "guide-scrim",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "guide-questions",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "tutorial-overlay",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "tutorial-spotlight",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "tutorial-card",
+      "tag": "section",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "aria-labelledby": "tutorial-title"
+      }
+    },
+    {
+      "id": "tutorial-title",
+      "tag": "h2",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "tabindex": "-1"
+      }
+    },
+    {
+      "id": "close-tutorial",
+      "tag": "button",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {
+        "type": "button"
+      }
+    },
+    {
+      "id": "tutorial-copy",
+      "tag": "p",
+      "initiallyHidden": false,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "tutorial-choices",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {}
+    },
+    {
+      "id": "tutorial-arrow",
+      "tag": "div",
+      "initiallyHidden": true,
+      "initiallyDisabled": false,
+      "attributes": {
+        "aria-hidden": "true"
+      }
     }
   ]
 }

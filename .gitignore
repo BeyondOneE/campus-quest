@@ -10,4 +10,5 @@ dist/
 __pycache__/
 campus-quest-safari-*.json
 campus-quest-treasure-*.json
+campus-quest-motion-*.json
 device-reports/

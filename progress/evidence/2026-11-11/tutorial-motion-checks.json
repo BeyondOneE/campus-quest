@@ -1,0 +1,74 @@
+{
+  "id": "E-20261111-014",
+  "record": "CQ-20261111-014",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 132,
+    "build": "passed"
+  },
+  "desktop": {
+    "engine": "WebKitGTK",
+    "version": "2.52.6",
+    "isolatedDatabase": true,
+    "providerFixture": true,
+    "cases": [
+      {
+        "ok": true,
+        "width": 320,
+        "height": 500,
+        "reduce": false,
+        "backdropFaded": true,
+        "cardSlid": true,
+        "staggered": true,
+        "copyMoved": true,
+        "arrowMoved": true,
+        "manualFade": true,
+        "rapidSteps": true,
+        "noReplay": true,
+        "guideReturn": true
+      },
+      {
+        "ok": true,
+        "width": 390,
+        "height": 780,
+        "reduce": false,
+        "backdropFaded": true,
+        "cardSlid": true,
+        "staggered": true,
+        "copyMoved": true,
+        "arrowMoved": true,
+        "manualFade": true,
+        "rapidSteps": true,
+        "noReplay": true,
+        "guideReturn": true
+      },
+      {
+        "ok": true,
+        "width": 390,
+        "height": 780,
+        "reduce": true,
+        "backdropFaded": false,
+        "cardSlid": false,
+        "staggered": false,
+        "copyMoved": false,
+        "arrowMoved": false,
+        "manualFade": false,
+        "rapidSteps": true,
+        "noReplay": true,
+        "guideReturn": true
+      }
+    ]
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingFiles": [
+      "tutorials.js",
+      "style.css"
+    ],
+    "serviceRestarted": false
+  },
+  "physicalIPhoneChecked": false,
+  "updatedInGameARValidated": false
+}

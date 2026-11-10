@@ -1,0 +1,25 @@
+{
+  "id": "E-20261110-002",
+  "record": "CQ-20261110-002",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed",
+    "testsPassed": 102,
+    "build": "passed",
+    "controllerFixture": {
+      "floorArrowStableUnderPitchAndRoll": true,
+      "floorArrowWrapsOnShortArc": true,
+      "estimatedDistanceBeforeMetres": 1.3,
+      "estimatedDistanceAfterMetres": 0.5,
+      "fixedHeightAimAndClaimPassed": true
+    }
+  },
+  "lan": {
+    "backendHealthy": true,
+    "httpsHealthy": true,
+    "setupHealthy": true,
+    "matchingSources": ["app.js", "ar.js"]
+  },
+  "physicalSafariAcceptance": false
+}

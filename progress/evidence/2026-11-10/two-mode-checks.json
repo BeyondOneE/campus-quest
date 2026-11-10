@@ -1,0 +1,38 @@
+{
+  "id": "E-20261110-010",
+  "record": "CQ-20261110-010",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "playableModes": ["gps", "indoor-ronin"],
+  "automated": {
+    "install": "passed",
+    "testsPassed": 107,
+    "build": "passed",
+    "isolatedRetiredModesMigrated": ["indoor-imu", "indoor-planar"],
+    "migrationIdempotence": "passed",
+    "roNINRadarAndControlledClaim": "passed"
+  },
+  "offlineReplay": {
+    "source": "E-20261110-006",
+    "recordedTrials": ["shake", "measured walk"],
+    "officialWeights": true,
+    "previousComparisonMatched": true
+  },
+  "desktop": {
+    "viewports": ["390x780", "320x500"],
+    "visibleModes": ["gps", "indoor-ronin"],
+    "switchAndReload": "passed"
+  },
+  "lan": {
+    "privateDatabaseBackupVerified": true,
+    "retiredRoomsMigrated": 1,
+    "existingGpsAndRoninRoomsVerified": true,
+    "ownershipMembershipAccountsAndReceiptsVerified": true,
+    "caUnchanged": true,
+    "healthChecksPassed": true,
+    "inferenceWorkerRunning": true,
+    "matchingSources": 5,
+    "offlineBaselinePublic": false
+  },
+  "updatedInGameARValidated": false
+}

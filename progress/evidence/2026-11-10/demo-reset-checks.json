@@ -1,0 +1,31 @@
+{
+  "id": "E-20261110-012",
+  "record": "CQ-20261110-012",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "scope": "current room",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 112,
+    "build": "passed",
+    "hostAndRoundValidation": "passed",
+    "transactionRollback": "passed",
+    "accountsAndOtherRooms": "preserved"
+  },
+  "isolatedPreview": {
+    "viewports": ["320x500", "390x780"],
+    "confirmationAndCancel": "passed",
+    "guestResetButtonHidden": true,
+    "httpResetAndOldCodeRejection": "passed",
+    "guestReturnedHomeAfterHostReset": true,
+    "guestStayedHomeOnReload": true
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingFiles": 4,
+    "existingRecordsVerified": true,
+    "caUnchanged": true
+  },
+  "domContractIds": 139,
+  "updatedInGameARValidated": false
+}

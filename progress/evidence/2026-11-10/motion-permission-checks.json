@@ -1,0 +1,16 @@
+{
+  "id": "E-20261110-018",
+  "record": "CQ-20261110-018",
+  "date": "2026-11-10",
+  "recordedOn": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "testsPassed": 118,
+    "build": "passed",
+    "denialAndRequestErrorDistinguished": true,
+    "retryAndLatePermissionResponse": "passed"
+  },
+  "desktop": { "viewports": ["320x500", "390x780"], "permissionTextFits": true },
+  "lan": { "trustedHttpsPassed": true, "sameOriginSensorPolicyChecked": true, "revisedScriptServed": true },
+  "updatedInGameARValidated": false
+}

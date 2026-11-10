@@ -1,0 +1,60 @@
+{
+  "id": "E-20261111-010",
+  "record": "CQ-20261111-010",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 129,
+    "build": "passed"
+  },
+  "desktop": {
+    "engine": "WebKitGTK",
+    "version": "2.52.6",
+    "viewport": "390x780",
+    "isolatedDatabase": true,
+    "providerFixtureDelayMs": 1000,
+    "javascriptAnimateDisabledInFixture": true,
+    "immediateSend": true,
+    "sameNodeAfterReply": true,
+    "noReplay": true,
+    "normalMotion": {
+      "user": {
+        "minOpacity": 0.35,
+        "minScale": 0.84,
+        "maxScale": 1.022,
+        "maxLateralOffset": 16
+      },
+      "reply": {
+        "minOpacity": 0.35,
+        "minScale": 0.84,
+        "maxScale": 1.022,
+        "maxLateralOffset": 12
+      }
+    },
+    "reducedMotion": {
+      "user": {
+        "minOpacity": 0.45,
+        "minScale": 1,
+        "maxScale": 1,
+        "maxLateralOffset": 0
+      },
+      "reply": {
+        "minOpacity": 0.45,
+        "minScale": 1,
+        "maxScale": 1,
+        "maxLateralOffset": 0
+      }
+    }
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingFiles": [
+      "guide.js",
+      "style.css"
+    ],
+    "restarted": false
+  },
+  "physicalIPhoneChecked": false,
+  "updatedInGameARValidated": false
+}

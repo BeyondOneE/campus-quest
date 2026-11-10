@@ -1,0 +1,104 @@
+{
+  "id": "E-20261111-012",
+  "record": "CQ-20261111-012",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 131,
+    "build": "passed"
+  },
+  "desktop": {
+    "engine": "WebKitGTK",
+    "version": "2.52.6",
+    "isolatedDatabase": true,
+    "providerFixture": true,
+    "cases": [
+      {
+        "ok": true,
+        "width": 320,
+        "height": 500,
+        "reduce": false,
+        "escapeEarly": false,
+        "firstReturn": {
+          "fade": true,
+          "slide": true,
+          "opacityBefore": 0.998851,
+          "frames": 17
+        },
+        "doneReturn": {
+          "fade": true,
+          "slide": true,
+          "opacityBefore": 1,
+          "frames": 20
+        },
+        "sameMessages": true,
+        "draftPreserved": true,
+        "focusReturnedToPanel": true,
+        "continuedChat": true,
+        "completedRoomTutorial": true,
+        "manualClose": true
+      },
+      {
+        "ok": true,
+        "width": 390,
+        "height": 780,
+        "reduce": false,
+        "escapeEarly": true,
+        "firstReturn": {
+          "fade": true,
+          "slide": true,
+          "opacityBefore": 0.829833,
+          "frames": 19
+        },
+        "doneReturn": {
+          "fade": true,
+          "slide": true,
+          "opacityBefore": 1,
+          "frames": 20
+        },
+        "sameMessages": true,
+        "draftPreserved": true,
+        "focusReturnedToPanel": true,
+        "continuedChat": true,
+        "completedRoomTutorial": true,
+        "manualClose": true
+      },
+      {
+        "ok": true,
+        "width": 390,
+        "height": 780,
+        "reduce": true,
+        "escapeEarly": false,
+        "firstReturn": {
+          "fade": false,
+          "slide": false,
+          "opacityBefore": 1
+        },
+        "doneReturn": {
+          "fade": false,
+          "slide": false,
+          "opacityBefore": 1
+        },
+        "sameMessages": true,
+        "draftPreserved": true,
+        "focusReturnedToPanel": true,
+        "continuedChat": true,
+        "completedRoomTutorial": true,
+        "manualClose": true
+      }
+    ]
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingFiles": [
+      "app.js",
+      "guide.js",
+      "tutorials.js",
+      "style.css"
+    ],
+    "serviceRestarted": false
+  },
+  "physicalIPhoneChecked": false,
+  "updatedInGameARValidated": false
+}

@@ -1,0 +1,34 @@
+{
+  "id": "E-20261111-006",
+  "record": "CQ-20261111-006",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 125,
+    "build": "passed"
+  },
+  "desktop": {
+    "viewports": [
+      "320x500",
+      "390x780"
+    ],
+    "isolatedDatabase": true,
+    "providerFixture": true,
+    "openingAndClosingIntermediateFrames": "passed",
+    "rapidReopenAndFocusRestore": "passed",
+    "newBubblesAndScrollRetention": "passed",
+    "manualWaitingAndReducedMotion": "passed",
+    "visualViewportInsetFixture": "passed",
+    "tutorialHandoff": "passed"
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingChatAssets": [
+      "guide.js",
+      "style.css"
+    ],
+    "restarted": false
+  },
+  "updatedInGameARValidated": false
+}

@@ -1,0 +1,184 @@
+{
+  "id": "E-20261110-006",
+  "record": "CQ-20261110-006",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "provenance": "Two user-supplied iPhone motion recording exports",
+  "model": "Official RoNIN ResNet18, CPU offline replay",
+  "checkpointSha256": "5ae5c9e508f2dc9609c25b59d0e3dfd770ecbcde6920cbc5be3c6d9fed8a6346",
+  "inputNormalization": {
+    "browserGyroXYZ": [
+      "alpha",
+      "beta",
+      "gamma"
+    ],
+    "accelerationScale": -1,
+    "appliedTo": [
+      "acceleration",
+      "accelerationIncludingGravity"
+    ],
+    "groundTruthUsedForCalibration": false,
+    "webKitMotionSource": "https://github.com/WebKit/WebKit/blob/main/Source/WebCore/platform/ios/WebCoreMotionManager.mm#L212-L227",
+    "webKitRateFields": "https://github.com/WebKit/WebKit/blob/main/Source/WebCore/dom/DeviceMotionData.h#L59-L71",
+    "gravityDirectionRateResidualRmsPerSecond": {
+      "shake": {
+        "original": 3.9479,
+        "normalized": 0.2406
+      },
+      "walk": {
+        "original": 1.0741,
+        "normalized": 0.0451
+      }
+    }
+  },
+  "roNINInputRateHz": 200,
+  "reports": {
+    "shake": {
+      "recordingSha256": "9837daf55bec879f018139ac493e0070c1f8daa20bc9d93855c89391316c3644",
+      "samples": 903,
+      "meanSampleRateHz": 60.0,
+      "maxSampleGapMs": 31,
+      "distanceOneWayMeters": null,
+      "movingReference": "body remains at origin",
+      "currentInput": {
+        "errorSummary": {
+          "baseline": {
+            "movingRmsMeters": 2.782984,
+            "movingMaxMeters": 4.953234,
+            "settledRmsMeters": 4.056055
+          },
+          "ronin": {
+            "movingRmsMeters": 0.030539,
+            "movingMaxMeters": 0.041526,
+            "settledRmsMeters": 0.041744
+          }
+        },
+        "errorMetersByMark": {
+          "shake-end": {
+            "baseline": 4.055628,
+            "ronin": 0.04064
+          },
+          "settled": {
+            "baseline": 4.056055,
+            "ronin": 0.041744
+          }
+        }
+      },
+      "iosNormalizedInput": {
+        "errorSummary": {
+          "baseline": {
+            "movingRmsMeters": 0.355106,
+            "movingMaxMeters": 0.83272,
+            "settledRmsMeters": 0.081936
+          },
+          "ronin": {
+            "movingRmsMeters": 0.000113,
+            "movingMaxMeters": 0.000211,
+            "settledRmsMeters": 0.000392
+          }
+        },
+        "errorMetersByMark": {
+          "shake-end": {
+            "baseline": 0.082812,
+            "ronin": 0.000211
+          },
+          "settled": {
+            "baseline": 0.081936,
+            "ronin": 0.000392
+          }
+        }
+      },
+      "medianGyroNormInSecondBeforeLastMarkDegreesPerSecond": 1.15
+    },
+    "walk": {
+      "recordingSha256": "7cdd622246cca6bf29f9374e24cb5a03407aa217c87139da3510e28a2516a721",
+      "samples": 2130,
+      "meanSampleRateHz": 59.97,
+      "maxSampleGapMs": 34,
+      "distanceOneWayMeters": 2,
+      "movingReference": "four marked points including arrivals",
+      "currentInput": {
+        "errorSummary": {
+          "baseline": {
+            "movingRmsMeters": 2.470653,
+            "movingMaxMeters": 3.29275,
+            "settledRmsMeters": 3.470697
+          },
+          "ronin": {
+            "movingRmsMeters": 3.222807,
+            "movingMaxMeters": 4.25935,
+            "settledRmsMeters": 4.702511
+          }
+        },
+        "errorMetersByMark": {
+          "out-mid": {
+            "baseline": 1.570028,
+            "ronin": 1.47664
+          },
+          "out-arrival": {
+            "baseline": 2.757615,
+            "ronin": 3.082648
+          },
+          "out-settled": {
+            "baseline": 3.673939,
+            "ronin": 5.212841
+          },
+          "back-mid": {
+            "baseline": 1.872133,
+            "ronin": 4.25935
+          },
+          "back-arrival": {
+            "baseline": 3.29275,
+            "ronin": 3.423549
+          },
+          "back-settled": {
+            "baseline": 3.254789,
+            "ronin": 4.129589
+          }
+        }
+      },
+      "iosNormalizedInput": {
+        "errorSummary": {
+          "baseline": {
+            "movingRmsMeters": 2.939663,
+            "movingMaxMeters": 5.513205,
+            "settledRmsMeters": 5.103099
+          },
+          "ronin": {
+            "movingRmsMeters": 0.773678,
+            "movingMaxMeters": 1.286661,
+            "settledRmsMeters": 1.026047
+          }
+        },
+        "errorMetersByMark": {
+          "out-mid": {
+            "baseline": 0.533573,
+            "ronin": 0.668462
+          },
+          "out-arrival": {
+            "baseline": 1.493349,
+            "ronin": 1.286661
+          },
+          "out-settled": {
+            "baseline": 0.694524,
+            "ronin": 1.286879
+          },
+          "back-mid": {
+            "baseline": 1.286954,
+            "ronin": 0.398868
+          },
+          "back-arrival": {
+            "baseline": 5.513205,
+            "ronin": 0.36452
+          },
+          "back-settled": {
+            "baseline": 7.183376,
+            "ronin": 0.670437
+          }
+        }
+      },
+      "medianGyroNormInSecondBeforeLastMarkDegreesPerSecond": 51.88
+    }
+  },
+  "inGameARValidated": false
+}

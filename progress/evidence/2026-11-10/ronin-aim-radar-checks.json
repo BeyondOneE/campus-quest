@@ -1,0 +1,25 @@
+{
+  "id": "E-20261110-008",
+  "record": "CQ-20261110-008",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "priorBuildUserReport": { "claimSucceeded": true, "aimShiftDuringTilt": true, "chestMarkerMissing": true },
+  "automated": { "install": "passed", "testsPassed": 111, "build": "passed", "downwardAimLimitDegrees": 35 },
+  "recordedWalkReplay": {
+    "source": "E-20261110-006",
+    "officialWeights": true,
+    "lockedFixes": 30,
+    "aimDirectionStable": true,
+    "aimPitchDegrees": -34.44,
+    "distinctRadarBearings": 24,
+    "distinctRadarDistances": 22
+  },
+  "desktopSvgFixture": {
+    "dotVisibleAbovePlayerAtOverlap": true,
+    "dotVisibleWithoutFreshPose": true,
+    "edgeArrowVisibleBeyondFiveMetres": true,
+    "physicalCameraOrMotionUsed": false
+  },
+  "lan": { "allHealthChecksPassed": true, "matchingSources": 3, "inferenceWorkerRunning": true, "databaseRowCountsAndRootCaPreserved": true },
+  "updatedInGameARValidated": false
+}

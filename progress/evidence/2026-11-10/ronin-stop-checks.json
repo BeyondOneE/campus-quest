@@ -1,0 +1,23 @@
+{
+  "id": "E-20261110-009",
+  "record": "CQ-20261110-009",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "userReportedDisplacementAfterStopping": true,
+  "automated": { "install": "passed", "testsPassed": 112, "build": "passed", "bufferedWalkAndResume": "passed" },
+  "recordingReplay": {
+    "source": "E-20261110-006",
+    "officialWeights": true,
+    "bothWalkVariantsReachedNearbySearch": true,
+    "shakeTriggeredDeparture": false,
+    "movingMarkedRmsMetres": { "prior": 0.77259, "revised": 0.77523 },
+    "unmodifiedStopDisplacementMetres": { "prior": 0, "revised": 0 },
+    "controlledResidual": {
+      "injectedMetresPerSecond": 0.2,
+      "evaluatedSeconds": 6.017,
+      "displacementMetres": { "prior": 1.20981, "revised": 0 }
+    }
+  },
+  "lan": { "healthChecksPassed": true, "inferenceWorkerRunning": true, "matchingEstimatorSource": true },
+  "updatedInGameARValidated": false
+}

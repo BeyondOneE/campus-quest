@@ -1,0 +1,37 @@
+{
+  "id": "E-20261111-008",
+  "record": "CQ-20261111-008",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 128,
+    "build": "passed",
+    "domContractElementsMatched": 171
+  },
+  "desktop": {
+    "viewports": [
+      "320x500",
+      "390x780"
+    ],
+    "isolatedDatabase": true,
+    "providerFixture": true,
+    "dialogFocusedBeforeComposerTap": true,
+    "composerFocusedAfterTouch": true,
+    "reboundFramesObserved": true,
+    "directionalBubblesAndScrollRetention": "passed",
+    "rapidReopenTutorialHandoffAndReducedMotion": "passed",
+    "keyboardInsetFixture": "passed"
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingFiles": [
+      "index.html",
+      "guide.js",
+      "style.css"
+    ],
+    "restarted": false
+  },
+  "physicalIPhoneKeyboardChecked": false,
+  "updatedInGameARValidated": false
+}

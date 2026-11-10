@@ -53,7 +53,8 @@ const proxy = https.createServer({ key: readFileSync(`${directory}server.key`), 
     headers: { ...request.headers, host: `127.0.0.1:${backendPort}`, 'x-forwarded-for': request.socket.remoteAddress } }, reply => {
     response.writeHead(reply.statusCode, reply.headers); reply.pipe(response);
   });
-  upstream.setTimeout(15000, () => upstream.destroy());
+  const guideRequest=request.method==='POST'&&request.url?.split('?')[0]==='/api/guide';
+  upstream.setTimeout(guideRequest?30000:15000, () => upstream.destroy());
   upstream.on('error', () => {
     if (response.writableEnded) return;
     if (response.headersSent) { response.destroy(); return; }

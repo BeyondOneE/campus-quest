@@ -6,6 +6,7 @@ import { isIP } from 'node:net';
 import { GameStore } from './store.mjs';
 import { createApplication } from './app.mjs';
 import { CampusGuide } from './guide.mjs';
+import { RoninWorker } from './ronin.mjs';
 
 const port = Number(process.env.PORT || 4180);
 const directory = resolve('.local'); mkdirSync(directory, { recursive: true, mode: 0o700 });
@@ -18,20 +19,22 @@ if(existsSync('.env'))for(const [key,value] of Object.entries(parseEnv(readFileS
 }
 const guide=new CampusGuide({apiKey:process.env.DEEPSEEK_API_KEY||'',baseUrl:process.env.CQ_AI_BASE_URL||'https://api.deepseek.com',
   model:process.env.CQ_AI_MODEL||'deepseek-flash',...(process.env.CQ_GUIDE_CONFIG?{loadConfig:()=>JSON.parse(readFileSync(process.env.CQ_GUIDE_CONFIG,'utf8'))}:{})});
-const handle = createApplication({ store, guide, localPort: port, publicOrigin: process.env.PUBLIC_ORIGIN || '' });
+const ronin = new RoninWorker();
+const handle = createApplication({ store, guide, ronin, localPort: port, publicOrigin: process.env.PUBLIC_ORIGIN || '' });
 const server = http.createServer(async (request, response) => {
   const chunks = []; let bytes = 0;
   try {
+    const path = new URL(request.url, 'http://localhost').pathname;
+    const maxBytes = request.method === 'POST' && path === '/api/ronin' ? 48 * 1024 : 8192;
     for await (const chunk of request) {
       bytes += chunk.length;
-      if (bytes > 8192) { response.writeHead(413, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); response.end('{"error":{"code":"BODY_TOO_LARGE","message":"Request too large."}}'); return; }
+      if (bytes > maxBytes) { response.writeHead(413, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); response.end('{"error":{"code":"BODY_TOO_LARGE","message":"Request too large."}}'); return; }
       chunks.push(chunk);
     }
     let body = {};
     try { if (bytes) body = JSON.parse(Buffer.concat(chunks).toString('utf8')); } catch {
       response.writeHead(400, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }); response.end('{"error":{"code":"INVALID_JSON","message":"Invalid JSON."}}'); return;
     }
-    const path = new URL(request.url, 'http://localhost').pathname;
     const result = await handle({ method: request.method, path, headers: request.headers, body,
       // Only the local proxy can reach this loopback listener; it overwrites this header.
       clientKey: isIP(request.headers['x-forwarded-for'] || '') ? request.headers['x-forwarded-for'] : request.socket.remoteAddress || 'unknown' });
@@ -41,9 +44,12 @@ const server = http.createServer(async (request, response) => {
   }
 });
 server.requestTimeout = 15000; server.headersTimeout = 10000; server.keepAliveTimeout = 5000;
-server.listen(port, '127.0.0.1', () => console.log(`Campus Quest backend: http://127.0.0.1:${port}/treasure-lab/`));
+server.listen(port, '127.0.0.1', () => {
+  console.log(`Campus Quest backend: http://127.0.0.1:${port}/treasure-lab/`);
+  ronin.start();
+});
 const prune = setInterval(() => store.prune(), 60000); prune.unref();
 for (const signal of ['SIGINT','SIGTERM']) process.on(signal, () => {
-  clearInterval(prune); server.close(() => { store.close(); process.exit(0); });
+  clearInterval(prune); ronin.close(); server.close(() => { store.close(); process.exit(0); });
   setTimeout(() => process.exit(0), 3000).unref();
 });

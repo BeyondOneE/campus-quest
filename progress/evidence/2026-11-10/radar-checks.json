@@ -1,0 +1,36 @@
+{
+  "id": "E-20261110-003",
+  "record": "CQ-20261110-003",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed",
+    "testsPassed": 103,
+    "build": "passed",
+    "controlledOscillation": {
+      "durationSeconds": 6,
+      "frequencyHz": 4,
+      "previousEstimateMetres": 1.402,
+      "updatedEstimateMetres": 0.09,
+      "positionHeldAfterDetection": true,
+      "headingUpdatedDuringPause": true,
+      "movementResumedAfterHold": true
+    },
+    "radarShowsHeadingAndChestBeforeDeparture": true,
+    "claimStillRequiresNearbyAim": true
+  },
+  "desktop": {
+    "environment": "Isolated preview of the camera markup and stylesheet with no motion or video input",
+    "viewports": [[390, 780], [320, 500]],
+    "clearOfCloseButtonAndGuidance": true,
+    "horizontalOverflow": false
+  },
+  "lan": {
+    "restarted": true,
+    "backendHealthy": true,
+    "httpsHealthy": true,
+    "setupHealthy": true,
+    "matchingSources": 6
+  },
+  "physicalSafariAcceptance": false
+}

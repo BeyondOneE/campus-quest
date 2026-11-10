@@ -1,0 +1,33 @@
+{
+  "id": "E-20261111-003",
+  "record": "CQ-20261111-003",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "content": {
+    "knowledgeEntries": 13,
+    "faqs": 3,
+    "gpsPlaces": 0
+  },
+  "automated": {
+    "suite": "tests/campus-guide.test.mjs",
+    "passed": 21,
+    "indoorDistanceIncorrectlyLabeledGps": true
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingFiles": [
+      "guide.js",
+      "client.js",
+      "app.js"
+    ]
+  },
+  "provider": {
+    "model": "deepseek-flash",
+    "isolatedInMemoryRoom": true,
+    "calls": 1,
+    "upstreamStatus": 200,
+    "replySource": "deepseek",
+    "elapsedMs": 3542
+  },
+  "updatedInGameARValidated": false
+}

@@ -17,18 +17,124 @@
       <linearGradient id="g-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3bf"/><stop offset=".45" stop-color="#f8c64f"/><stop offset="1" stop-color="#b8741a"/></linearGradient>
       <linearGradient id="g-hollow" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6e3a18"/><stop offset="1" stop-color="#1d0d04"/></linearGradient>
       <radialGradient id="g-hoard" cx=".5" cy=".9" r=".9"><stop offset="0" stop-color="#fffbe0"/><stop offset=".5" stop-color="#ffd566"/><stop offset="1" stop-color="#d98f23"/></radialGradient>
+      <linearGradient id="g-compass-chest" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#42698a"/><stop offset=".6" stop-color="#243f60"/><stop offset="1" stop-color="#101e36"/></linearGradient>
+      <linearGradient id="g-gear-chest" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#bd6c55"/><stop offset=".55" stop-color="#863f36"/><stop offset="1" stop-color="#4b2529"/></linearGradient>
+      <linearGradient id="g-book-chest" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#945995"/><stop offset=".55" stop-color="#603962"/><stop offset="1" stop-color="#362244"/></linearGradient>
+      <linearGradient id="g-circuit-chest" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#306a6c"/><stop offset=".55" stop-color="#20484f"/><stop offset="1" stop-color="#11282f"/></linearGradient>
+      <linearGradient id="g-sketch-chest" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ebd1a5"/><stop offset=".55" stop-color="#bb9565"/><stop offset="1" stop-color="#805936"/></linearGradient>
+      <linearGradient id="g-lantern-chest" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#78844f"/><stop offset=".55" stop-color="#485c39"/><stop offset="1" stop-color="#243b2c"/></linearGradient>
+      <linearGradient id="g-copper-trim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffe0be"/><stop offset=".5" stop-color="#ce845c"/><stop offset="1" stop-color="#985134"/></linearGradient>
+      <linearGradient id="g-mint-trim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e5fff5"/><stop offset=".48" stop-color="#83d6c5"/><stop offset="1" stop-color="#3b7d88"/></linearGradient>
+      <linearGradient id="g-ink-trim" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d0dbea"/><stop offset=".45" stop-color="#7b99b9"/><stop offset="1" stop-color="#40566c"/></linearGradient>
     </defs>
-    <symbol id="chest" viewBox="0 0 160 130">
-      <rect x="16" y="66" width="128" height="56" rx="8" fill="url(#g-wood)"/>
+    <symbol id="chest-shell" viewBox="0 0 160 130">
+      <rect class="chest-body" x="16" y="66" width="128" height="56" rx="8" fill="url(#g-wood)"/>
       <path fill="#3d1c08" opacity=".5" d="M16 84h128v2H16zM16 103h128v2H16z"/>
-      <path fill="url(#g-lid)" d="M16 66V48C16 26 36 12 58 12h44c22 0 42 14 42 36v18z"/>
+      <path class="chest-lid" fill="url(#g-lid)" d="M16 66V48C16 26 36 12 58 12h44c22 0 42 14 42 36v18z"/>
       <path fill="none" stroke="#ffe2ad" stroke-opacity=".4" stroke-width="2.500" stroke-linecap="round" d="M26 50c2-14 16-28 34-28h40c10 0 19 4 25 10"/>
       <path fill="#3d1c08" opacity=".35" d="M17 42h126v2H17zM26 26h108v2H26z"/>
-      <path fill="url(#g-gold)" d="M32 15h15v107H32zM113 15h15v107h-15z"/>
-      <rect x="11" y="60" width="138" height="10" rx="4" fill="url(#g-gold)"/>
+      <path class="chest-trim" fill="url(#g-gold)" d="M32 15h15v107H32zM113 15h15v107h-15z"/>
+      <rect class="chest-trim" x="11" y="60" width="138" height="10" rx="4" fill="url(#g-gold)"/>
       <path fill="#fff6cf" d="M39.500 24a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5zm0 58a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5zm0 22a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5zm81-80a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5zm0 58a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5zm0 22a2.500 2.500 0 1 1 0 5 2.500 2.500 0 0 1 0-5z"/>
-      <rect x="64" y="52" width="32" height="38" rx="7" fill="url(#g-gold)" stroke="#8a5413" stroke-width="1.500"/>
+      <rect class="chest-trim" x="64" y="52" width="32" height="38" rx="7" fill="url(#g-gold)" stroke="#8a5413" stroke-width="1.500"/>
+    </symbol>
+    <symbol id="chest" viewBox="0 0 160 130">
+      <use href="#chest-shell" width="160" height="130"/>
       <path fill="#3a1d07" d="M80 62a5.500 5.500 0 0 1 3 10.100V80h-6v-7.900A5.500 5.500 0 0 1 80 62z"/>
+    </symbol>
+
+    <symbol id="crest-campus-compass" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="14" fill="#1a3352" stroke="#784e25" stroke-width="1.3"/>
+      <circle cx="16" cy="16" r="11" fill="none" stroke="#f5ce82" stroke-width=".8"/>
+      <path fill="#fff0b8" d="M16 4l3 9 9 3-9 3-3 9-3-9-9-3 9-3z"/>
+      <path fill="#dc9653" d="M16 4v12l-3 3 3 9V16l3-3z"/>
+      <circle cx="16" cy="16" r="1.6" fill="#4a3850"/>
+    </symbol>
+    <symbol id="chest-campus-compass" viewBox="0 0 160 130">
+      <use href="#chest-shell" data-card="campus-compass" width="160" height="130"/>
+      <path d="M50 40c8-12 19-17 30-17s22 5 30 17M57 43c5-7 13-11 23-11s18 4 23 11M65 45h30M53 96l7-4 5 3m30 0 5-3 7 4"
+        fill="none" stroke="#d5e0e8" stroke-width="1.6" opacity=".58" stroke-linecap="round"/>
+      <path fill="#f7d382" d="M80 19l2 4-2 4-2-4z"/>
+      <use href="#crest-campus-compass" x="66" y="56" width="28" height="28"/>
+    </symbol>
+
+    <symbol id="crest-workshop-gear" viewBox="0 0 32 32">
+      <g fill="#582b28">
+        <rect x="12.5" y="1" width="7" height="30" rx="1.5"/>
+        <rect x="12.5" y="1" width="7" height="30" rx="1.5" transform="rotate(45 16 16)"/>
+        <rect x="12.5" y="1" width="7" height="30" rx="1.5" transform="rotate(90 16 16)"/>
+        <rect x="12.5" y="1" width="7" height="30" rx="1.5" transform="rotate(135 16 16)"/>
+        <circle cx="16" cy="16" r="11.3"/>
+      </g>
+      <circle cx="16" cy="16" r="6.4" fill="#efbc90" stroke="#d0865c" stroke-width="1.7"/>
+      <circle cx="16" cy="16" r="2.8" fill="#7e4136"/>
+    </symbol>
+    <symbol id="chest-workshop-gear" viewBox="0 0 160 130">
+      <use href="#chest-shell" data-card="workshop-gear" width="160" height="130"/>
+      <path fill="url(#g-copper-trim)" stroke="#693430" stroke-width="1.2"
+        d="M15 75h12l4 5v35l-5 5H15l-3-5V80zM133 75h12l3 5v35l-3 5h-11l-5-5V80z"/>
+      <path d="M50 28h60v18H50z" fill="#542d31" stroke="#d9976a" stroke-width="1.6"/>
+      <path d="M58 37h10m7 0h10m7 0h10" stroke="#ecb181" stroke-width="2" stroke-linecap="round"/>
+      <path d="M21 83v4m0 23v4m118-31v4m0 23v4" stroke="#68362d" stroke-width="2.4" stroke-linecap="round"/>
+      <use href="#crest-workshop-gear" x="66" y="56" width="28" height="28"/>
+    </symbol>
+
+    <symbol id="crest-library-bookmark" viewBox="0 0 32 32">
+      <path d="M3 7c6-3 10-2 13 2 3-4 7-5 13-2v19c-5-2-10-1-13 3-3-4-8-5-13-3z" fill="#49274f" stroke="#592846" stroke-width="1.7" stroke-linejoin="round"/>
+      <path d="M6 9c4-1 7 0 10 3 3-3 6-4 10-3v13c-4-1-7 0-10 3-3-3-6-4-10-3z" fill="#f6d89f"/>
+      <path d="M16 12v13" stroke="#9d6a55" stroke-width="1.2"/>
+      <path fill="#ba4564" d="M21 8h4v13l-2-2-2 2z"/>
+    </symbol>
+    <symbol id="chest-library-bookmark" viewBox="0 0 160 130">
+      <use href="#chest-shell" data-card="library-bookmark" width="160" height="130"/>
+      <path d="M49 93h62m-62 5h62m-62 10h62m-62 5h62" stroke="#dfbf9c" stroke-width="1.6" opacity=".69" stroke-linecap="round"/>
+      <path fill="#a73357" stroke="#ed9b83" stroke-width="1.2" d="M98 12h10v43l-5-4-5 4z"/>
+      <path d="M53 34c11-4 22-3 33 1m-33 6c11-4 22-3 33 1" fill="none" stroke="#ebbd8b" stroke-width="1.5" opacity=".75"/>
+      <use href="#crest-library-bookmark" x="66" y="56" width="28" height="28"/>
+    </symbol>
+
+    <symbol id="crest-circuit-key" viewBox="0 0 32 32">
+      <rect x="2" y="2" width="28" height="28" rx="6" fill="#173e49" stroke="#35656a" stroke-width="1.5"/>
+      <circle cx="11" cy="11" r="5" fill="none" stroke="#d6fff1" stroke-width="2.6"/>
+      <path d="M15 15l10 10m-4-4 3-3m-1 5 3-3" fill="none" stroke="#d6fff1" stroke-width="2.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="chest-circuit-key" viewBox="0 0 160 130">
+      <use href="#chest-shell" data-card="circuit-key" width="160" height="130"/>
+      <path d="M52 48h10v-9h17V26h14m-26 0v7H53m55 5H94v11h-9M52 109h15v-9h25v9h15m-50-22v-9m45 9v-9"
+        fill="none" stroke="#9cf5e0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <g fill="#d4fff3"><circle cx="93" cy="26" r="2.1"/><circle cx="67" cy="26" r="2.1"/><circle cx="108" cy="38" r="2.1"/>
+        <circle cx="52" cy="109" r="2.1"/><circle cx="107" cy="109" r="2.1"/></g>
+      <use href="#crest-circuit-key" x="66" y="56" width="28" height="28"/>
+    </symbol>
+
+    <symbol id="crest-studio-sketch" viewBox="0 0 32 32">
+      <path d="M6 3h13l7 7v19H6z" fill="#fff0ca" stroke="#314b66" stroke-width="1.7" stroke-linejoin="round"/>
+      <path d="M19 3v7h7" fill="#c99f6f" stroke="#314b66" stroke-width="1.3"/>
+      <path d="M9 24l5-8 4 5 4-3" fill="none" stroke="#496e91" stroke-width="1.8" stroke-linejoin="round"/>
+      <circle cx="19" cy="14" r="1.5" fill="#cf8550"/>
+    </symbol>
+    <symbol id="chest-studio-sketch" viewBox="0 0 160 130">
+      <use href="#chest-shell" data-card="studio-sketch" width="160" height="130"/>
+      <path d="M52 25h56v22H52z" fill="#f6dfb6" stroke="#6e82a0" stroke-width="1.4" transform="rotate(-5 80 36)"/>
+      <path d="M58 42l9-10 9 4 8-7 15 8m-44 65h16m9 0h25m-50 8h36m8 0h7"
+        fill="none" stroke="#385878" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#crest-studio-sketch" x="66" y="56" width="28" height="28"/>
+    </symbol>
+
+    <symbol id="crest-garden-lantern" viewBox="0 0 32 32">
+      <path d="M13 7V4a3 3 0 0 1 6 0v3m-9 1h12l3 4v13l-3 4H10l-3-4V12z" fill="#35462a" stroke="#35462a" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M11 12h10v12H11z" fill="#ffdb75"/>
+      <path d="M16 14c4 4 2 8 0 8s-4-4 0-8z" fill="#fff9ce"/>
+      <path d="M10 25h12M10 11h12" stroke="#c78446" stroke-width="1.5"/>
+    </symbol>
+    <symbol id="chest-garden-lantern" viewBox="0 0 160 130">
+      <use href="#chest-shell" data-card="garden-lantern" width="160" height="130"/>
+      <path d="M50 48c13-15 20-5 29-13s20-9 31-3m-47 10c-1-7-5-10-10-11 0 6 4 10 10 11zm30-9c-2-6-7-8-12-7 1 5 6 8 12 7z"
+        fill="none" stroke="#d7d999" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="50" y="77" width="11" height="37" rx="3" fill="#f2bd62" stroke="#34452c" stroke-width="1.8"/>
+      <rect x="99" y="77" width="11" height="37" rx="3" fill="#f2bd62" stroke="#34452c" stroke-width="1.8"/>
+      <path d="M50 89h11m-11 13h11m38-13h11m-11 13h11" stroke="#526243" stroke-width="1.8"/>
+      <use href="#crest-garden-lantern" x="66" y="56" width="28" height="28"/>
     </symbol>
   </svg>
 
@@ -71,7 +177,6 @@
 
       <section id="screen-entry" class="screen screen-entry" aria-labelledby="entry-brand" hidden>
         <header class="topbar">
-          <button id="entry-back" class="link" type="button" hidden>‹ Back to room</button>
           <span class="spacer"></span>
           <button id="open-account" class="chip" type="button">Sign in</button>
         </header>
@@ -85,14 +190,18 @@
         <p id="environment" class="alert" role="status" hidden></p>
         <div id="entry-home" class="panel">
           <p id="connection-status" class="quiet" role="status">Connecting…</p>
-          <div id="room-shortcuts" class="shortcuts" hidden></div>
           <button id="show-create" class="primary" type="button">Create a room</button>
           <button id="show-join" class="secondary" type="button">Join with a code</button>
+          <button id="open-progress-home" class="secondary" type="button" aria-haspopup="dialog" aria-controls="sheet-progress" hidden>Leaderboard &amp; Treasure Book</button>
         </div>
         <form id="entry-form" class="panel panel-card" novalidate hidden>
           <div class="panel-head"><button id="entry-cancel" class="link" type="button">‹ Back</button><h2 id="entry-title">Create a room</h2></div>
-          <div id="nickname-field" class="field-group"><label for="nickname">Nickname</label><input id="nickname" maxlength="32" autocomplete="nickname" placeholder="What should others call you?"></div>
-          <div id="code-field" class="field-group"><label for="room-code">Room code</label><input id="room-code" class="code-input" maxlength="8" minlength="8" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="8 characters"></div>
+          <div id="code-field" class="field-group">
+            <label for="room-code">Room code</label>
+            <input id="room-code" class="code-input" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" aria-describedby="room-code-error" placeholder="4 digits from the host">
+            <p id="room-code-error" class="field-error" role="alert" hidden></p>
+          </div>
+          <div id="nickname-field" class="field-group"><label for="nickname">Nickname</label><input id="nickname" maxlength="32" autocomplete="nickname" enterkeyhint="go" placeholder="What should others call you?"></div>
           <button id="entry-submit" class="primary" type="submit">Create room</button>
         </form>
         <p id="connection-error" class="alert" role="alert" hidden></p>
@@ -100,7 +209,6 @@
 
       <section id="screen-field" class="screen screen-field" aria-labelledby="headline" hidden>
         <header class="topbar">
-          <button id="open-room" class="chip chip-room" type="button" aria-label="Room details"><b id="room-label">—</b><span id="player-count"></span></button>
           <span class="spacer"></span>
           <span id="location-status" class="chip chip-status" role="status">Location off</span>
           <button id="open-menu" class="icon-button" type="button" aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
@@ -124,9 +232,9 @@
             <i class="rays rays-big"></i>
             <svg class="chest-live" viewBox="0 0 160 130" aria-hidden="true">
               <g class="lid-open">
-                <path fill="url(#g-lid)" d="M18 64V32C18 14 36 2 58 2h44c22 0 40 12 40 30v32z"/>
+                <path class="chest-lid" fill="url(#g-lid)" d="M18 64V32C18 14 36 2 58 2h44c22 0 40 12 40 30v32z"/>
                 <path fill="url(#g-hollow)" d="M28 64V36c0-14 14-24 32-24h40c18 0 32 10 32 24v28z"/>
-                <path fill="url(#g-gold)" d="M32 4h15v12H32zM113 4h15v12h-15z"/>
+                <path class="chest-trim" fill="url(#g-gold)" d="M32 4h15v12H32zM113 4h15v12h-15z"/>
               </g>
               <g class="hoard">
                 <path fill="url(#g-hoard)" d="M22 72c4-16 16-14 22-22 8-8 16-2 24-8 8-6 18-6 26 0 8 6 16 0 24 8 6 8 18 6 20 22z"/>
@@ -134,30 +242,28 @@
                 <path fill="#4de3d0" d="M104 42l7 6-7 11-7-11z"/><path fill="#fff" fill-opacity=".5" d="M104 42l7 6H97z"/>
                 <path fill="#fff6cf" d="M80 30a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm-46 22a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm92 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10z"/>
               </g>
-              <rect x="16" y="66" width="128" height="56" rx="8" fill="url(#g-wood)"/>
+              <rect class="chest-body" x="16" y="66" width="128" height="56" rx="8" fill="url(#g-wood)"/>
               <path fill="#3d1c08" opacity=".5" d="M16 84h128v2H16zM16 103h128v2H16z"/>
-              <path fill="url(#g-gold)" d="M32 66h15v56H32zM113 66h15v56h-15z"/>
-              <rect x="11" y="60" width="138" height="10" rx="4" fill="url(#g-gold)"/>
-              <rect x="64" y="60" width="32" height="30" rx="7" fill="url(#g-gold)" stroke="#8a5413" stroke-width="1.500"/>
-              <path fill="#3a1d07" d="M80 66a5.500 5.500 0 0 1 3 10.100V84h-6v-7.900A5.500 5.500 0 0 1 80 66z"/>
+              <path class="chest-trim" fill="url(#g-gold)" d="M32 66h15v56H32zM113 66h15v56h-15z"/>
+              <rect class="chest-trim" x="11" y="60" width="138" height="10" rx="4" fill="url(#g-gold)"/>
+              <rect class="chest-trim" x="64" y="60" width="32" height="30" rx="7" fill="url(#g-gold)" stroke="#8a5413" stroke-width="1.500"/>
+              <path class="chest-keyhole" fill="#3a1d07" d="M80 66a5.500 5.500 0 0 1 3 10.100V84h-6v-7.900A5.500 5.500 0 0 1 80 66z"/>
+              <use id="claimed-chest-crest" x="67" y="62" width="26" height="26"/>
               <g class="lid-shut">
-                <path fill="url(#g-lid)" d="M16 66V48C16 26 36 12 58 12h44c22 0 42 14 42 36v18z"/>
-                <path fill="url(#g-gold)" d="M32 15h15v51H32zM113 15h15v51h-15z"/>
+                <path class="chest-lid" fill="url(#g-lid)" d="M16 66V48C16 26 36 12 58 12h44c22 0 42 14 42 36v18z"/>
+                <path class="chest-trim" fill="url(#g-gold)" d="M32 15h15v51H32zM113 15h15v51h-15z"/>
               </g>
             </svg>
             <p id="receipt" class="receipt"></p>
           </div>
-          <h2 id="headline" class="headline">Hide the treasure</h2>
+          <h2 id="headline" class="headline" tabindex="-1">Hide the treasure</h2>
           <p id="message" class="message" role="status"></p>
         </div>
 
-        <dl id="readouts" class="readouts"><div><dt>GPS accuracy</dt><dd id="accuracy">—</dd></div><div><dt>Last update</dt><dd id="age">—</dd></div></dl>
         <p id="alert" class="alert" role="alert" hidden></p>
 
         <div class="dock">
           <div id="place-panel" class="place-panel" hidden>
-            <label for="radius">Claim radius <output id="radius-value" for="radius">3 m</output></label>
-            <input id="radius" type="range" min="3" max="100" step="1" value="3">
             <p id="place-note" class="quiet" hidden>This starts a new round for everyone in the room.</p>
             <button id="place" class="primary" type="button" disabled>Hide treasure here</button>
           </div>
@@ -165,6 +271,8 @@
           <button id="place-cancel" class="link" type="button" hidden>Cancel</button>
           <p id="location-note" class="quiet">Your coordinates and aiming readings go to the host computer for this test. Camera video stays on this phone.</p>
           <button id="start-camera" class="primary primary-call" type="button" disabled hidden>Open camera</button>
+          <p id="treasure-reward" class="quiet treasure-reward" role="status" hidden></p>
+          <button id="open-progress-claim" class="secondary" type="button" aria-haspopup="dialog" aria-controls="sheet-progress" hidden>View Treasure Book</button>
           <button id="rehide" class="secondary" type="button" hidden>Hide a new treasure</button>
         </div>
       </section>
@@ -177,27 +285,32 @@
           <span class="spacer"></span>
           <button id="stop-camera" class="icon-button" type="button" aria-label="Close camera"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
         </header>
-        <div id="treasure" class="treasure ar-target" role="img" aria-label="Treasure target" hidden><svg class="art" aria-hidden="true"><use href="#chest"/></svg></div>
+        <aside id="motion-radar" class="motion-radar" aria-label="Indoor radar" hidden>
+          <header><strong>Radar</strong><span>5 m</span></header>
+          <svg viewBox="0 0 100 100" role="img" aria-label="Top-down view. Starting direction is up. You are the centre arrow. A gold dot marks the chest, or an arrow points towards it beyond five metres.">
+            <circle cx="50" cy="50" r="42"/><circle cx="50" cy="50" r="21"/>
+            <path class="radar-grid" d="M8 50h84M50 8v84M47 11l3-3 3 3"/>
+            <g id="radar-you" hidden><path d="M50 37l7 21-7-4-7 4z"/></g>
+            <g id="radar-chest" hidden><circle cx="50" cy="50" r="4.5"/></g>
+            <g id="radar-edge" hidden><path d="M50 42l6 12-6-3-6 3z"/></g>
+          </svg>
+          <p id="radar-status" hidden>Waiting for motion</p>
+        </aside>
+        <div id="treasure" class="treasure ar-target" role="img" aria-label="Treasure target" hidden>
+          <svg class="art" viewBox="0 0 160 130" aria-hidden="true"><use id="ar-chest-art" href="#chest" width="160" height="130"/></svg>
+        </div>
         <div id="ar-guidance" class="ar-guidance" hidden>
           <span id="ar-arrow" class="ar-arrow" aria-hidden="true">↑</span>
           <span id="gps-spinner" class="gps-spinner" role="img" aria-label="Reconnecting GPS" hidden></span>
-          <p id="ar-message" role="status">Waiting for compass readings.</p>
+          <p id="ar-message" role="status">Waiting for motion readings.</p>
           <p id="ar-distance"></p>
         </div>
         <div id="aim-reticle" class="aim-reticle" aria-hidden="true" hidden><span>+</span></div>
         <aside id="guide-controls" class="guide-controls" aria-label="Campus guide" hidden>
           <button id="guide-preview" class="guide-preview" type="button" aria-live="polite">Ask about your surroundings or the treasure.</button>
-          <button id="open-guide" class="chip" type="button" aria-controls="guide-panel" aria-expanded="false">Chat with guide</button>
         </aside>
-        <section id="guide-panel" class="guide-panel" aria-label="Guide conversation" hidden>
-          <header><div><strong id="guide-name">Campus Guide</strong><p id="guide-status" role="status">Connecting…</p></div><button id="close-guide" class="chip" type="button">Close</button></header>
-          <div id="guide-messages" class="guide-messages" role="log" aria-live="polite" aria-label="Conversation"></div>
-          <div class="guide-questions"><button id="guide-distance" class="chip" type="button">How far?</button><button id="guide-place" class="chip" type="button">This building</button><button id="guide-courses" class="chip" type="button">Courses here</button></div>
-          <form id="guide-form" class="guide-form"><label for="guide-input" class="sr-only">Ask the campus guide</label><input id="guide-input" type="text" maxlength="500" autocomplete="off" placeholder="Ask your campus guide…" enterkeyhint="send"><button id="guide-send" class="chip" type="submit">Send</button></form>
-          <p class="guide-notice">Questions and selected building facts may go to DeepSeek. No camera frames or automatic GPS coordinates are sent. Distances are approximate.</p>
-        </section>
         <div class="camera-foot">
-          <p id="camera-message" role="status"></p>
+          <p id="camera-message" role="status" hidden></p>
           <button id="claim" class="primary" type="button" disabled hidden>Aim to claim</button>
           <button id="direction-retry" class="secondary" type="button" hidden>Enable direction</button>
           <button id="retry-playback" class="primary" type="button" hidden>Resume video</button>
@@ -208,17 +321,89 @@
     <div id="scrim" class="scrim" hidden></div>
 
     <section id="sheet-menu" class="sheet" role="dialog" aria-modal="true" aria-label="Menu" tabindex="-1" hidden>
-      <div class="sheet-head"><h2>Room <b id="sheet-room-code">—</b></h2><button id="copy-code" class="chip" type="button">Copy code</button><button class="icon-button" data-close-sheet type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="sheet-head"><h2>Room <b id="sheet-room-code">—</b><span id="player-count" class="room-count"></span></h2><button id="copy-code" class="chip" type="button">Copy code</button><button class="icon-button" data-close-sheet type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <p id="mode-status" class="quiet" role="status">Indoor · host phone</p>
+      <div id="mode-options" class="sheet-actions" role="group" aria-label="Game mode">
+        <button id="mode-gps" class="secondary" type="button" aria-pressed="false">Outdoor</button>
+        <button id="mode-ronin" class="secondary" type="button" aria-pressed="true">Indoor</button>
+      </div>
+      <div id="mode-confirm" class="sheet-actions" role="group" aria-labelledby="mode-question" hidden>
+        <p id="mode-question"></p>
+        <p class="quiet">This removes the treasure and clears this round’s claims for everyone in the room.</p>
+        <button id="mode-apply" class="primary" type="button">Switch and reset round</button>
+        <button id="mode-cancel" class="secondary" type="button">Keep current mode</button>
+      </div>
+      <p id="mode-error" class="alert" role="alert" hidden></p>
+      <p class="quiet">Only the host can change the game mode.</p>
       <ul id="players" class="players" aria-label="Players"></ul>
-      <div class="identity"><p id="account-status" role="status"></p><button id="open-account-menu" class="chip" type="button">Sign in</button><button id="logout" class="chip" type="button" hidden>Sign out</button></div>
+      <div class="identity"><p id="account-status" role="status"></p><button id="open-account-menu" class="chip" type="button">Create account</button><button id="logout" class="chip" type="button" hidden>Sign out</button></div>
       <div class="menu-list">
         <button id="stop-location" type="button" disabled>Turn off location</button>
         <button id="move-treasure" type="button" hidden>Move the treasure</button>
-        <button id="switch-room" type="button">Switch room</button>
-        <button id="open-notes" type="button">Field notes</button>
-        <a href="/device-check/">Hardware diagnostics</a>
+        <button id="open-progress-room" type="button" aria-haspopup="dialog" aria-controls="sheet-progress" hidden>Leaderboard &amp; Treasure Book</button>
+        <button id="leave-room" type="button" aria-haspopup="dialog" aria-controls="sheet-room-exit">Leave room</button>
       </div>
       <p class="fineprint">The treasure point is saved on the host computer. Your latest position stays in its memory, with no movement history. Backgrounding the page stops location and camera.</p>
+      <div class="menu-list">
+        <button id="open-tools" type="button" aria-haspopup="dialog" aria-controls="sheet-tools">Test tools</button>
+      </div>
+    </section>
+
+    <section id="sheet-progress" class="sheet" role="dialog" aria-modal="true" aria-labelledby="progress-title" tabindex="-1" hidden>
+      <div class="sheet-head">
+        <h2 id="progress-title">Player progress</h2>
+        <button class="icon-button" data-close-sheet type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="progress-tabs" role="group" aria-label="Progress view">
+        <button id="progress-leaderboard" class="secondary" type="button" aria-controls="leaderboard-panel" aria-pressed="true">Leaderboard</button>
+        <button id="progress-book" class="secondary" type="button" aria-controls="treasure-book-panel" aria-pressed="false">Treasure Book</button>
+      </div>
+      <p id="progress-status" class="quiet" role="status" hidden></p>
+      <p id="progress-summary" class="quiet" hidden></p>
+      <div id="leaderboard-panel" hidden>
+        <p id="leaderboard-empty" class="quiet" hidden>Claim a treasure while signed in to start the leaderboard.</p>
+        <table id="leaderboard-table" class="leaderboard-table" aria-label="Top ten players" hidden>
+          <thead><tr><th scope="col">Rank</th><th scope="col">Player</th><th scope="col">Found</th><th scope="col">Collection</th></tr></thead>
+          <tbody id="leaderboard-rows"></tbody>
+        </table>
+      </div>
+      <div id="treasure-book-panel" hidden>
+        <ul id="treasure-book-cards" class="treasure-book-cards" aria-label="Treasure cards"></ul>
+      </div>
+    </section>
+
+    <section id="sheet-tools" class="sheet" role="dialog" aria-modal="true" aria-labelledby="tools-title" tabindex="-1" hidden>
+      <div class="sheet-head">
+        <button id="tools-back" class="link" type="button" aria-label="Back to room menu">‹ Back</button>
+        <h2 id="tools-title">Test tools</h2>
+        <button class="icon-button" data-close-sheet type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="menu-list">
+        <button id="open-notes" type="button">Field notes and report</button>
+        <a href="./motion-recording.html">Motion recording</a>
+        <a href="/device-check/">Hardware diagnostics</a>
+        <button id="open-reset" type="button" hidden>Reset demo</button>
+      </div>
+      <dl id="readouts" class="readouts" aria-label="GPS readings" hidden>
+        <div><dt>GPS accuracy</dt><dd id="accuracy">—</dd></div>
+        <div><dt>Last update</dt><dd id="age">—</dd></div>
+      </dl>
+      <dl id="indoor-readouts" class="readouts" aria-label="Motion readings" hidden>
+        <div><dt>Chest offset (m)</dt><dd id="radar-offset">—</dd></div>
+      </dl>
+      <div id="departure-tools" class="place-panel" hidden>
+        <label id="departure-setting" for="radius">Departure distance <output id="radius-value" for="radius">3 m</output></label>
+        <input id="radius" type="range" min="3" max="100" step="1" value="3">
+        <p class="fineprint">Applies the next time you hide a treasure in GPS mode.</p>
+      </div>
+    </section>
+
+    <section id="sheet-room-exit" class="sheet" role="dialog" aria-modal="true" aria-labelledby="room-exit-title" aria-describedby="room-exit-details" tabindex="-1" hidden>
+      <div class="sheet-head"><h2 id="room-exit-title">Leave this room?</h2></div>
+      <p id="room-exit-details"></p>
+      <button id="confirm-room-exit" class="primary" type="button">Leave room</button>
+      <button id="cancel-room-exit" class="secondary" type="button">Cancel</button>
+      <p id="room-exit-error" class="alert" role="alert" hidden></p>
     </section>
 
     <section id="sheet-account" class="sheet" role="dialog" aria-modal="true" aria-labelledby="account-title" tabindex="-1" hidden>
@@ -233,12 +418,47 @@
     </section>
 
     <section id="sheet-notes" class="sheet" role="dialog" aria-modal="true" aria-labelledby="notes-title" tabindex="-1" hidden>
-      <div class="sheet-head"><h2 id="notes-title">Field notes</h2><button class="icon-button" data-close-sheet type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <div class="sheet-head">
+        <button id="notes-back" class="link" type="button" aria-label="Back to test tools">‹ Back</button>
+        <h2 id="notes-title">Field notes</h2>
+        <button class="icon-button" data-close-sheet type="button" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
       <label for="notes">What did you notice?</label>
       <textarea id="notes" maxlength="1500" rows="4" placeholder="Trigger timing, camera behaviour, changes near the boundary."></textarea>
       <button id="download-report" class="primary" type="button">Export report</button>
       <p id="report-status" class="fineprint" role="status">The report has no coordinates. Keep private details out of your notes.</p>
     </section>
+
+    <nav id="assist-launchers" class="assist-launchers" aria-label="Game help" hidden>
+      <button id="open-tutorials" class="chip" type="button" aria-haspopup="dialog" aria-controls="tutorial-card" aria-expanded="false">Tutorials</button>
+      <button id="open-guide" class="icon-button" type="button" aria-label="Chat with guide" title="Chat with guide" aria-haspopup="dialog" aria-controls="guide-panel" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a7 7 0 0 1-7 7H5l2-3a7 7 0 1 1 13-4Z"/><path d="M9 11h6"/></svg>
+      </button>
+    </nav>
+    <div id="guide-scrim" class="guide-scrim" aria-hidden="true" hidden></div>
+    <section id="guide-panel" class="guide-panel" role="dialog" aria-modal="true" aria-labelledby="guide-name" tabindex="-1" hidden>
+      <header><div><strong id="guide-name">Campus Guide</strong><p id="guide-status" role="status">Connecting…</p></div><button id="close-guide" class="chip" type="button">Close</button></header>
+      <div id="guide-messages" class="guide-messages" role="log" aria-live="polite" aria-label="Conversation"></div>
+      <div id="guide-questions" class="guide-questions" hidden><button id="guide-distance" class="chip" type="button">How far?</button><button id="guide-place" class="chip" type="button">This building</button><button id="guide-courses" class="chip" type="button">Courses here</button></div>
+      <form id="guide-form" class="guide-form"><label for="guide-input" class="sr-only">Ask the campus guide</label><input id="guide-input" type="text" maxlength="500" autocomplete="off" placeholder="Ask about the game or campus…" enterkeyhint="send"><button id="guide-send" class="chip" type="submit">Send</button></form>
+      <p class="guide-notice">DeepSeek may receive your questions, selected campus facts and approximate game context. Camera video stays on this phone. Raw GPS readings go only to the game server.</p>
+    </section>
+    <div id="tutorial-overlay" class="tutorial-overlay" data-side="bottom" hidden>
+      <div id="tutorial-spotlight" class="tutorial-spotlight" aria-hidden="true" hidden></div>
+      <section id="tutorial-card" class="tutorial-card" aria-labelledby="tutorial-title">
+        <header><h2 id="tutorial-title" tabindex="-1">Tutorials</h2><button id="close-tutorial" class="chip" type="button">Close</button></header>
+        <p id="tutorial-copy" aria-live="polite"></p>
+        <div id="tutorial-choices" class="tutorial-choices" hidden>
+          <button class="secondary" type="button" data-tutorial="create-room">Create a room</button>
+          <button class="secondary" type="button" data-tutorial="join-room">Join a room</button>
+          <button class="secondary" type="button" data-tutorial="switch-indoor">Enable Indoor mode</button>
+          <button class="secondary" type="button" data-tutorial="hide-and-claim">Hide and claim a treasure</button>
+          <button class="secondary" type="button" data-tutorial="view-leaderboard">View the leaderboard</button>
+          <button class="secondary" type="button" data-tutorial="view-treasure-book">View the Treasure Book</button>
+        </div>
+      </section>
+      <div id="tutorial-arrow" class="tutorial-arrow" aria-hidden="true" hidden>↑</div>
+    </div>
 
     <canvas id="fx" class="fx" aria-hidden="true"></canvas>
     <div id="flash" class="flash" aria-hidden="true"></div>

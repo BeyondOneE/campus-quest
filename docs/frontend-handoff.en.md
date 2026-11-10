@@ -2,6 +2,10 @@
 
 [中文](frontend-handoff.md) · Contract updated: 2026-11-04 (Asia/Shanghai)
 
+The top-right room menu offers **Outdoor** and **Indoor**. Switching starts a fresh room round. [RoNIN and mode switching](indoor-demo.en.md)
+
+Current gameplay: [2026-11-05 near-field search](near-field-search.en.md) supersedes the final GPS 3 m claim / absolute-compass gate below. GPS unlocks a 15 m encounter; turn to search and aim in a short local frame. The slider is departure distance.
+
 ## Start here
 
 Frontend work can start against the existing backend. Claude owns visual design, layout, English copy and frontend presentation; Codex owns backend, API contracts, persistence and domain rules. Read [AGENTS](../AGENTS.md), [project status](project-status.en.md), this guide and the [API contract](backend-api.en.md) before editing. The [ready-to-use brief](claude-frontend-brief.en.md) is the handoff starting prompt.
@@ -32,14 +36,16 @@ Target the user's iPhone Safari. Build all product UI directly in English: label
 The first frontend delivery should cover this real flow:
 
 1. Restore sign-in, or register / sign in / continue as a guest.
-2. Create a room or join by its eight-character code; show the current user, room code, owner role and player roster.
+2. Create a room or join by its four-digit code or an existing eight-character code; show the current user, room code, owner role and player roster.
 3. Explicitly start live location, explaining that coordinates go to the computer and video stays on the phone.
 4. The owner places the shared treasure using a fresh accurate position. Everyone leaves the range and returns to unlock it.
 5. After confirmed departure, explicitly open rear-camera AR directions and request Motion & Orientation. Show an arrow far away and a direction-bound chest near the target after stable return / live frames.
 6. Centre the chest, hold, then enable manual Claim only with local current aim and server `canClaim`; await server confirmation, show the receipt and release the camera.
-7. Keep optional field notes, coordinate-free export and hardware diagnostics reachable but secondary to the game.
+7. Offer **Leave room** in the room menu. Confirm before a host leaves or signs out because either action closes the room for everyone.
+8. Put field notes and report export, motion recording, hardware diagnostics, numeric readings, departure-distance tuning and demo reset under the final **Test tools** item in the room menu.
+9. Show **Leaderboard & Treasure Book** for signed-in players at room selection and in the room menu. Show the account's new reward and the book link after a claim. Each ranking row shows both finds and unique cards collected. Select the AR and claim chest artwork using `room.cardId` and the book thumbnails using each catalog card ID.
 
-Page splits, navigation, typography, colors, spacing, iconography, the treasure illustration and animations are Claude's design space. Do not invent working maps, scheduled spawns, scoring, player-to-player chat or account recovery; their backend interfaces do not exist yet. The treasure itself may be illustrated; the live-camera background and location must remain real.
+Page splits, navigation, typography, colors, spacing, iconography, the treasure illustration and animations are Claude's design space. Use the account progress API for the leaderboard and collection. Treat maps, scheduled spawns, player-to-player chat and account recovery as future work. The live-camera background and location must remain real.
 
 ## Choose the correct entry
 
@@ -56,7 +62,7 @@ Page splits, navigation, typography, colors, spacing, iconography, the treasure 
 
 `npm start` serves the live view at `http://127.0.0.1:4180/treasure-lab/`. `npm run dev` starts the old Vite prototype; it does not proxy `/api` and is not the gameplay integration server. Building `src/` alone does not update the live game.
 
-The backend currently serves an explicit allowlist: seven treasure files (including `ar.js` and `guide.js`) and four diagnostic files. New assets, additional modules, external font / CDN dependencies, a React bundle or a separate frontend origin need an integration change coordinated with Codex. The current CSP permits same-origin assets and connections. Do not weaken CSP, cookie protection or CORS merely to make a preview work. Preserve the live URL and same-origin API path.
+The backend serves an explicit allowlist of 11 treasure files and four diagnostic files. New assets, additional modules, external font / CDN dependencies, a React bundle or a separate frontend origin need an integration change coordinated with Codex. The current CSP permits same-origin assets and connections. Do not weaken CSP, cookie protection or CORS merely to make a preview work. Preserve the live URL and same-origin API path.
 
 For a styling / structure pass, retain every controller-used element ID and required element type; see [DOM contract](frontend-dom-contract.json). Keep elements mounted if `app.js` still queries them, including hidden / secondary panels. Retain `[hidden]` behavior, button disabled states, the video element's `playsinline`, `autoplay`, `muted` attributes, and the account form's validation / password semantics. If replacing the controller, a visually equivalent screen alone is insufficient: port and verify its lifecycle obligations below.
 
@@ -68,15 +74,16 @@ Use `RemoteTreasureSession`, never a new local `TreasureSession`, as the product
 | --- | --- |
 | Restoring identity / request pending | Show progress, prevent duplicate submission, await completion before moving to the success view |
 | Signed out / guest | Offer account entry and temporary guest rooms; a nickname does not verify identity |
-| Signed in, no active room | Show account / room choices; do not treat `ROOM_REQUIRED` as incorrect credentials |
+| Signed in, no active room | Show the account and the create / join actions. `ROOM_REQUIRED` means the player needs a room |
 | Registration from a valid guest room | Keep that player ID, owner role and receipts; explain this before registration |
-| Login / another device | Restore account membership; never merge an unrelated guest automatically or restart hardware |
+| Login / another device | Start at room selection. Joining an open room by code restores that account's player and receipt |
+| Room exit | Call `leaveRoom` for a confirmed exit. Polling clients return to room selection when the host closes the room |
 | Owner / participant | `player.role` is `owner` or `guest`; the latter is a room permission role even for a signed-in account. Only the owner places / re-places |
 | Network failure / session expiry | Show recovery or sign-in entry and block collection; never fabricate successful local progress |
 | New treasure round / room switch | Discard old eligibility, read current state and restart location manually when required |
 | Collected | Render the server receipt. Repeated requests return the same receipt; no new points or prizes are implied |
 
-Roster `players[].collected`, `receipt` and `collectionCount` refer to the current room's current treasure round. They are not a global profile, lifetime inventory, total score or proof of connected / online players. `playerCount` counts unexpired memberships. Room codes are private play-session data, not public discovery listings. There is no leave-room, delete-room, profile-edit or password-reset endpoint.
+Roster `players[].collected`, `receipt` and `collectionCount` refer to the current room's current treasure round. They are not a global profile, lifetime inventory, total score or proof of connected / online players. `playerCount` counts unexpired memberships. Room codes are private play-session data, not public discovery listings.
 
 ## Location, camera and lifecycle obligations
 
@@ -116,7 +123,7 @@ After frontend code changes, run `npm test` and `npm run build` as required by [
 Deliver these checks with the new view:
 
 - Check real rendered English at 320 / 390 px and ordinary desktop widths, including long errors, validation, loading, signed-in / signed-out and disabled states. No horizontal overflow; controls remain reachable around Safari toolbars / safe areas. Test actual views, not only whether the old prototype builds.
-- Exercise registration, login, logout, guest adoption, create / join, reload and account room restoration against the real local API. Use an isolated test database for throwaway users. Do not reset the running user's `.local/` database.
+- Exercise registration, login, guest adoption, create / join by code, reload, participant leave and host disbanding against the local API. Use an isolated test database for throwaway users.
 - Retain the existing automated geofence, camera, background / late-callback and adapter checks. If lifecycle / component code changes, add only meaningful regressions for changed behavior; do not remove gates to make tests pass.
 - Keep screenshots labeled desktop / actual device and record the exact route. Do not insert fake camera frames, coordinates or permission success into the shipped UI. Unit-test fixtures remain isolated tests.
 - User phone sign-in and outdoor departure / return / video / collection are still pending. The user will run hardware acceptance later; desktop completion must not be labeled Safari acceptance.
@@ -129,8 +136,16 @@ The backend, treasure UI, tests and docs are committed on local `main` (057b9d9)
 
 ## AR integration revision
 
-CQ-20261104-008 adds functional AR guidance while preserving Claude's forest design. Use [AR contract](backend-api.en.md#ar-guidance-and-aim-contract-2026-11-04) and [field procedure](treasure-lab.en.md). Preserve new IDs in the updated DOM contract: `treasure` is now a non-clickable target image; `claim` is the separate action; `ar-guidance`, `ar-arrow`, `ar-message`, `ar-distance`, `aim-reticle` and `direction-retry` are controller-owned. `ar.js` contains geometry / hold logic shared by frontend and server. Do not return to a fixed centred clickable chest. Clean up orientation listeners and pending permissions with the existing camera token on stop / background. The 1200 ms / 10° hold and nearby bearing lock are experimental; Safari alignment and field feel remain unverified. Current validation is recorded in E-20261104-007; the older 48-test handoff figure above is historical.
+CQ-20261104-008 adds functional AR guidance while preserving Claude's forest design. Use [AR contract](backend-api.en.md#ar-guidance-and-aim-contract-2026-11-04) and [field procedure](treasure-lab.en.md). Preserve new IDs in the updated DOM contract: `treasure` is now a non-clickable target image; `claim` is the separate action; `ar-guidance`, `ar-arrow`, `ar-message`, `ar-distance`, `aim-reticle` and `direction-retry` are controller-owned. `ar.js` contains geometry / hold logic shared by frontend and server. Do not return to a fixed centred clickable chest. Clean up orientation listeners and pending permissions with the existing camera token on stop / background. The original hold was 1200 ms within 10°. Current settings are in the AR contract; Safari alignment and field feel remain unverified. Current validation is recorded in E-20261104-007; the older 48-test handoff figure above is historical.
 
 ## Camera guide and small-range revision
 
 CQ-20261104-010 adds `guide.js`, English camera chat / proactive notices, `gps-spinner` and the `guide-*` DOM contract. Default departure / collection is 3 m with centre-distance classification, no 10 m buffer at 3 m. Do not restore the previous automatic camera exit on transient GPS loss. Guide open pauses aiming / Claim; closing requires another hold. Preserve typing during background polling and visual-viewport keyboard adjustment. Reuse `guideRequest` without blocking game requests or turning a guide-only failure into a gameplay disconnection. [Guide configuration / API](ai-guide.en.md) describes role, FAQ, building / course data and private Key setup. No live-model or real-phone acceptance is claimed; presets must remain labelled.
+
+## Room and camera interaction revision
+
+CQ-20261110-011 validates pasted room codes after removing spaces and hyphens, shows format feedback at the input and fits the room form to the visual viewport. Keep the confirmation inside the room menu when a mode switch would reset a placed round. The confirmation is bound to that round and initially focuses **Keep current mode**. Use `ar-message` for the current live-camera instruction and `camera-message` for startup, playback and claim errors. The reticle ring shows the local hold. Claim becomes available when the server also confirms aim, and the button shows **Saving claim…** until the request completes. [Interaction checks](../progress/en/daily/2026-11-10.md#cq-20261110-011--room-and-camera-interaction)
+
+## Global guide and tutorials
+
+CQ-20261111-004 places the manual **Tutorials** button at the top left next to the chat icon. Keep the launcher and guide panel outside the individual screens. The tutorial overlay follows live controls from `tutorials.js`. The current room code and member count appear together in Menu. [Guide contract](ai-guide.en.md)

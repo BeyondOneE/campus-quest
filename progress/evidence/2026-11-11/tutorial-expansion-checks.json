@@ -1,0 +1,52 @@
+{
+  "id": "E-20261111-005",
+  "record": "CQ-20261111-005",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "manualTutorialCount": 6,
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 124,
+    "build": "passed",
+    "domContractElementsMatched": 171
+  },
+  "desktop": {
+    "viewports": [
+      "320x500",
+      "390x780"
+    ],
+    "isolatedDatabase": true,
+    "providerFixture": true,
+    "manualPickerAndGuestCreation": "passed",
+    "accountPrerequisiteAndProgressTabSwitching": "passed",
+    "newTutorialsStartedFromFixtureReplies": "passed"
+  },
+  "provider": {
+    "model": "deepseek-flash",
+    "isolatedInMemorySessions": true,
+    "results": [
+      {
+        "tutorialId": "create-room",
+        "upstreamStatus": 200,
+        "elapsedMs": 1106
+      },
+      {
+        "tutorialId": "view-leaderboard",
+        "upstreamStatus": 200,
+        "elapsedMs": 1314
+      },
+      {
+        "tutorialId": "view-treasure-book",
+        "upstreamStatus": 200,
+        "elapsedMs": 687
+      }
+    ]
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingGameFiles": 3,
+    "existingRecordsVerified": true,
+    "caUnchanged": true
+  },
+  "updatedInGameARValidated": false
+}

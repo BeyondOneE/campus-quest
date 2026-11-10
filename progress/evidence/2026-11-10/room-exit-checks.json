@@ -1,0 +1,30 @@
+{
+  "id": "E-20261110-016",
+  "record": "CQ-20261110-016",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 116,
+    "build": "passed",
+    "domContractElementsMatched": 144,
+    "hostLeaveAndSignOut": "passed",
+    "accountMemberRejoinPreservesReceipt": "passed",
+    "demoResetAndExpiredAccountRecovery": "passed"
+  },
+  "desktop": {
+    "viewports": ["320x500", "390x780"],
+    "isolatedDatabase": true,
+    "independentBrowserSessions": true,
+    "leaveCancelDisbandAndReload": "passed",
+    "historyAndClosedCodeChecks": "passed"
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingGameFiles": 4,
+    "accountEnvelopeChecked": true,
+    "existingRecordsVerified": true,
+    "caUnchanged": true
+  },
+  "updatedInGameARValidated": false
+}

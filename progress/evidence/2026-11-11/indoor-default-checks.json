@@ -1,0 +1,42 @@
+{
+  "id": "E-20261111-013",
+  "record": "CQ-20261111-013",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 132,
+    "build": "passed",
+    "modeControlsMatchDomContract": true
+  },
+  "desktop": {
+    "engine": "WebKitGTK",
+    "version": "2.52.6",
+    "isolatedDatabase": true,
+    "case": {
+      "ok": true,
+      "width": 390,
+      "height": 780,
+      "reduce": false,
+      "initialSelection": "Indoor",
+      "createdRoom": "indoor-ronin",
+      "nextAction": "Enable motion",
+      "restoredRoom": "gps"
+    }
+  },
+  "lan": {
+    "serviceRestarted": true,
+    "healthChecksPassed": true,
+    "existingRoomModesAndRoundsPreserved": true,
+    "matchingFiles": [
+      "index.html",
+      "app.js",
+      "client.js",
+      "indoor.js"
+    ],
+    "newRoomMode": "indoor-ronin",
+    "temporaryRoomRemoved": true
+  },
+  "physicalIPhoneChecked": false,
+  "updatedInGameARValidated": false
+}

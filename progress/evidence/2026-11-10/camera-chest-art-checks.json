@@ -1,0 +1,23 @@
+{
+  "id": "E-20261110-015",
+  "record": "CQ-20261110-015",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "source": "public/treasure-lab/index.html#ar-chest",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 113,
+    "build": "passed",
+    "domContractElementsMatched": 146
+  },
+  "preview": {
+    "type": "standalone SVG render",
+    "widthPx": 400,
+    "heightPx": 325
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "gamePageMatchesSource": true
+  },
+  "updatedInGameARValidated": false
+}

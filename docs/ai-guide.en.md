@@ -1,10 +1,16 @@
-# Camera companion and content configuration
+# Game guide and tutorials
 
-[中文](ai-guide.md) · Updated: 2026-11-04 · CQ-20261104-010
+[中文](ai-guide.md) · Updated 2026-11-11 · CQ-20261111-015
 
-The AR camera includes **Chat with guide**, a message preview, English text conversation, **How far?**, **This building** and **Courses here**. No voice, image analysis or puzzle-unlock gate was added. Camera capture continues while reading / typing; opening the conversation clears aiming and hides Claim. Close it and aim again to collect. Camera close, background, identity / room / round changes cancel pending UI work. Keyboard avoidance uses the visual viewport; real iPhone keyboard behavior is still unverified.
+Open **Tutorials** at the top left or use the adjacent chat icon from the start screen, room, camera or game panels. A visitor can ask about the app before joining. The six English tours cover creating a room, joining a room, enabling Indoor, hiding and claiming a treasure, viewing the leaderboard and viewing the Treasure Book. The progress tours guide guests to the account entry and signed-in players to the requested tab. Each tour dims the page and points an arrow at the live control for the current step. The player taps the controls and confirms any round reset.
 
-The computer backend calculates distance and chooses a known building. The model cannot modify game rules, target coordinates or receipts. Automatic messages introduce a newly detected configured building / its courses, announce GPS loss / recovery, and report distance about every 30 seconds while the conversation is closed. The controller reads guide context every five seconds; opening the conversation pauses proactive interruptions. Server cooldowns prevent repeated arrival / distance messages on every render.
+The tutorial picker slides in and its options appear in order. When a walkthrough starts, the arrow flies from the centre of the visible screen to the first control. The yellow frame and instruction fade in after it arrives. Use the highlighted control to advance. The old frame and instruction fade out first, then the arrow flies to the next control before the new details appear. Closing the tutorial fades out the overlay.
+
+For a matching question, the guide explains the steps in chat and can suggest a tutorial. The game checks the tutorial ID and the player's role before showing **Open tutorial** and **Not now** under the reply. Opening the tutorial fades out chat and starts the same arrow sequence. **Not now** dismisses the invitation and keeps the conversation open.
+
+In a tutorial opened from chat, **Close** or **Done** fades out the tutorial and slides the chat panel back into view. The current conversation and draft are available when you return. Tap the composer to bring up the keyboard. Reduced motion switches directly in either direction.
+
+The computer calculates distance and matches configured buildings. The camera still shows proactive distance and GPS notices and offers **How far?**, **This building** and **Courses here**. Opening chat in AR clears aiming while the video continues. Guide messages persist across screens in the same conversation. The first room retains onboarding chat, and later room and round changes clear the prior hunt context.
 
 ## Enable DeepSeek privately
 
@@ -26,29 +32,29 @@ Edit [server/guide-config.json](../server/guide-config.json), or set `CQ_GUIDE_C
 | `role` | English character / tone / behavior instructions, 1–12000 characters; fixed system constraints still forbid fabricated places, courses, camera observations and game mutations |
 | `presets` | Required English templates: `welcome`, `distance`, `gpsLost`, `gpsRestored`, `unknownPlace`, `arrival`, `providerUnavailable`; each 1–1000 characters |
 | Template tokens | `{distance}`, `{distanceLabel}`, `{place}`, `{description}`, `{courses}`; substituted from backend context |
-| `faq` | Up to 100 entries `{ questions: [English question variants], answer: English approved answer }`; exact normalized matches use the approved reply before the model |
+| `faq` | Up to 100 entries `{ questions: [English question variants], answer: English approved answer }`; exact normalized matches supply an approved answer to the model; without a key they use the preset |
 | `places` | Up to 200 verified campus areas, each with a unique `id`, `name`, `description`, numeric `latitude` / `longitude`, numeric `radius` in metres and a `courses` array |
 | `courses` | Up to 30 `{ name, description }` entries per place; use verified course descriptions, not inferred teaching assignments |
 
-Only enter verified public campus-site coordinates, not a player's private live position. A building is selected only with a fresh accurate fix whose reported uncertainty circle fits within exactly one configured place. Ambiguous overlaps, missing facts, expired location or weak GPS withhold building context. GPS identifies a nearby configured area; it does not establish which object the camera faces or the floor / room. The model must acknowledge facts absent from the supplied content. Questions explicitly about an unknown building / courses receive the unknown-location preset even when a model key is configured.
+Only enter verified public campus-site coordinates, not a player's private live position. A building is selected only with a fresh accurate fix whose reported uncertainty circle fits within exactly one configured place. Ambiguous overlaps, missing facts, expired location or weak GPS withhold building context. GPS identifies a nearby configured area; it does not establish which object the camera faces or the floor / room. The model must acknowledge facts absent from the supplied content. With a key, questions about unknown buildings / courses still reach the model, which receives a null place and must ask for the building name instead of inferring proximity.
 
 ## API and failure behavior
 
-Both routes use the existing authenticated room identity. Guide responses are separate from game envelopes; guide failures do not mark game connectivity offline or block its request queue.
+Guide responses are separate from game envelopes. A signed-in account or guest room session can use its existing CSRF token. Outside a room, the first anonymous GET issues an HttpOnly `cq_guide` cookie and a matching CSRF token for guide requests.
 
 | Route | Contract |
 | --- | --- |
-| `GET /api/guide` | `{ name, providerConfigured, context, messages }`; no hardware permission or provider call |
-| `POST /api/guide` | Normal `X-CSRF-Token`, Origin / JSON, `roomCode` and current `treasureId`; send either `message` (1–500 trimmed characters) or `event` (`distance`, `arrival`, `gps-lost`, `gps-restored`) |
-| POST result | Same guide view plus `accepted`, and `status: ready | degraded` on an accepted response; a deduplicated / inapplicable event returns `accepted: false` |
-| `context` | `{ gps: available | lost | paused, distanceMeters: number | null, place: null | { id, name, description, courses }, knowledgeReady, roundId }`; no raw coordinates |
-| `messages` | At most 24 `{ id, role: user | assistant, text, source: player | preset | deepseek, kind, at }` items, rendered as text; per login / guest session and room / round |
+| `GET /api/guide` | Returns `name`, `providerConfigured`, `context`, `messages`, `csrfToken`, `status` and `providerError`. Reading the guide makes no model call. |
+| `POST /api/guide` | Send Origin, JSON, `X-CSRF-Token`, either `message` (1–500 trimmed characters) or `event` (`distance`, `arrival`, `gps-lost`, `gps-restored`), and optionally a supported `page` such as `entry`, `menu` or `camera`. A room request includes `roomCode` and current `treasureId`. |
+| POST result | The guide view plus `accepted` and, on an accepted reply, `tutorialId` or `null`. Inapplicable or repeated events return `accepted: false`. |
+| Context | Includes `roomRole` (`host`, `guest` or `null`), position mode, GPS status, approximate distance, matched place and current round. Outside a room, the position, distance, place and round fields are empty. |
+| Messages | Up to 24 items per conversation with `id`, `role`, `text`, `source`, `kind`, `at` and optional `failureCode`. The client displays text as text. |
 
-`RemoteTreasureSession.guideRequest(body?, signal?)` returns a guide response or null when obsolete. It waits for already queued GPS invalidation, then sends separately so a slow model never blocks location / aiming. There is a 12-second client timeout and an 8-second provider timeout. Server POST limits are 20 requests per player per minute and two simultaneous provider calls globally; concurrent requests in one conversation return 429 `GUIDE_BUSY`. Arrival / GPS events have 60-second cooldowns; distance events 30 seconds. Histories are memory-only, capped at 256 conversations with lazy 30-minute expiry; they reset on restart / round / content changes, with no durable chat table.
+`RemoteTreasureSession.guideRequest(body?, signal?)` sends independently of location and aiming. The provider, client and LAN proxy timeouts are 20, 25 and 30 seconds. The API allows 20 POSTs per guide identity per minute and limits unauthenticated visitors outside a room to eight per IP per minute. Two provider calls can run at once, with one per conversation. Arrival and GPS events have a 60-second cooldown. Distance has a 30-second cooldown. Up to 256 conversations stay in memory with a 30-minute idle expiry.
 
-Distance, GPS notices and exact FAQ answers use presets. Other supported questions / arrival introductions use DeepSeek when configured. Requests use `/chat/completions`, JSON `{ reply }`, a 400-token output limit and bounded conversation; raw provider errors are never exposed. Empty, malformed, oversized, incomplete, timed-out or failed responses become an explicit preset error (`status: degraded`, `source: preset`) with retry messaging. Model outputs remain untrusted; JSON format alone is not semantic validation. Replies based on an obsolete round, place or GPS context are rejected. Game receipt checks remain independent.
+With a configured key, manual questions and camera shortcuts go to DeepSeek. The request supplies the current page, permitted tutorials, approximate game context and curated facts. The connector reads JSON `{ reply, tutorialId? }` with a 400-token output limit. A valid tutorial ID from the current manual reply lets the client offer a walkthrough. The player confirms in chat. GET polls cannot create offers. Welcome, distance and GPS notices use templates. Indoor distance uses the motion estimate. A provider failure returns a labelled preset response with `status: degraded` and a safe error code.
 
-API errors include 400 `INVALID_GUIDE_MESSAGE` / `INVALID_GUIDE_EVENT`, 409 `GUIDE_CONTEXT_CHANGED`, 429 `GUIDE_BUSY` / `RATE_LIMIT` and 503 `GUIDE_CONFIG_INVALID`, plus existing identity / CSRF / room / round errors. No endpoint accepts a client-supplied role, building facts, coordinates or provider key as model context. The shared content file, `.env` and private storage are outside the static allowlist.
+The API rejects an unsupported page with `INVALID_GUIDE_PAGE`, missing visitor setup with `GUIDE_SESSION_REQUIRED`, concurrent work with `GUIDE_BUSY`, and outdated context with `GUIDE_CONTEXT_CHANGED`. Origin, CSRF and current-room checks also apply. The shared content file, `.env` and private storage are outside the static allowlist.
 
 ## Three-metre mode and GPS recovery
 
@@ -67,3 +73,11 @@ CQ-20261104-011 imports `Campus_Quest_AI_导览预设_v0.1_2026-11-04.md`. The E
 Authentication checks against the official endpoint returned 401; a prefix-format check also failed and was not saved. The original supplied key remains private. No live generated answer or provider acceptance is claimed. The user confirmed replacement is required. All 80 tests and build passed; service restart and health checks passed. See E-20261104-009.
 
 CQ-20261104-012 supersedes the earlier 401 blocker: replacement-key authentication, supported-model discovery (`deepseek-flash`) and one real Building C / example-module answer passed. No GPS or camera data was used; phone behavior remains unverified.
+
+## Provider failure diagnosis
+
+CQ-20261104-015: errors now distinguish `AI_TIMEOUT`, `AI_NETWORK`, `AI_AUTH`, `AI_RATE_LIMIT`, `AI_UPSTREAM`, `AI_REPLY_TOO_LARGE`, `AI_REPLY_INCOMPLETE` and `AI_REPLY_INVALID`. The header gives a readable reason; a failed assistant message retains `failureCode`, so polling cannot relabel that failure as an enabled / successful model. A later successful answer clears the degraded state. The backend logs only `{ event, code, upstreamStatus, elapsedMs }` to its existing private log; no prompt, reply, raw error, identity, coordinate or credential is logged. This cannot reconstruct earlier failures: the supplied screenshot confirms fallback replies, but their original cause was not recorded. Named Building C retrieval and a live repeat succeeded; that does not establish continuous provider or phone reliability. No automatic paid retry was added.
+
+Indoor RoNIN reports `context.positionMode` as `indoor-ronin`, with `gps: not-used` and `place: null`. The `distanceLabel` identifies RoNIN as the source of the estimate. The indoor flow suppresses GPS and building-arrival messages. [Indoor contract](indoor-demo.en.md)
+
+CQ-20261111-007 formats prior successful assistant replies as JSON and leaves preset notices and failed replies out of the model history. A completed HTTP 200 with whitespace-only content gets one retry with shorter history within the existing 20-second provider deadline. A second blank reply is labelled `AI_REPLY_EMPTY`. Malformed replies receive a separate unreadable-reply notice. [DeepSeek JSON Output](https://api-docs.deepseek.com/guides/json_mode/)

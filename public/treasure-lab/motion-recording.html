@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" class="motion-recording-root">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <title>Motion recording · Campus Quest</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./motion-recording.js"></script>
+</head>
+<body class="motion-recording-page">
+  <main class="motion-recording">
+    <a href="/treasure-lab/">‹ Back to Campus Quest</a>
+    <h1>Motion recording</h1>
+    <p>Record one trial at a time. Motion data stay on this phone until you export a JSON file.</p>
+    <div id="motion-setup" class="motion-recording-setup">
+      <div class="field-group">
+        <label for="motion-trial">Trial</label>
+        <select id="motion-trial">
+          <option value="shake">Shake in place</option>
+          <option value="walk">Measured out and back</option>
+        </select>
+      </div>
+      <div id="motion-distance-field" class="field-group" hidden>
+        <label for="motion-distance">One-way distance (m)</label>
+        <input id="motion-distance" type="number" min="0.5" max="20" step="any" value="2" inputmode="decimal">
+      </div>
+    </div>
+    <p id="motion-instructions">Keep your feet at the starting mark. Move the phone when prompted, then hold it still again.</p>
+    <p id="motion-status" role="status">Ready to record.</p>
+    <p id="motion-count" class="quiet">0 samples</p>
+    <button id="motion-start" class="primary" type="button">Start recording</button>
+    <button id="motion-mark" class="primary" type="button" hidden disabled>Mark start</button>
+    <button id="motion-stop" class="secondary" type="button" hidden>Stop recording</button>
+    <button id="motion-export" class="secondary" type="button" disabled>Export JSON</button>
+    <p class="quiet">Keep Safari open. Switching apps stops recording. Export before refreshing or starting another trial.</p>
+  </main>
+</body>
+</html>

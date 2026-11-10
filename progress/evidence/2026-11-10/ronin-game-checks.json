@@ -1,0 +1,39 @@
+{
+  "id": "E-20261110-007",
+  "record": "CQ-20261110-007",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "sourceRecordings": "E-20261110-006",
+  "automated": {
+    "install": "passed",
+    "testsPassed": 111,
+    "build": "passed",
+    "fixedHeightAimAndClaimFixture": "passed",
+    "iosOfflineComparisonMatchesPreviousResults": true
+  },
+  "loopbackHttpReplay": {
+    "model": "Official RoNIN ResNet18 on CPU",
+    "originalSamplePace": true,
+    "requests": 235,
+    "medianMs": 18,
+    "p95Ms": 29,
+    "shake": { "acceptedFixes": 68, "departureTriggered": false, "maxEstimatedOffsetMetres": 0.0002 },
+    "walk": { "acceptedFixes": 166, "oneWayMetres": 2, "phases": ["unplaced", "leave", "return", "ready"] }
+  },
+  "desktop": {
+    "isolated": true,
+    "viewports": [[390, 780], [320, 500]],
+    "fourMenuModesFit": true,
+    "modeSurvivedReload": true,
+    "physicalPermissionsRequested": false
+  },
+  "lan": {
+    "backendHealthy": true,
+    "httpsHealthy": true,
+    "setupHealthy": true,
+    "inferenceWorkerRunning": true,
+    "matchingSources": 6,
+    "databaseRowCountsAndRootCaPreserved": true
+  },
+  "physicalSafariGameplayAcceptance": false
+}

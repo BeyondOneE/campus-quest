@@ -1,0 +1,56 @@
+{
+  "id": "E-20261105-001",
+  "checkedOn": "2026-11-05",
+  "type": "near-field-search-validation",
+  "tests": {
+    "passed": 90,
+    "failed": 0,
+    "newNearFieldTests": 7,
+    "buildPassed": true
+  },
+  "parameters": {
+    "entryRadiusMetres": 15,
+    "entryDwellMs": 2000,
+    "durationMs": 90000,
+    "exitRadiusMetres": 35,
+    "exitDwellMs": 3000,
+    "localTargetDegrees": 45,
+    "aimDwellMs": 1200,
+    "gyroMaxGapMs": 500
+  },
+  "isolatedRealHttp": {
+    "lockAt12m": true,
+    "gpsInterruptionClaim": true,
+    "idempotentReceipt": true,
+    "playerIsolation": true,
+    "coordinateFreeEnvelope": true,
+    "database": "memory-only"
+  },
+  "runtime": {
+    "dataPreserved": {
+      "accounts": true,
+      "players": true,
+      "rooms": true,
+      "claims": true,
+      "ca": true
+    },
+    "servedModulesMatchSource": {
+      "app.js": true,
+      "ar.js": true,
+      "model.js": true,
+      "client.js": true
+    },
+    "departureLabelServed": true,
+    "appUrl": "https://192.168.50.136:4443/treasure-lab/",
+    "health": {
+      "backend": true,
+      "https": true,
+      "setup": true
+    }
+  },
+  "liveDatabaseTestRowsAdded": false,
+  "privateBackupRetained": true,
+  "newDependencies": false,
+  "physicalSafariAcceptance": false,
+  "cameraOrRawMotionUploaded": false
+}

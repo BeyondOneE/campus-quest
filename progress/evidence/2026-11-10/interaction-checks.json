@@ -1,0 +1,24 @@
+{
+  "id": "E-20261110-011",
+  "record": "CQ-20261110-011",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 110,
+    "build": "passed",
+    "cameraInstructionHoldProgressAndClaimRetry": "passed"
+  },
+  "desktop": {
+    "viewports": ["390x780", "320x500", "320x360"],
+    "isolatedDatabase": true,
+    "invalidCodeFeedbackInView": true,
+    "pastedCodeJoinAndIndoorSpectator": "passed",
+    "cancelPreservedPlacedRound": true,
+    "confirmedSwitchResetPlacedRound": true,
+    "hardwarePermissionsGranted": false
+  },
+  "lan": { "healthChecksPassed": true, "matchingFiles": 3 },
+  "domContractIds": 132,
+  "updatedInGameARValidated": false
+}

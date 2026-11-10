@@ -1,0 +1,30 @@
+{
+  "id": "E-20261110-001",
+  "record": "CQ-20261110-001",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed",
+    "testsPassed": 102,
+    "build": "passed",
+    "planarCases": [
+      "Horizontal projection under tilt with and without vertical acceleration, stationary drift suppression and interruption",
+      "Backend mode reset, fixed height, same-frame aim and fresh steady readings",
+      "Controller flow from motion calibration through live-frame fixture and Claim with no geolocation request"
+    ]
+  },
+  "desktop": {
+    "environment": "Isolated local server and desktop browser",
+    "menuViewports": [[390, 780], [320, 500]],
+    "threeModesFit": true,
+    "selectionSurvivesReload": true
+  },
+  "lan": {
+    "restarted": true,
+    "backendHealthy": true,
+    "httpsHealthy": true,
+    "setupHealthy": true,
+    "matchingSources": 7
+  },
+  "physicalSafariAcceptance": false
+}

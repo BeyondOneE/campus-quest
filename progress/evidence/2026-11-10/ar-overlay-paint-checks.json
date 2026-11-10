@@ -1,0 +1,21 @@
+{
+  "id": "E-20261110-017",
+  "record": "CQ-20261110-017",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 117,
+    "build": "passed",
+    "fixtureFrameIntervalMs": 16,
+    "latestPoseAndCoalescing": "passed",
+    "roninHeadingUpdate": "passed",
+    "backgroundCancelsPendingPaint": "passed",
+    "stalledVideoBlocksClaim": "passed"
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingFiles": ["app.js", "style.css"]
+  },
+  "updatedInGameARValidated": false
+}

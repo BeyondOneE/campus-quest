@@ -42,9 +42,13 @@ test('aim needs distinct fresh samples over receipt time; timers, stale frames, 
   const aim=new AimHold();aim.observe(sample(359,1000),1,1000);
   assert.equal(aim.snapshot(5000).ready,false);
   aim.observe(sample(359,1000),1,1400);assert.equal(aim.samples,1);
-  aim.reset();for(let i=0;i<4;i++) aim.observe(sample(1,1000+i*450),1,1000+i*450);
-  assert.equal(aim.snapshot(2350).ready,true);
-  assert.equal(aim.snapshot(2350+AR_DEFAULTS.maxGap+1).ready,false);
+  aim.reset();
+  aim.observe(sample(16,1000),1,1000);
+  aim.observe(sample(347,1350),1,1350);
+  assert.equal(aim.snapshot(1350).ready,false);
+  aim.observe(sample(14,1700),1,1700);
+  assert.equal(aim.snapshot(1700).ready,true);
+  assert.equal(aim.snapshot(1700+AR_DEFAULTS.maxGap+1).ready,false);
   for(const invalid of [sample(90,2400),sample(1,2400,{pitch:35}),sample(1,2400,{cameraLive:false}),
     sample(1,2400,{videoAgeMs:800}),sample(1,2400,{source:'relative'}),sample(1,200)]) {
     aim.observe(invalid,1,2500);assert.equal(aim.snapshot(2500).ready,false);
@@ -54,14 +58,14 @@ test('aim needs distinct fresh samples over receipt time; timers, stale frames, 
 test('server allows distant direction guidance, freezes the nearby bearing and requires its own aim hold', () => {
   const h=backendHarness(),a=h.client();
   try {
-    a.create();a.fix();a.place();h.advance(1000);a.fix(65);
+    a.createOutdoor();a.fix();a.place();h.advance(1000);a.fix(65);
     assert.equal(a.data.state.canNavigate,true);assert.equal(a.data.state.eligible,false);
     assert.equal(a.data.state.guidance.mode,'approach');
     h.advance(1000);a.fix(0);h.advance(2000);a.fix(0);
     const bearing=a.data.state.guidance.bearingDegrees;
-    assert.equal(a.data.state.guidance.mode,'nearby');assert.equal(bearing,180);
+    assert.equal(a.data.state.guidance.mode,'nearby');assert.equal(bearing,45);assert.equal(a.data.state.guidance.frame,'local');
     h.advance(100);a.fix(-1);assert.equal(a.data.state.guidance.bearingDegrees,bearing,'small GPS changes do not swing a nearby target');
-    a.call('POST','/api/aim',{treasureId:a.data.room.treasureId,sample:sample(bearing,h.now(),{heldForMs:999999})});
+    a.call('POST','/api/aim',{treasureId:a.data.room.treasureId,sample:sample(bearing,h.now(),{heldForMs:999999,source:'relative-orientation',frameId:'fixture-'+a.data.player.id,encounterId:a.data.state.nearField.id})});
     assert.equal(a.collect().data.error.code,'AIM_REQUIRED');
     a.aimAtTreasure();assert.equal(a.data.state.canClaim,true);
     h.advance(1000);assert.equal(a.collect().data.error.code,'AIM_REQUIRED');
@@ -73,7 +77,7 @@ test('server allows distant direction guidance, freezes the nearby bearing and r
 test('aim samples are isolated by player, checked for CSRF / round and invalidated by stop', () => {
   const h=backendHarness(),a=h.client(),b=h.client();
   try {
-    a.create();b.join(a.data.room.code);a.fix();a.place();b.call('GET','/api/state');
+    a.createOutdoor();b.join(a.data.room.code);a.fix();a.place();b.call('GET','/api/state');
     a.returnToTreasure();b.returnToTreasure();a.aimAtTreasure();
     assert.equal(b.collect().data.error.code,'AIM_REQUIRED');
     assert.equal(a.call('POST','/api/aim',{treasureId:a.data.room.treasureId,sample:null},{'x-csrf-token':'wrong'}).status,403);
@@ -106,10 +110,17 @@ test('turning away, stale orientation and stalled video cancel claiming even wit
 
 test('direction denial is retryable and backgrounded permission cannot attach a late sensor listener', async () => {
   let permissions=0;
-  const h=harness({getUserMedia:()=>Promise.resolve(cameraStream()),directionPermission:()=>Promise.resolve(++permissions===1?'denied':'granted')});
-  h.unlock();await h.click('start-camera');h.frame();h.direction();
+  const h=harness({getUserMedia:()=>Promise.resolve(cameraStream()),directionPermission:async()=>{
+    if (++permissions === 2) throw new DOMException('Gesture required', 'NotAllowedError');
+    return permissions === 1 ? 'denied' : 'granted';
+  }});
+  h.unlock();await h.click('start-camera');await new Promise(resolve=>setImmediate(resolve));h.frame();h.direction();
   assert.equal(h.node('treasure').hidden,true);assert.equal(h.node('claim').disabled,true);assert.equal(h.node('direction-retry').hidden,false);
-  h.click('direction-retry');await Promise.resolve();h.direction();h.frame();assert.equal(h.node('treasure').hidden,false);
+  assert.match(h.node('ar-message').textContent, /Motion permission denied/);
+  await h.click('direction-retry');
+  assert.match(h.node('ar-message').textContent, /Tap Enable direction in Safari/);
+  assert.equal(h.directionListening,false);
+  await h.click('direction-retry');h.direction();h.frame();assert.equal(h.node('treasure').hidden,false);
   h.background();assert.equal(h.directionListening,false);
   let resolve;const pending=harness({getUserMedia:()=>Promise.resolve(cameraStream()),directionPermission:()=>new Promise(r=>{resolve=r;})});
   pending.unlock();await pending.click('start-camera');pending.background();resolve('granted');await Promise.resolve();
@@ -118,9 +129,9 @@ test('direction denial is retryable and backgrounded permission cannot attach a 
 
 test('position expiry while a camera prompt delays rendering releases late capture and orientation listeners', async () => {
   let resolve;const stream=cameraStream(),h=harness({getUserMedia:()=>new Promise(r=>{resolve=r;})});
-  h.unlock();const pending=h.click('start-camera');await Promise.resolve();
+  h.unlock();const pending=h.click('start-camera');await new Promise(resolve=>setImmediate(resolve));
   assert.equal(h.directionListening,true);
-  h.advance(16000,false);resolve(stream);await pending;
+  h.advance(91000,false);resolve(stream);await pending;
   assert.equal(stream.stops,1);assert.equal(h.directionListening,false);
   assert.equal(h.node('claim').disabled,true);assert.equal(h.node('treasure').hidden,true);
 });

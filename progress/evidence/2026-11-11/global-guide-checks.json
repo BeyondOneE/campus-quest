@@ -1,0 +1,46 @@
+{
+  "id": "E-20261111-004",
+  "record": "CQ-20261111-004",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "tutorialIds": [
+    "join-room",
+    "switch-indoor",
+    "hide-and-claim"
+  ],
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 123,
+    "build": "passed",
+    "domContractElementsMatched": 171,
+    "visitorIsolationAndTutorialIdValidation": "passed"
+  },
+  "desktop": {
+    "viewports": [
+      "320x500",
+      "390x780"
+    ],
+    "isolatedDatabase": true,
+    "providerFixture": true,
+    "visitorJoinSpotlightAndChatRetention": "passed",
+    "progressPanelGuideAccessAndMenuMemberCount": "passed",
+    "manualIndoorTutorialAndRoundResetConfirmation": "passed"
+  },
+  "provider": {
+    "model": "deepseek-flash",
+    "isolatedInMemorySession": true,
+    "calls": 1,
+    "upstreamStatus": 200,
+    "replySource": "deepseek",
+    "tutorialId": "join-room",
+    "elapsedMs": 1332
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingGameFiles": 6,
+    "visitorGuideRouteChecked": true,
+    "existingRecordsVerified": true,
+    "caUnchanged": true
+  },
+  "updatedInGameARValidated": false
+}

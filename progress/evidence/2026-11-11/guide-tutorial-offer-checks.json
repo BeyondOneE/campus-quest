@@ -1,0 +1,96 @@
+{
+  "id": "E-20261111-011",
+  "record": "CQ-20261111-011",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 130,
+    "build": "passed"
+  },
+  "desktop": {
+    "engine": "WebKitGTK",
+    "version": "2.52.6",
+    "isolatedDatabase": true,
+    "providerFixture": true,
+    "cases": [
+      {
+        "ok": true,
+        "width": 320,
+        "height": 500,
+        "reduce": false,
+        "declinedInChat": true,
+        "replyBeforeOffer": true,
+        "confirmationRequired": true,
+        "focusTransferred": true,
+        "stableChatHeight": true,
+        "chatHistoryRetained": true,
+        "manualPicker": true,
+        "ordinaryQuestion": true,
+        "frames": 21,
+        "intermediate": {
+          "chat": true,
+          "backdrop": true,
+          "card": true
+        },
+        "maxCardShift": 10
+      },
+      {
+        "ok": true,
+        "width": 390,
+        "height": 780,
+        "reduce": false,
+        "declinedInChat": true,
+        "replyBeforeOffer": true,
+        "confirmationRequired": true,
+        "focusTransferred": true,
+        "stableChatHeight": true,
+        "chatHistoryRetained": true,
+        "manualPicker": true,
+        "ordinaryQuestion": true,
+        "frames": 22,
+        "intermediate": {
+          "chat": true,
+          "backdrop": true,
+          "card": true
+        },
+        "maxCardShift": 10
+      },
+      {
+        "ok": true,
+        "width": 390,
+        "height": 780,
+        "reduce": true,
+        "declinedInChat": true,
+        "replyBeforeOffer": true,
+        "confirmationRequired": true,
+        "focusTransferred": true,
+        "stableChatHeight": true,
+        "chatHistoryRetained": true,
+        "manualPicker": true,
+        "ordinaryQuestion": true,
+        "frames": 47,
+        "intermediate": {
+          "chat": false,
+          "backdrop": false,
+          "card": false
+        },
+        "maxCardShift": 0
+      }
+    ]
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingFiles": [
+      "app.js",
+      "guide.js",
+      "tutorials.js",
+      "style.css"
+    ],
+    "serviceRestarted": true,
+    "guideGetHealthy": true,
+    "providerConfigured": true
+  },
+  "physicalIPhoneChecked": false,
+  "updatedInGameARValidated": false
+}

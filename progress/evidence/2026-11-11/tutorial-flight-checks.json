@@ -1,0 +1,64 @@
+{
+  "id": "E-20261111-015",
+  "record": "CQ-20261111-015",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 132,
+    "build": "passed",
+    "arrowMatchesDomContract": true
+  },
+  "desktop": {
+    "engine": "WebKitGTK",
+    "version": "2.52.6",
+    "isolatedDatabase": true,
+    "providerFixture": true,
+    "cases": [
+      {
+        "ok": true,
+        "width": 320,
+        "height": 500,
+        "reduce": false,
+        "centredArrow": true,
+        "fadesBeforeTravel": true,
+        "revealsAfterArrival": true,
+        "latestStep": true,
+        "guideReturn": true
+      },
+      {
+        "ok": true,
+        "width": 390,
+        "height": 780,
+        "reduce": false,
+        "centredArrow": true,
+        "fadesBeforeTravel": true,
+        "revealsAfterArrival": true,
+        "latestStep": true,
+        "guideReturn": true
+      },
+      {
+        "ok": true,
+        "width": 390,
+        "height": 780,
+        "reduce": true,
+        "centredArrow": false,
+        "fadesBeforeTravel": false,
+        "revealsAfterArrival": false,
+        "latestStep": true,
+        "guideReturn": true
+      }
+    ]
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingFiles": [
+      "index.html",
+      "tutorials.js",
+      "style.css"
+    ],
+    "serviceRestarted": false
+  },
+  "physicalIPhoneChecked": false,
+  "updatedInGameARValidated": false
+}

@@ -1,12 +1,13 @@
+import assert from 'node:assert/strict';
 import { GameStore } from '../../server/store.mjs';
 import { createApplication } from '../../server/app.mjs';
 
 // All locations here are isolated synthetic test fixtures, never physical evidence.
-export function backendHarness(path = ':memory:') {
+export function backendHarness(path = ':memory:', options = {}) {
   let time = 1800000000000;
   let clients = 0;
   const store = new GameStore(path, () => time);
-  const handle = createApplication({ store, localPort: 4180, publicOrigin: 'https://field.example.test' });
+  const handle = createApplication({ store, localPort: 4180, publicOrigin: 'https://field.example.test', ...options });
   const h = { store, handle, now: () => time, advance: ms => { time += ms; },
     client() {
       const clientKey = `browser-${++clients}`;
@@ -30,6 +31,11 @@ export function backendHarness(path = ':memory:') {
           return { ...response, data };
         },
         create(name = 'Owner') { return c.call('POST', '/api/rooms', { name }); },
+        createOutdoor(name) {
+          assert.equal(c.create(name).status, 201);
+          const { treasureId } = c.data.room;
+          assert.equal(c.call('POST', '/api/mode', { mode: 'gps', treasureId }).status, 200);
+        },
         join(code, name = 'Guest') { return c.call('POST', '/api/rooms/join', { code, name }); },
         fix(north = 0, accuracy = 5, timestamp = time) {
           return c.call('POST', '/api/location', { treasureId: c.data.room.treasureId,
@@ -41,7 +47,7 @@ export function backendHarness(path = ':memory:') {
             if (i) h.advance(450);
             c.call('POST', '/api/aim', { treasureId: c.data.room.treasureId, sample: {
               heading: c.data.state.guidance?.bearingDegrees ?? 180, pitch: 0, timestamp: time,
-              source: 'webkit-compass', accuracy: 5, cameraLive: true, videoAgeMs: 0 } });
+              source: 'relative-orientation', frameId: `fixture-${c.data.player.id}`, encounterId: c.data.state.nearField?.id, cameraLive: true, videoAgeMs: 0 } });
           }
         },
         collect() { return c.call('POST', '/api/collect', { treasureId: c.data.room.treasureId, cameraLive: true }); },

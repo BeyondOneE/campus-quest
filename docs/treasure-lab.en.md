@@ -2,6 +2,10 @@
 
 [中文](treasure-lab.md)
 
+The top-right room menu offers **Outdoor** and **Indoor**. Switching starts a fresh room round. [RoNIN and mode switching](indoor-demo.en.md)
+
+Current gameplay: [2026-11-05 near-field search](near-field-search.en.md) supersedes the final GPS 3 m claim / absolute-compass gate below. GPS unlocks a 15 m encounter; turn to search and aim in a short local frame. The slider is departure distance.
+
 On 2026-11-03 the user authorized “real location triggers treasure → present it in the camera view → tap to collect,” then required a computer-hosted backend connected to phone browsers from this stage onward. The entry is `/treasure-lab/`, separate from the six-screen demo and hardware diagnostics. Guest sessions, a shared single point across devices and persistent claims are implemented. Campus maps, zone editing, scheduled spawns, student verification and final multiplayer gameplay are not implemented. Local username / password registration, login and logout are now available; see the [account API](backend-api.en.md).
 
 ## Start and access
@@ -18,12 +22,13 @@ The Node service exposes eleven allowlisted static files across both pages plus 
 
 ## Field procedure
 
-1. Open the same HTTPS test URL in phone Safari, tap “Create a room” and enter a nickname. Other phones tap “Join with a code” and enter the room code and their own nicknames. You may first create an account or sign in. Signed-in players use their account username; returning to a previous room restores identity and receipts. Registration keeps the current guest room; login does not merge unrelated guest progress. Use trusted HTTPS before entering credentials.
+1. Open the same HTTPS test URL in phone Safari, tap “Create a room” and enter a nickname. Other phones tap “Join with a code”, enter or paste the four-digit room code, then enter their nickname. Existing eight-character codes still work. The form accepts lowercase letters, spaces and hyphens in pasted codes and shows format errors next to the field. Signed-in players use their account username. Signing in starts at room selection. Rejoining an open room by code restores the account player and receipts. Registration keeps the current guest room. Use trusted HTTPS before entering credentials.
 2. At an outdoor site where you can walk away and return, read the location-sharing notice, tap “Turn on location” and grant permission. Positions are sent to the computer backend for checks. Location and camera permission are never requested automatically.
-3. Once the creator's location is valid, choose a collection radius and tap “Hide treasure here”. Other players share this point. Only the creator can move it, from the menu or after claiming, which starts a new round.
+3. Once the creator’s location is valid, tap “Hide treasure here”. The host can adjust **Departure distance** under **Menu → Test tools** before placing. Other players share the point. Only the creator can move it, from the menu or after claiming, which starts a new round.
 4. Keep the page visible and walk outside until departure is confirmed. Tap “Open AR directions” and allow the rear camera and Motion & Orientation. Follow the arrow back, with the phone upright and the rear camera towards the horizon. The arrow points directly towards the target, without road routing.
-5. On a stable in-range return, a chest appears only when its virtual direction enters the view. Centre it in the reticle and hold steady for about 1.2 seconds, then tap “Claim treasure”. Turning away, old compass readings or stalled video disable Claim. Poor accuracy, boundary uncertainty or disconnection also suspend collection. The backend rechecks both location and aim before recording one claim per player per round and releasing the camera.
-6. Open “Field notes” from the top-right menu, record actual observations and export the report. Reloading restores the cookie identity and backend claim; restart camera and location manually. Backend restart clears transient location observation but retains the shared point and claim receipts.
+5. On a stable in-range return, a chest appears only when its virtual direction enters the view. Point at the chest and hold for about 0.7 seconds, then tap “Claim treasure”. Turning away, old compass readings or stalled video disable Claim. Poor accuracy, boundary uncertainty or disconnection also suspend collection. The backend rechecks both location and aim before recording one claim per player per round and releasing the camera.
+6. Use **Menu → Test tools → Field notes and report** to record actual observations and export a report. Reloading restores the cookie identity and backend claim. Restart camera and location manually. Backend restart clears temporary location state and retains the shared point and claim receipts.
+7. Tap **Menu → Leave room** and confirm to return to room selection. When the host leaves or signs out, the room closes for everyone. The host can also use **Menu → Test tools → Reset demo** to close it before another demonstration.
 
 ## Experiment parameters and gates
 
@@ -35,7 +40,7 @@ The Node service exposes eleven allowlisted static files across both pages plus 
 | Confirm departure | At 3 m: reported centre distance must exceed 3 m; larger radii retain distance minus accuracy ≥ radius plus 10 m |
 | Confirm entry | At 3 m: reported centre distance at most 3 m; larger radii include uncertainty. Two distinct valid readings spanning at least 2 seconds |
 | Camera navigation | Confirmed departure and valid fresh location, including outside / boundary |
-| Allow collection | Confirmed stable return; still in range; frame age at most 750 ms; direction age at most 1500 ms; aim within 10° for at least 1200 ms |
+| Allow collection | Valid nearby encounter, frame age at most 750 ms, direction age at most 1500 ms and aim within 18° for at least 700 ms |
 | Aim hold | At least three distinct samples, gaps at most 900 ms; measured by backend receipt time, plus an independent phone-side check |
 
 These values are starting parameters for a feasibility experiment, not final acceptance criteria approved by the user. The gates conservatively filter using reported uncertainty, but reported accuracy does not guarantee actual error. The treasure centre also comes from an uncertain system fix without survey calibration. Smaller radii may require better location quality. This page does not establish floor detection, exact physical-point matching or resistance to location spoofing.

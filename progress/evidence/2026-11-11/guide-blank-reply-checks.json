@@ -1,0 +1,40 @@
+{
+  "id": "E-20261111-007",
+  "record": "CQ-20261111-007",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "before": {
+    "privateLogInvalidReplyCount": 3,
+    "upstreamStatus": 200,
+    "isolatedTurns": 5,
+    "blankCompletedReplies": 2
+  },
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 127,
+    "build": "passed",
+    "blankRetryLimit": 1,
+    "providerDeadlineMs": 20000
+  },
+  "isolatedReplay": {
+    "model": "deepseek-flash",
+    "turns": 5,
+    "modelReplies": 5,
+    "retriesNeeded": 0,
+    "tutorialIdsReturned": [
+      "create-room",
+      "view-leaderboard",
+      "view-treasure-book"
+    ],
+    "claimFollowUpTextOnly": true
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "guideScriptMatched": true,
+    "replySource": "deepseek",
+    "tutorialId": "hide-and-claim",
+    "existingRecordsVerified": true,
+    "caUnchanged": true
+  },
+  "updatedInGameARValidated": false
+}

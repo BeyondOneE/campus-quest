@@ -1,0 +1,27 @@
+{
+  "id": "E-20261110-013",
+  "record": "CQ-20261110-013",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 113,
+    "build": "passed",
+    "readingsAndPlacementSetting": "passed"
+  },
+  "desktop": {
+    "viewports": ["320x500", "390x780"],
+    "isolatedDatabase": true,
+    "singleBottomMenuEntry": true,
+    "bothModePanels": "passed",
+    "notesBackAndResetCancel": "passed",
+    "hardwarePermissionsGranted": false
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingGameFiles": 3,
+    "standaloneToolPagesVerified": 2
+  },
+  "domContractIds": 146,
+  "updatedInGameARValidated": false
+}

@@ -1,0 +1,36 @@
+{
+  "id": "E-20261111-009",
+  "record": "CQ-20261111-009",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 129,
+    "build": "passed",
+    "failedSendRestoresDraft": "passed",
+    "serverHistoryOrdering": "passed"
+  },
+  "desktop": {
+    "viewports": [
+      "320x500",
+      "390x780"
+    ],
+    "isolatedDatabase": true,
+    "providerFixtureDelayMs": 650,
+    "sentBubbleVisibleInClickHandler": true,
+    "sameNodeAfterConfirmation": true,
+    "popKeyframeObserved": true,
+    "replyAnimatedSeparately": true,
+    "scrollTutorialHandoffAndReducedMotion": "passed"
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingFiles": [
+      "guide.js",
+      "style.css"
+    ],
+    "restarted": false
+  },
+  "physicalIPhoneChecked": false,
+  "updatedInGameARValidated": false
+}

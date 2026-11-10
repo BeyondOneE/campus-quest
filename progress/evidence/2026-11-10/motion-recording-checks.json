@@ -1,0 +1,34 @@
+{
+  "id": "E-20261110-005",
+  "record": "CQ-20261110-005",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed",
+    "testsPassed": 107,
+    "build": "passed",
+    "recording": ["raw channels and missing values", "background stop and permission race", "served recorder assets", "measured waypoint replay"]
+  },
+  "desktop": {
+    "isolated": true,
+    "viewports": [[390, 780], [320, 500]],
+    "homeEntryAndExportControlReachable": true,
+    "hardwarePermissionsRequested": false
+  },
+  "lan": {
+    "backendHealthy": true,
+    "httpsHealthy": true,
+    "setupHealthy": true,
+    "matchingSources": 4
+  },
+  "offline": {
+    "upstreamCommit": "805b7f0f28bb164ce89ada9ac05a9470dbe3d715",
+    "modelSource": "https://doi.org/10.20383/102.0543",
+    "archiveSha256": "7431ac4c87371d634f9eac355fbbf12ee0a346b38c01f7e1809c1953db580168",
+    "archiveMatchesPublisherChecksum": true,
+    "checkpointSha256": "5ae5c9e508f2dc9609c25b59d0e3dfd770ecbcde6920cbc5be3c6d9fed8a6346",
+    "officialResnet18CpuReplay": { "controlledShake": "passed", "controlledWalk": "passed" }
+  },
+  "physicalSafariAcceptance": false,
+  "phoneRecordingsAvailable": false
+}

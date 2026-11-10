@@ -2,37 +2,40 @@
 
 [中文](backend-api.md)
 
+The top-right room menu offers **Outdoor** (`gps`) and **Indoor** (`indoor-ronin`). New rooms start in Indoor. Joining or resuming a room uses its saved mode. Switching modes resets the current room round. The indoor guide describes the local `POST /api/ronin` inference endpoint. [RoNIN and mode switching](indoor-demo.en.md)
+
+Current gameplay: [2026-11-05 near-field search](near-field-search.en.md) supersedes the final GPS 3 m claim / absolute-compass gate below. GPS unlocks a 15 m encounter; turn to search and aim in a short local frame. The slider is departure distance.
+
 ## Running and identity
 
 Use the validated Node.js 24.19.0 runtime. Run `./start.sh` from the repository for background backend + LAN HTTPS startup, health checks and log management; see [launcher commands](lan-access.en.md#one-command-startup). Manual backend-only startup remains `npm start`. The application listens at `http://127.0.0.1:4180/treasure-lab/` and serves the English page plus the API from the same origin. SQLite data is kept in ignored `.local/campus-quest.sqlite`. The Python diagnostic server is separate and provides no business API.
 
-Players can register a local username / password account or continue as temporary guests. Accounts preserve room membership and receipts across devices. Guest identities still use a nickname and an eight-character room code. Neither option verifies student identity. Browser sessions expire after 24 hours; account credentials and membership persist in SQLite. Use different browser profiles or phones for different signed-in users.
+Players can register a local username / password account or continue as temporary guests. Accounts preserve room membership and receipts across devices. Guests use a nickname and a room code. New rooms use four digits. Existing eight-character codes still work. Neither option verifies student identity. Browser sessions expire after 24 hours; account credentials and membership persist in SQLite. Use different browser profiles or phones for different signed-in users.
 
 Guest room creation / joining sets `cq_session`; account registration / login sets `cq_account`. Both cookies are HttpOnly and SameSite=Strict, with Secure on HTTPS. Successful account and game responses include `csrfToken`; include it as `X-CSRF-Token` on authenticated POST requests. Account mutations use the browser session's own token, including room changes and logout. An expired account cookie never silently falls back to a guest. Do not store or print cookie / CSRF values in handoff records.
 
 ## Accounts
 
-Account envelope example after registration without a guest room (documentation-only values). Signed-out success is `{ "account": null, "rooms": [], "activeRoom": null }` and omits `csrfToken`. With an active membership, `activeRoom` is its room code and `rooms` contains `{ code, role }` entries. Registration / login do not return a game envelope; read `/api/state` for that room afterward.
+Account envelope example after registration on the start screen. Signed-out responses contain `{ "account": null, "activeRoom": null }`. When the browser session is in a room, `activeRoom` holds its code. Read `/api/state` for gameplay.
 
 ```json
 {
   "account": { "id": "example-account", "username": "explorer" },
   "csrfToken": "<csrf-token-from-response>",
-  "activeRoom": null,
-  "rooms": []
+  "activeRoom": null
 }
 ```
 
 | Method and path | JSON body / result |
 | --- | --- |
-| `GET /api/auth/session` | `{ account: { id, username }, csrfToken, activeRoom, rooms: [{ code, role }] }`; signed out returns `account: null`, empty rooms and no CSRF token |
+| `GET /api/auth/session` | Signed-in account envelope `{ account: { id, username }, csrfToken, activeRoom }` |
 | `POST /api/auth/register` | `{ username, password }`; HTTP 201, signs in and returns the account envelope |
-| `POST /api/auth/login` | `{ username, password }`; HTTP 200, new browser session and the account envelope |
-| `POST /api/auth/logout` | `{}`; HTTP 200, revokes this account session, releases its temporary location state and clears both cookies; other devices remain signed in |
+| `POST /api/auth/login` | `{ username, password }` from room selection. HTTP 200 with a new browser session and `activeRoom: null` |
+| `POST /api/auth/logout` | `{ roomCode, treasureId }` from an active room or `{}` from room selection. HTTP 200 leaves the room, closes it if the caller is the host, revokes this login and clears both cookies |
 
 Usernames contain 3–32 ASCII letters, digits or underscores and are stored lowercase. Passwords contain 1–128 Unicode code points with no strength rule beyond length (user decision, 2026-11-04); spaces are preserved. Passwords are never returned or logged. The server uses asynchronous salted scrypt (`N=131072, r=8, p=1`, 16-byte random salt); at most two password operations run concurrently. See [OWASP password storage guidance](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) and [Node crypto](https://nodejs.org/download/release/latest-v24.x/docs/api/crypto.html). Test-server limits are 1,000 accounts, eight live sessions per account, 20 auth attempts per address per 15 minutes and eight per canonical username per 15 minutes. Rate windows are in memory and reset on restart. Excess concurrent work returns 429 `AUTH_BUSY`.
 
-Registration with a valid guest cookie and its CSRF token associates that guest's current room, player ID, owner role and receipts with the new account. The old guest token stops authenticating that player. Login restores the account's most recently used room; it does not merge an unrelated guest's progress. Joining an existing account room restores the same player instead of creating another membership. Accounts may belong to several rooms; the active room belongs to the browser login session. Each device has separate temporary location gates, and login does not restore old location or start hardware. Receipts are shared across devices, so duplicate collection returns the original receipt.
+Registration with a valid guest cookie and its CSRF token associates that guest's current room, player ID, owner role and receipts with the new account. The old guest token stops authenticating that player. A fresh sign-in starts at room selection. Rejoin an open room with its code to restore the same account player and receipts. Each device has its own current room and temporary location gates. Reloading the browser resumes its current room.
 
 After sign-in without a room, use room creation / joining before `GET /api/state` (otherwise 409 `ROOM_REQUIRED`). Signed-in room requests do not require `name`; the server uses the account username. Every signed-in gameplay POST must include the observed `roomCode` as well as the existing payload; a changed room returns 409 `ROOM_CHANGED`. Guests may also send `roomCode`. Wrong passwords and unknown users return the same 401 `INVALID_CREDENTIALS`; invalid input returns 400, duplicate usernames 409, and expired logins 401 `ACCOUNT_SESSION_EXPIRED`.
 
@@ -43,28 +46,41 @@ This is local password authentication, without email verification, student SSO, 
 | Method and path | JSON body / result |
 | --- | --- |
 | `GET /api/health` | Public readiness: `{ ok, service, version }` |
+| `GET /api/progress` | Signed-in leaderboard and personal Treasure Book. Available from room selection and in a room |
 | `POST /api/rooms` | Guest: `{ name }`; account: `{}` with account CSRF. Creates a room and owner; HTTP 201 state envelope |
 | `POST /api/rooms/join` | Guest: `{ name, code }`; account: `{ code }` with account CSRF. HTTP 201 state envelope; restores existing account membership |
+| `POST /api/rooms/leave` | `{ roomCode, treasureId }` with session CSRF. Leaves the current room, or closes it when called by the host. HTTP 200 account envelope with `activeRoom: null` |
+| `POST /api/rooms/reset` | `{ roomCode, treasureId }`; host only with session CSRF. Closes the current room and returns the HTTP 200 account envelope with `activeRoom: null` |
 | `GET /api/state` | Current player, room, roster, location gates and receipt |
-| `GET /api/guide` | Separate authenticated guide context / history; see [guide contract](ai-guide.en.md) |
-| `POST /api/guide` | `{ roomCode, treasureId, message }` or `{ roomCode, treasureId, event }`; separate guide response |
+| `GET /api/guide` | Guide context and history, available before joining a room. See the [guide contract](ai-guide.en.md). |
+| `POST /api/guide` | Send `message` or `event` and optional `page`. In a room, also send `roomCode` and `treasureId`. The guide can return a tutorial ID. |
 | `POST /api/location` | `{ roomCode, treasureId, fix: { latitude, longitude, accuracy, timestamp } }`; HTTP 200 state plus `accepted: boolean` |
 | `POST /api/location/stop` | `{ roomCode }`; HTTP 200 state; clears this session's latest position / entry observation |
 | `POST /api/treasure` | `{ roomCode, treasureId, radius }`; owner only; HTTP 200 state for a new shared round placed from the latest valid fix |
 | `POST /api/aim` | `{ roomCode, treasureId, sample }`; HTTP 200 state plus `accepted: boolean`; `sample: null` clears aim |
 | `POST /api/collect` | `{ roomCode, treasureId, cameraLive: true }`; HTTP 200 state plus `collection: { id, collectedAt, repeated }` |
 
-Creation and joining return HTTP 201; other successes return 200. State envelopes contain `serverTime`, `csrfToken`, `room`, `player`, `state`, `report`, `receipt` and `players`. Room data includes the eight-character code, current `treasureId`, radius, placement flag, player count and `one-claim-per-player` policy. No endpoint returns stored treasure coordinates or another player's latest coordinates. `state` includes `kind`, `phase`, `distance`, `eligible`, `canNavigate`, `guidance`, `aim`, `canClaim`, `canPlace` and `expiresInMs`. Receipt fields are `id` and `collectedAt`; duplicate collections return the original receipt with `repeated: true`.
+Creation and joining return HTTP 201; other successes return 200. State envelopes contain `serverTime`, `csrfToken`, `room`, `player`, `state`, `report`, `receipt` and `players`. Room data includes the room code as a string, current `treasureId`, radius, placement flag, player count and `one-claim-per-player` policy. No endpoint returns stored treasure coordinates or another player's latest coordinates. `state` includes `kind`, `phase`, `distance`, `eligible`, `canNavigate`, `guidance`, `aim`, `canClaim`, `canPlace` and `expiresInMs`. Receipt fields are `id` and `collectedAt`; duplicate collections return the original receipt with `repeated: true`.
 
-When no treasure is placed, `treasureId` is null. Mutation requests carry the currently observed value; after replacement, requests with an old value return 409 `TREASURE_CHANGED`. Poll state to recover, then send a fresh location. Replacement starts a new round without deleting old receipts. Only the creator may replace a treasure; every participant can claim the current treasure once independently. This is an experimental rule, not a finalized multiplayer design.
+A new room receives an independent `treasureId` before placement. Older unplaced rooms may return null. Mutation requests carry the observed value, which also distinguishes rounds if a four-digit code is assigned again. After replacement, requests with an old value return 409 `TREASURE_CHANGED`. Poll state to recover, then send a fresh location. Replacement starts a new round and preserves old receipts. Only the creator may replace a treasure. Each participant can claim the current treasure once.
+
+The host confirms **Leave room**, **Sign out** or **Reset demo** before the request that closes the room. The server deletes the room, memberships and claim receipts and clears affected sessions' room pointers in one transaction. It drops temporary location, aiming and guide data for that room. Polling participants return to room selection on `SESSION_REQUIRED` for a guest or `ROOM_REQUIRED` for a signed-in player. Joining the closed room returns 404 while its code is unassigned.
+
+An ordinary participant's exit ends that device's room session. Their account player and receipt can be recovered by rejoining with the room code. The roster removes the player when their last device leaves. A create / join request for a different room or an existing-account sign-in from a guest room returns 409 `ROOM_ALREADY_JOINED`. Leave the current room first. Backgrounding pauses the hardware and preserves the active room session for return.
 
 Error responses are `{ error: { code, message } }`, with English messages. Important statuses are 400 invalid input, 401 missing / expired identity, 403 origin / CSRF / owner rejection, 404 missing session or route, 409 changed room / treasure or unmet location gates, 413 oversized body, 415 wrong content type and 429 test-server limits. There are no CORS allow headers. POST requires JSON and an allowed Origin. The HTTP body limit is 8192 bytes; rooms allow 16 active players, and session creation / joining is limited to 20 requests per minute per connection address. The LAN proxy overwrites the forwarded client address; the loopback-only backend trusts that local proxy. Another proxy must preserve this boundary.
+
+## Leaderboard and Treasure Book
+
+`GET /api/progress` returns `{ leaderboard, self, cards }`. Each leaderboard entry and `self` contains `username`, `treasuresFound`, `cardsCollected` and `rank`. The first ten accounts with claims appear on the board, ordered by finds. Equal totals share a rank. `self.rank` is null until the first scored find. Each card has `id`, `name`, `unlocked` and `story`. The story is null for a locked card. A guest request returns 401 `ACCOUNT_REQUIRED`.
+
+The first successful signed-in claim in each round credits one find and returns `collection.reward: { name, unlocked }`. Here `unlocked` marks a newly discovered card. Another round with the same card adds a find and counts that card once towards collection. Each successful placement draws independently from the six catalog cards, so consecutive rounds can draw the same card. All players receive the same `room.cardId` for a placed treasure. This field is `null` when the room has no treasure. A legacy placement without a card uses Campus Compass. Account credit and the room receipt commit together. Account progress persists through room closure and demo reset. Scoring starts with new claims after the upgrade.
 
 ## Frontend adapter and location behavior
 
 Use [RemoteTreasureSession](../public/treasure-lab/client.js), not a browser-local `TreasureSession`, as the product authority. It exposes asynchronous `resume()`, `connect(name, code)`, `receive(fix)`, `place(radius)`, `aim(sample)`, `collect()` and `refresh()`; `start(now)` / `stop(now)` mirror hardware state and `snapshot(now)` / `report(now)` render cached server results. The current controller polls every 2 seconds while visible. Network failures suspend collection; late responses after stopping cannot reactivate local tracking. The camera lifecycle remains on the phone and must retain its permission, frame-update and background-stop gates.
 
-For accounts use `authenticate('register' | 'login', username, password)` and `logout()`; render `account` and `accountRooms`. `resume()` resolves account state before restoring gameplay. CSRF tokens stay in memory, cookies remain HttpOnly, and the view clears the password field immediately after submission. Identity changes and expired logins stop hardware. Never put passwords or tokens into localStorage, reports or UI errors.
+For accounts use `authenticate('register' | 'login', username, password)` and `logout()`. Render the `account` and current game state. `resume()` resolves account state before restoring gameplay. CSRF tokens stay in memory, cookies remain HttpOnly, and the view clears the password field immediately after submission. Leaving a room, identity changes and expired logins stop hardware. Never put passwords or tokens into localStorage, reports or UI errors.
 
 The backend reuses the tested location model: initial radius 3 metres, adjustable 3–100; accuracy threshold 20 metres, exit buffer 10 metres, fresh fix age at most 15 seconds, return observation at least 2 seconds across distinct readings. These are experiment settings. Client coordinates and `cameraLive` are untrusted reports, so this is not anti-cheat or proof of camera use. Backend checks prevent normal UI bypass and duplicate claims; physical accuracy remains to be tested.
 
@@ -110,9 +126,12 @@ Before switching identity or rooms, stop hardware and call `stop(now)`. For loca
 | Public member | Contract |
 | --- | --- |
 | `resume()` | Promise with no result payload; populates identity / room or `lastError`; does not start hardware |
-| `authenticate('register' \| 'login', username, password)` | `Promise<boolean>`; success restores account and most recent room when present |
-| `logout()` | `Promise<boolean>`; success clears local account and game state |
+| `authenticate('register' \| 'login', username, password)` | `Promise<boolean>`. Fresh login starts at room selection and registration can adopt the current guest room |
+| `logout()` | `Promise<boolean>`. Sends the current room target when present and clears the local account and game state on success |
 | `connect(name, code = '')` | `Promise<boolean>`; empty code creates, nonempty code joins; accounts use their server-owned username |
+| `leaveRoom({ roomCode, treasureId })` | `Promise<boolean>`. On success returns to room selection and retains the account login |
+| `resetDemo({ roomCode, treasureId })` | `Promise<boolean>`. Host-only demo exit |
+| `progress()` | Promise for `/api/progress`. Open from the signed-in start screen, room menu or claim view |
 | `start(now)` / `stop(now)` | Synchronous local lifecycle mirrors; `stop` queues a server stop, not an awaited completion |
 | `receive(fix)` | `Promise<boolean>`; false can mean a skipped in-flight reading, rejected duplicate timestamp or failure; inspect `lastError` |
 | `aim(sample)` | `Promise<boolean>`; sends one new aim reading or null to clear; skipped concurrent readings return false; no sensor access inside the adapter |
@@ -120,7 +139,7 @@ Before switching identity or rooms, stop hardware and call `stop(now)`. For loca
 | `refresh()` | Promise with no payload; updates game state when connected and not busy / already polling |
 | `snapshot(now)` | Cached render state with local active / online / freshness / busy guards; prefer to raw `data.state` for enabled controls |
 | `report(now)` | Coordinate-free export data, extended with cached room / player / receipt / connection information and client events |
-| `account`, `accountRooms` | Current account or null; account room list from the latest auth response, refreshed on connection; not a live room-discovery service |
+| `account` | Current account or null |
 | `connected`, `online`, `active`, `busy`, `lastError` | Respectively current room identity, recent game API success, local location-sharing state, action pending and English error string |
 | `data`, `fix`, `phase`, `zone`, `collectionCount` | Cached game envelope, latest accepted device fix, phase, radius-only placed marker or null, current-round count |
 
@@ -135,7 +154,7 @@ Illustrative unplaced guest response below: IDs, room code, CSRF placeholder and
   "serverTime": 1800000000000,
   "csrfToken": "<csrf-token-from-response>",
   "room": {
-    "code": "ABCDEFGH",
+    "code": "0123",
     "treasureId": null,
     "placed": false,
     "radius": 3,
@@ -150,7 +169,7 @@ Illustrative unplaced guest response below: IDs, room code, CSRF placeholder and
     "eligible": false,
     "canNavigate": false,
     "guidance": null,
-    "aim": { "ready": false, "heldMs": 0, "requiredMs": 1200, "expiresInMs": 0 },
+    "aim": { "ready": false, "heldMs": 0, "requiredMs": 700, "expiresInMs": 0 },
     "canClaim": false,
     "canPlace": false,
     "expiresInMs": 0
@@ -176,7 +195,7 @@ Illustrative unplaced guest response below: IDs, room code, CSRF placeholder and
 }
 ```
 
-`treasureId` is null before placement and an opaque string afterward; use the exact returned value without generating one. `room.code` is eight uppercase characters; the current generator uses `ABCDEFGHJKLMNPQRSTUVWXYZ23456789`. Normalize user-entered codes by trimming / uppercasing, not by silently accepting arbitrary codes. Guest nickname is 1–32 trimmed characters without control characters. Location latitude is finite in −90…90, longitude in −180…180, accuracy finite and nonnegative, and timestamp a finite Unix time. The server rejects fixes older than 15 s or over 5 s into the future; duplicate / out-of-order timestamps can return HTTP 200 with `accepted: false`. HTTP 200 `accepted: true` still does not imply eligibility: inspect state. Accuracy over 20 m may be recorded but cannot unlock / place.
+Use the exact `treasureId` returned by the server. New `room.code` values contain four digits from `0000` to `9999`. Keep them as strings to preserve leading zeroes. Joining removes whitespace and hyphens and accepts existing eight-character codes case-insensitively. Guest nickname is 1–32 trimmed characters without control characters. Location latitude is finite in −90…90, longitude in −180…180, accuracy finite and nonnegative, and timestamp a finite Unix time. The server rejects fixes older than 15 s or over 5 s into the future; duplicate / out-of-order timestamps can return HTTP 200 with `accepted: false`. HTTP 200 `accepted: true` still does not imply eligibility: inspect state. Accuracy over 20 m may be recorded but cannot unlock / place.
 
 `state.kind` is one of `stopped | waiting | stale | imprecise | unplaced | inside | outside | boundary`; `state.phase` is `unplaced | leave | return | ready | collected`. `eligible` is location eligibility, not proof of live camera. `expiresInMs` is the server's remaining fix lifetime at response generation, not a command to extend it; the adapter expires cached controls locally. `canPlace` already includes owner permission. A stopped or recovered session can have `phase: collected` with `eligible: false` and a non-null receipt.
 
@@ -198,6 +217,7 @@ Errors have `{ "error": { "code": "…", "message": "English explanation" } }`. 
 | 404 `ROOM_NOT_FOUND` | Keep join entry and ask the user to check the code |
 | 409 `USERNAME_TAKEN`, `ALREADY_SIGNED_IN`, `ROOM_FULL` | Show specific account / room guidance; no automatic retry loop |
 | 409 `ROOM_REQUIRED` | Account is signed in without an active room; open room selection |
+| 409 `ROOM_ALREADY_JOINED` | Leave the active room before opening another or signing in from a guest session |
 | 409 `ROOM_CHANGED`, `TREASURE_CHANGED` | Refresh state, discard stale assumptions, stop hardware on room changes and observe the current round |
 | 409 `LOCATION_REQUIRED`, `NOT_ELIGIBLE` | Preserve location / leave-return gates and explain the next step |
 | 409 `AIM_REQUIRED` | Keep Claim disabled; obtain fresh orientation and video, centre the chest and complete another hold |
@@ -219,7 +239,7 @@ Call `POST /api/aim` with the normal CSRF / room / round guards and this sample 
 
 ```json
 {
-  "roomCode": "ABCDEFGH",
+  "roomCode": "0123",
   "treasureId": "<current-round-id>",
   "sample": {
     "heading": 180, "pitch": 0, "timestamp": 1800000000000,
@@ -231,7 +251,7 @@ Call `POST /api/aim` with the normal CSRF / room / round guards and this sample 
 
 `heading` is the rear-camera viewing azimuth in [0,360); `pitch` is elevation in [-90,90]. Both are finite degrees. `source` must be `webkit-compass` or `absolute-orientation`; relative alpha and movement course are insufficient. `accuracy` is null / absent when unavailable, otherwise finite 0–25 degrees. Timestamp is Unix milliseconds, no more than 1500 ms old or 5000 ms ahead of server time. `videoAgeMs` must be 0–750 and `cameraLive` true. Invalid / off-target / null samples clear the hold; they normally return HTTP 200 with `accepted: false`. Repeated / older timestamps cannot advance a hold.
 
-The server measures receipt-time dwell of at least 1200 ms across at least three distinct timestamps with gaps at most 900 ms. Rear-camera angular error (heading and pitch together) must remain within 10 degrees. Client-supplied dwell durations are ignored. `state.aim` is `{ ready, heldMs, requiredMs, expiresInMs }`; `canClaim` additionally requires location eligibility. The adapter expires cached readiness using both position and aim lifetimes. The current controller sends at most one sample every 250 ms, never overlaps aim sends, and maintains an independent local hold / fresh-frame check for the Claim tap. Rendering alone cannot complete a hold. These are initial experiment settings, not accepted physical performance.
+The server measures at least 700 ms of dwell across at least three distinct timestamps with gaps at most 900 ms. The total rear-camera angular error, including heading and pitch, must stay within 18°. Indoor aiming starts a new hold if the estimated horizontal position moves more than 0.20 m from the start of the hold. Client-supplied dwell durations are ignored. `state.aim` is `{ ready, heldMs, requiredMs, expiresInMs }`; `canClaim` additionally requires location eligibility. The adapter expires cached readiness using both position and aim lifetimes. The current controller sends at most one sample every 250 ms, never overlaps aim sends, and maintains an independent local hold / fresh-frame check for the Claim tap. Rendering alone cannot complete a hold. These are initial experiment settings, not accepted physical performance.
 
 Start orientation from the camera tap, requesting Motion & Orientation in the same user gesture before awaiting camera acquisition. `ar.js` transforms absolute orientation into a rear-camera ray including tilt and screen rotation, smooths wrap-around heading, and uses an approximate 60-degree horizontal virtual field of view. Reject stale / low-accuracy / missing compass readings; show retry guidance and withhold the target / Claim. Far away show the direction arrow; near, reveal the chest only inside the view and require centring / holding before manual Claim. Stop / background releases orientation listeners, clears local / server aim and releases camera / location. Export contains AR configuration and status, without automatic raw heading, bearing or coordinates. Video is never uploaded; aim readings go to the computer and remain transient.
 
@@ -243,4 +263,4 @@ CQ-20261104-010 supersedes the earlier default range / automatic camera-close be
 
 Transient GPS loss now invalidates targeting / Claim while retaining an active camera and orientation. The arrow is replaced by a reconnecting spinner, with a ten-second watch-recovery loop. Explicit stop, background and permission revocation still release hardware. The adapter's new `loseLocation(now)` invalidates old responses / clears the server fix without turning local tracking off; a new accepted fix clears this interruption. In-flight camera acquisition is still cancelled if location is invalid before capture becomes active.
 
-New `GET /api/guide` and `POST /api/guide` are separate guide envelopes, not game envelopes. They use the existing authenticated room / CSRF / Origin / JSON / current-round guards. `guideRequest(body?, signal?)` is independent of the location / aim queue; guide failure alone does not mark gameplay offline. Key, role, facts, request fields, timeout / rate / isolation rules and the exact response schema are in [AI guide configuration](ai-guide.en.md). Campus and course content are currently empty, the runtime key is unconfigured, and replies explicitly distinguish presets from DeepSeek. No puzzle gate or voice was added. Product code / tests are implemented; real-model and Safari field acceptance remain pending.
+The global guide uses separate responses and accepts questions before joining a room. Room-scoped requests still check current membership and round. Tutorial IDs, visitor CSRF setup, timeouts and content settings are described in the [guide contract](ai-guide.en.md).

@@ -1,0 +1,72 @@
+{
+  "id": "E-20261105-002",
+  "checkedOn": "2026-11-05",
+  "type": "indoor-mode-and-reset-validation",
+  "tests": {
+    "passed": 99,
+    "failed": 0,
+    "newIndoorTests": 9,
+    "buildPassed": true
+  },
+  "contracts": {
+    "routes": 17,
+    "publicFiles": 12,
+    "domControllerIds": 119
+  },
+  "sensorFixtureFlow": {
+    "gpsRequests": 0,
+    "placementDepartureReturnAimClaim": true,
+    "modeReset": true,
+    "rawMotionSimulatedOnlyInIsolatedTests": true
+  },
+  "desktopPreview": {
+    "database": "memory-only",
+    "sizes": [
+      [
+        390,
+        780
+      ],
+      [
+        320,
+        500
+      ]
+    ],
+    "pageMatchesViewport": true,
+    "narrowMenuScrolls": true,
+    "bothModeSwitchesAndReload": true,
+    "hardwareRequested": false,
+    "modelRequested": false,
+    "screenshot": "indoor-mode-menu-desktop.jpg",
+    "screenshotSha256": "b827bd03b51072b1d39b4f114cc93aaa9277dd6cd1e50d5814e39ca37051f10d"
+  },
+  "runtime": {
+    "existingDataPreserved": {
+      "accounts": true,
+      "players": true,
+      "rooms": true,
+      "claims": true,
+      "ca": true
+    },
+    "oldRoomsDefaultGps": true,
+    "servedModulesMatchSource": {
+      "app.js": true,
+      "indoor.js": true,
+      "ar.js": true,
+      "model.js": true,
+      "client.js": true,
+      "guide.js": true,
+      "style.css": true
+    },
+    "bothMenuEntriesServed": true,
+    "appUrl": "https://192.168.50.136:4443/treasure-lab/",
+    "health": {
+      "backend": true,
+      "https": true,
+      "setup": true
+    }
+  },
+  "privateBackupRetained": true,
+  "liveRoomSwitchedByAgent": false,
+  "liveDatabaseTestRowsAdded": false,
+  "physicalSafariAcceptance": false
+}

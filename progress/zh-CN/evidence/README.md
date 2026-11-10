@@ -26,6 +26,42 @@
 | E-20261104-008 | [相机向导 / GPS 检查](../../evidence/2026-11-04/camera-guide-checks.json) | 77 项测试 / 安装 / 构建、隔离模型样本与真实 HTTP、私密备份 / 保留数据的 3 米迁移、可信局域网 HTTPS、明确标注的桌面组件 / 入口检查；未配 Key，无真实模型调用或 Safari 真机验收 |
 | E-20261104-009 | [预设 / API 接入](../../evidence/2026-11-04/preset-integration-checks.json) | 80 项测试 / 构建、角色与有限知识检索、私密凭据配置及服务重启通过；DeepSeek 返回 401，用户确认需换有效 Key，无真实回答或手机验收 |
 | E-20261104-010 | [替换 Key 真实检查](../../evidence/2026-11-04/replacement-key-checks.json) | 认证 / 一次真实向导回答 HTTP 200，私密配置与重启 / 健康通过；本次无新源码测试或硬件验收 |
+| E-20261104-011 | [向导稳定性检查](../../evidence/2026-11-04/guide-reliability-checks.json) | 83 项测试 / 构建、安全诊断 / 轮询保留失败及两次隔离真实模型回答通过；原截图失败原因不可用，不代表提供方持续稳定或真机验收 |
+| E-20261105-001 | [近场检查](../../evidence/2026-11-05/near-field-checks.json) | 90 项测试 / 构建、隔离运动 / GPS 丢失 / 真实 HTTP 领取、数据 / CA 保留及可信局域网部署通过；输入为合成样本，没有 Safari 现场验收 |
+| E-20261105-002 | [室内检查](../../evidence/2026-11-05/indoor-mode-checks.json)、[隔离桌面菜单](../../evidence/2026-11-05/indoor-mode-menu-desktop.jpg) | 99 项测试 / 构建、合成无 GPS 全流程、390 / 320 宽真实桌面菜单切换 / 刷新、迁移 / 数据 / CA 保留及可信局域网部署；不代表真机验收 |
+| E-20261110-001 | [平面积分检查](../../evidence/2026-11-10/planar-integration-checks.json) | 102 项测试和构建、受控运动样本、隔离桌面菜单和刷新、电脑端可信局域网 HTTPS。待 iPhone Safari 真机测试 |
+| E-20261110-002 | [地面指路检查](../../evidence/2026-11-10/floor-guidance-checks.json) | 102 项测试和构建、受控地面箭头、接近距离和宝箱瞄准，以及局域网 HTTPS 提供更新脚本。待手机复测 |
+| E-20261110-003 | [雷达检查](../../evidence/2026-11-10/radar-checks.json) | 103 项测试和构建、受控晃动暂停和雷达流程、两种桌面布局尺寸及可信局域网重启。待手机复测 |
+| E-20261110-004 | [停稳修正与五米雷达](../../evidence/2026-11-10/stop-correction-radar-checks.json) | 104 项测试和构建、闭合轨迹回放、雷达圆点和边缘箭头、可信局域网重启。手机精度待测 |
+| E-20261110-005 | [运动录制与回放检查](../../evidence/2026-11-10/motion-recording-checks.json) | 107 项测试和构建、两种桌面尺寸、可信局域网 HTTPS 及使用官方权重的两组受控 CPU 回放。iPhone 录制及实测误差对比待完成 |
+| E-20261110-006 | [iPhone 运动对照](../../evidence/2026-11-10/iphone-motion-comparison.json) | 两份用户录制分别用原输入和修正输入回放。记录移动、停稳标记误差及最后回点标记时手机仍在转动。游戏 AR 验收待完成 |
+| E-20261110-007 | [RoNIN 玩法检查](../../evidence/2026-11-10/ronin-game-checks.json) | 111 项测试和构建、使用官方权重以原节奏进行两份 HTTP 回放、两种桌面宽度及可信局域网更新。瞄准领取用受控样本，iPhone AR 真机验收待完成 |
+| E-20261110-008 | [RoNIN 瞄准与雷达检查](../../evidence/2026-11-10/ronin-aim-radar-checks.json) | 用户报告旧版已成功领取。111 项测试、构建、往返录制回放、受控浏览器标记及可信局域网更新通过。新版手机表现待复测 |
+| E-20261110-009 | [RoNIN 停稳检查](../../evidence/2026-11-10/ronin-stop-checks.json) | 112 项测试、构建、两份录制回放及停稳段受控残余速度测试通过。可信局域网已提供更新，待手机复测 |
+| E-20261110-010 | [GPS 和 RoNIN 模式检查](../../evidence/2026-11-10/two-mode-checks.json) | 107 项测试和构建、两种手机宽度的桌面检查、录制离线回放及可信局域网升级迁移一个房间。精简版待单独手机检查 |
+| E-20261110-011 | [房间与相机交互检查](../../evidence/2026-11-10/interaction-checks.json) | 110 项测试和构建、隔离数据库的桌面进房与模式检查、三个局域网 HTTPS 文件一致。待 iPhone 真机检查键盘与相机 |
+| E-20261110-012 | [演示重置检查](../../evidence/2026-11-10/demo-reset-checks.json) | 112 项测试和构建、隔离 HTTP 和桌面重置及返回首页检查、可信局域网服务验证。iPhone 待测 |
+| E-20261110-013 | [调试入口检查](../../evidence/2026-11-10/test-tools-checks.json) | 113 项测试和构建、两种模式的菜单与工具桌面检查、更新页及独立工具页的 HTTPS 检查。iPhone 待测 |
+| E-20261110-014 | [四位房间号与瞄准检查](../../evidence/2026-11-10/short-code-aim-checks.json) | 113 项测试和构建、房间与模式桌面检查、可信局域网验证。iPhone 瞄准待测 |
+| E-20261110-015 | [相机宝箱素材检查](../../evidence/2026-11-10/camera-chest-art-checks.json) | 试作期间单独渲染 SVG、核对 146 个 DOM 元素、113 项测试和构建通过，可信局域网 HTTPS 页面一致。根据用户反馈恢复原版 |
+| E-20261110-016 | [退出房间检查](../../evidence/2026-11-10/room-exit-checks.json) | 116 项测试和构建、两种手机宽度的独立桌面会话及可信局域网更新。iPhone 待测 |
+| E-20261110-017 | [相机叠层检查](../../evidence/2026-11-10/ar-overlay-paint-checks.json) | 117 项测试和构建、受控绘制与传感器回调、局域网文件一致。iPhone 刷新节奏待测 |
+| E-20261110-018 | [运动权限检查](../../evidence/2026-11-10/motion-permission-checks.json) | 118 项测试和构建、权限结果样本、桌面换行和可信局域网检查。手机结果待测 |
+| E-20261111-001 | [排行榜和图鉴检查](../../evidence/2026-11-11/treasure-progress-checks.json) | 119 项测试和构建、领取与 SQLite 样本、两种桌面宽度及可信局域网升级。手机待测 |
+| E-20261111-002 | [宝箱样式检查](../../evidence/2026-11-11/chest-variant-checks.json) | 119 项测试和构建、受控随机抽取、SVG 渲染、两种桌面宽度及可信局域网升级。手机待测 |
+| E-20261111-003 | [AI 导览核对](../../evidence/2026-11-11/guide-audit-checks.json) | 21 项测试、局域网服务检查、一次隔离 DeepSeek 回复及室内距离文案错误复现。手机操作未测 |
+| E-20261111-004 | [全局向导检查](../../evidence/2026-11-11/global-guide-checks.json) | 123 项测试及构建、两种 Chrome 视口、一次真实教程选择和局域网 HTTPS 升级。手机操作待测 |
+| E-20261111-005 | [建房与收藏教程检查](../../evidence/2026-11-11/tutorial-expansion-checks.json) | 124 项测试及构建、两种 Chrome 视口、三次真实教程选择和局域网 HTTPS 升级。手机操作待测 |
+| E-20261111-006 | [聊天动效检查](../../evidence/2026-11-11/guide-motion-checks.json) | 125 项测试和构建、两种宽度的过渡与视口检查及匹配的局域网文件。手机操作待测 |
+| E-20261111-007 | [向导空回复检查](../../evidence/2026-11-11/guide-blank-reply-checks.json) | 127 项测试和构建、空回复复现、五轮回复恢复及真实局域网模型回复。手机操作待测 |
+| E-20261111-008 | [聊天焦点和动效检查](../../evidence/2026-11-11/guide-spring-checks.json) | 128 项测试和构建、两种 Chrome 视口及匹配的局域网文件。真机键盘待测 |
+| E-20261111-009 | [即时气泡检查](../../evidence/2026-11-11/guide-echo-checks.json) | 129 项测试和构建、两种宽度的延迟回复检查及匹配的局域网文件。iPhone 操作待测 |
+| E-20261111-010 | [气泡弹出动效检查](../../evidence/2026-11-11/guide-css-bubble-checks.json) | 129 项测试和构建、WebKitGTK 中两个气泡的缩放和回弹、减少动态效果时的淡入及匹配的局域网文件。iPhone 操作待测 |
+| E-20261111-011 | [教程确认检查](../../evidence/2026-11-11/guide-tutorial-offer-checks.json) | 130 项测试和构建、两种 WebKitGTK 宽度、过渡动画帧、减少动态效果及匹配的局域网文件。iPhone 操作待测 |
+| E-20261111-012 | [教程返回检查](../../evidence/2026-11-11/guide-tutorial-return-checks.json) | 131 项测试和构建、两种 WebKitGTK 宽度、返回动效、进房后继续对话及匹配的局域网文件。iPhone 操作待测 |
+| E-20261111-013 | [Indoor 默认模式检查](../../evidence/2026-11-11/indoor-default-checks.json) | 132 项测试和构建、WebKitGTK 建房与刷新，以及局域网临时房间创建与清理。现有房间模式和轮次保留 |
+| E-20261111-014 | [教程动效检查](../../evidence/2026-11-11/tutorial-motion-checks.json) | 132 项测试和构建、两种 WebKitGTK 宽度、列表与步骤及关闭的动画帧、减少动态效果和匹配的局域网文件。iPhone 操作待测 |
+| E-20261111-015 | [教程箭头飞行检查](../../evidence/2026-11-11/tutorial-flight-checks.json) | 132 项测试和构建、两种 WebKitGTK 宽度、淡出与飞行及淡入的顺序、减少动态效果和匹配的局域网文件。iPhone 操作待测 |
 
 历史桌面截图此前保存在 `/tmp`，当前已不可用，未收入证据库。本轮不会补拍并冒充 10 月 28 日的原始截图。后续的小型脱敏附件放到共享目录 `progress/evidence/YYYY-MM-DD/`，本页提供中文说明，英文页提供等价说明。
 

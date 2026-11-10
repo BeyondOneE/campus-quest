@@ -1,0 +1,30 @@
+{
+  "id": "E-20261110-004",
+  "record": "CQ-20261110-004",
+  "date": "2026-11-10",
+  "timeZone": "Asia/Shanghai",
+  "automated": {
+    "install": "passed",
+    "testsPassed": 104,
+    "build": "passed",
+    "closedMotionFixture": {
+      "durationSeconds": 6,
+      "endDisplacementMetres": 0,
+      "injectedAccelerationBiasMetresPerSecondSquared": 0.12,
+      "provisionalEndEstimateMetres": 2.153,
+      "settledAbsoluteErrorMetres": 0.0036,
+      "departureUnconfirmedDuringCorrection": true,
+      "knownNonzeroDisplacementMetres": 1.28
+    },
+    "radarRadiusMetres": 5,
+    "radarSwitchesBetweenDotAndEdgeArrow": true
+  },
+  "lan": {
+    "restarted": true,
+    "backendHealthy": true,
+    "httpsHealthy": true,
+    "setupHealthy": true,
+    "matchingSources": 5
+  },
+  "physicalSafariAcceptance": false
+}

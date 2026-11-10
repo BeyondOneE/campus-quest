@@ -358,6 +358,440 @@
         "zh-CN": "../zh-CN/evidence/README.md",
         "en": "../en/evidence/README.md"
       }
+    },
+    {
+      "id": "E-20261104-011",
+      "eventDate": "2026-11-04",
+      "type": "guide-provider-failure-reliability-check",
+      "committed": true,
+      "artifact": "2026-11-04/guide-reliability-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261105-001",
+      "eventDate": "2026-11-05",
+      "type": "near-field-search-validation",
+      "committed": true,
+      "artifact": "2026-11-05/near-field-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261105-002",
+      "eventDate": "2026-11-05",
+      "type": "indoor-mode-and-reset-validation",
+      "committed": true,
+      "artifact": "2026-11-05/indoor-mode-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-001",
+      "eventDate": "2026-11-10",
+      "type": "indoor-planar-integration-validation",
+      "committed": true,
+      "artifact": "2026-11-10/planar-integration-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-002",
+      "eventDate": "2026-11-10",
+      "type": "indoor-planar-floor-guidance-validation",
+      "committed": true,
+      "artifact": "2026-11-10/floor-guidance-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-003",
+      "eventDate": "2026-11-10",
+      "type": "indoor-camera-radar-and-shake-validation",
+      "committed": true,
+      "artifact": "2026-11-10/radar-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-004",
+      "eventDate": "2026-11-10",
+      "type": "indoor-stop-correction-and-radar-validation",
+      "committed": true,
+      "artifact": "2026-11-10/stop-correction-radar-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-005",
+      "eventDate": "2026-11-10",
+      "type": "motion-recording-and-replay-validation",
+      "committed": true,
+      "artifact": "2026-11-10/motion-recording-checks.json",
+      "physicalSafariAcceptance": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-006",
+      "eventDate": "2026-11-10",
+      "type": "user-iphone-motion-replay",
+      "committed": true,
+      "artifact": "2026-11-10/iphone-motion-comparison.json",
+      "physicalMotionCapture": true,
+      "inGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-007",
+      "eventDate": "2026-11-10",
+      "type": "ronin-game-integration-and-lan-deployment",
+      "committed": true,
+      "artifact": "2026-11-10/ronin-game-checks.json",
+      "physicalMotionCapture": true,
+      "inGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-008",
+      "eventDate": "2026-11-10",
+      "type": "ronin-aim-and-radar-regression",
+      "committed": true,
+      "artifact": "2026-11-10/ronin-aim-radar-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-009",
+      "eventDate": "2026-11-10",
+      "type": "ronin-stop-correction",
+      "committed": true,
+      "artifact": "2026-11-10/ronin-stop-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-010",
+      "eventDate": "2026-11-10",
+      "type": "gps-and-ronin-mode-checks",
+      "committed": true,
+      "artifact": "2026-11-10/two-mode-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-011",
+      "eventDate": "2026-11-10",
+      "type": "room-and-camera-interaction-checks",
+      "committed": true,
+      "artifact": "2026-11-10/interaction-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-012",
+      "eventDate": "2026-11-10",
+      "type": "demo-reset-checks",
+      "committed": true,
+      "artifact": "2026-11-10/demo-reset-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-013",
+      "eventDate": "2026-11-10",
+      "type": "test-tools-checks",
+      "committed": true,
+      "artifact": "2026-11-10/test-tools-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-014",
+      "eventDate": "2026-11-10",
+      "type": "short-room-code-and-aim-checks",
+      "committed": true,
+      "artifact": "2026-11-10/short-code-aim-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-015",
+      "eventDate": "2026-11-10",
+      "type": "camera-chest-art-checks",
+      "committed": true,
+      "artifact": "2026-11-10/camera-chest-art-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-016",
+      "eventDate": "2026-11-10",
+      "type": "room-exit-checks",
+      "committed": true,
+      "artifact": "2026-11-10/room-exit-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-017",
+      "eventDate": "2026-11-10",
+      "type": "ar-overlay-paint-checks",
+      "committed": true,
+      "artifact": "2026-11-10/ar-overlay-paint-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261110-018",
+      "eventDate": "2026-11-10",
+      "type": "motion-permission-checks",
+      "committed": true,
+      "artifact": "2026-11-10/motion-permission-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-001",
+      "eventDate": "2026-11-11",
+      "type": "treasure-progress-checks",
+      "committed": true,
+      "artifact": "2026-11-11/treasure-progress-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-002",
+      "eventDate": "2026-11-11",
+      "type": "chest-variant-checks",
+      "committed": true,
+      "artifact": "2026-11-11/chest-variant-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-003",
+      "eventDate": "2026-11-11",
+      "type": "guide-audit-checks",
+      "committed": true,
+      "artifact": "2026-11-11/guide-audit-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-004",
+      "eventDate": "2026-11-11",
+      "type": "global-guide-checks",
+      "committed": true,
+      "artifact": "2026-11-11/global-guide-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-005",
+      "eventDate": "2026-11-11",
+      "type": "tutorial-expansion-checks",
+      "committed": true,
+      "artifact": "2026-11-11/tutorial-expansion-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-006",
+      "eventDate": "2026-11-11",
+      "type": "guide-motion-checks",
+      "committed": true,
+      "artifact": "2026-11-11/guide-motion-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-007",
+      "eventDate": "2026-11-11",
+      "type": "guide-blank-reply-checks",
+      "committed": true,
+      "artifact": "2026-11-11/guide-blank-reply-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-008",
+      "eventDate": "2026-11-11",
+      "type": "guide-spring-checks",
+      "committed": true,
+      "artifact": "2026-11-11/guide-spring-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-009",
+      "eventDate": "2026-11-11",
+      "type": "guide-echo-checks",
+      "committed": true,
+      "artifact": "2026-11-11/guide-echo-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-010",
+      "eventDate": "2026-11-11",
+      "type": "guide-css-bubble-checks",
+      "committed": true,
+      "artifact": "2026-11-11/guide-css-bubble-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-011",
+      "eventDate": "2026-11-11",
+      "type": "guide-tutorial-offer-checks",
+      "committed": true,
+      "artifact": "2026-11-11/guide-tutorial-offer-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-012",
+      "eventDate": "2026-11-11",
+      "type": "guide-tutorial-return-checks",
+      "committed": true,
+      "artifact": "2026-11-11/guide-tutorial-return-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-013",
+      "eventDate": "2026-11-11",
+      "type": "indoor-default-checks",
+      "committed": true,
+      "artifact": "2026-11-11/indoor-default-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-014",
+      "eventDate": "2026-11-11",
+      "type": "tutorial-motion-checks",
+      "committed": true,
+      "artifact": "2026-11-11/tutorial-motion-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
+    },
+    {
+      "id": "E-20261111-015",
+      "eventDate": "2026-11-11",
+      "type": "tutorial-flight-checks",
+      "committed": true,
+      "artifact": "2026-11-11/tutorial-flight-checks.json",
+      "updatedInGameARValidated": false,
+      "notes": {
+        "zh-CN": "../zh-CN/evidence/README.md",
+        "en": "../en/evidence/README.md"
+      }
     }
   ]
 }

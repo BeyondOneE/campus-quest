@@ -1,10 +1,16 @@
-# 相机向导与内容配置
+# 游戏向导与操作教程
 
-[English](ai-guide.en.md) · 更新：2026-11-04 · CQ-20261104-010
+[English](ai-guide.en.md) · 更新于 2026-11-11 · CQ-20261111-015
 
-AR 相机内新增 **Chat with guide**、消息预览、英文文字对话，以及 **How far?**、**This building**、**Courses here** 快捷提问。本轮没有加入语音、图像识别或解谜领取门槛。阅读 / 输入时相机继续运行，打开对话会清除瞄准并隐藏 Claim，关闭后重新瞄准领取。关闭相机、后台、身份 / 房间 / 轮次变化取消迟到界面请求。利用 visual viewport 避让键盘，真实 iPhone 键盘表现仍待验证。
+首页、房间、相机和游戏面板都可使用左上角的 **Tutorials** 和旁边的聊天按钮。访客加入房间前也能提问。六条英文教程涵盖创建房间、加入房间、启用 Indoor、藏宝和领取、查看排行榜及查看图鉴。进度教程会引导访客打开账号入口，已登录玩家则直接进入对应标签。教程压暗背景，用箭头指向当前步骤的真实控件。按钮操作和轮次重置由玩家亲自确认。
 
-电脑后端计算距离、匹配已知建筑，模型不能修改玩法、目标坐标或领取凭据。主动消息用于介绍新进入的配置建筑 / 课程、通知 GPS 丢失 / 恢复，以及对话关闭时约每 30 秒报告距离。控制器每五秒读取向导上下文，打开对话后暂停主动打断；后端冷却防止每次渲染反复讲解。
+教程列表滑入后，选项依次出现。开始教程时，箭头从屏幕可见区域的中央飞向第一个控件，到位后黄框和说明淡入。操作高亮的控件推进时，旧黄框和说明先淡出，箭头再飞往下一个控件，到位后显示新提示。关闭教程时，遮罩和提示卡一起淡出。
+
+问题与教程匹配时，向导先在聊天里解释步骤，再推荐教程。游戏校验教程 ID 和玩家角色后，在回复下方显示 **Open tutorial** 和 **Not now**。打开教程时，聊天淡出，箭头按同样的顺序引导。点 **Not now** 会收起邀请并留在对话中。
+
+从聊天打开教程后，点 **Close** 或 **Done** 会淡出教程并滑回聊天窗口。回来后可以继续查看当前对话、编辑草稿。点输入框才会弹出键盘。开启「减少动态效果」时，打开和返回都直接切换。
+
+电脑后端计算距离并匹配已配置楼栋。相机仍显示主动距离和 GPS 通知，也保留 **How far?**、**This building** 和 **Courses here**。在 AR 内打开对话会清除瞄准，相机继续运行。同一会话跨页面保留消息。首次进房保留入门对话，后续房间或轮次变化会清除上一轮寻宝上下文。
 
 ## 私密启用 DeepSeek
 
@@ -26,29 +32,29 @@ AR 相机内新增 **Chat with guide**、消息预览、英文文字对话，以
 | `role` | 英文角色 / 语气 / 行为设定，1–12000 字符；固定系统约束仍禁止编造建筑、课程、相机观察和修改游戏 |
 | `presets` | 必需英文模板 `welcome`、`distance`、`gpsLost`、`gpsRestored`、`unknownPlace`、`arrival`、`providerUnavailable`，每项 1–1000 字符 |
 | 模板变量 | `{distance}`、`{distanceLabel}`、`{place}`、`{description}`、`{courses}`，由后端上下文替换 |
-| `faq` | 最多 100 项 `{ questions: [英文问法变体], answer: 英文确认回答 }`，规范化精确匹配优先使用确认回复，不经过模型 |
+| `faq` | 最多 100 项 `{ questions: [英文问法变体], answer: 英文确认回答 }`，规范化精确匹配会将确认回复作为模型依据；未配置 Key 时使用预设 |
 | `places` | 最多 200 个核实区域，逐项含唯一 `id`、`name`、`description`、数值 `latitude` / `longitude`、单位米的数值 `radius` 和 `courses` 数组 |
 | `courses` | 每地点最多 30 项 `{ name, description }`，填写已核实的课程介绍，不推断教学安排 |
 
-仅填写核实的公开校园点位，不填写玩家私密实时位置。仅当新鲜、精度达标的位置及其报告误差圆完整处于唯一配置区域时匹配建筑。重叠不明确、无资料、过期或精度不足时不提供建筑上下文。GPS 只能识别附近配置区域，不证明相机面对哪个物体、楼层或房间。模型必须承认资料缺失；明确询问未知建筑 / 课程时，即使已配置模型，也直接使用未知地点预设。
+仅填写核实的公开校园点位，不填写玩家私密实时位置。仅当新鲜、精度达标的位置及其报告误差圆完整处于唯一配置区域时匹配建筑。重叠不明确、无资料、过期或精度不足时不提供建筑上下文。GPS 只能识别附近配置区域，不证明相机面对哪个物体、楼层或房间。模型必须承认资料缺失；已配置 Key 时，未知建筑 / 课程问题仍交模型处理，上下文地点为空，要求询问楼名，不能推断当前位置。
 
 ## API 与失败处理
 
-两个路由复用现有认证房间身份，向导响应独立于游戏状态包。向导失败不会把游戏连接标为断线，也不会阻塞游戏请求队列。
+向导响应独立于游戏状态包。已登录账号和房间访客可复用既有 CSRF 令牌。未进房的匿名访客首次 GET 会收到 HttpOnly 的 `cq_guide` Cookie 及配套的向导 CSRF 令牌。
 
 | 路由 | 契约 |
 | --- | --- |
-| `GET /api/guide` | `{ name, providerConfigured, context, messages }`，不申请硬件或调用模型 |
-| `POST /api/guide` | 使用既有 `X-CSRF-Token`、Origin / JSON、`roomCode` 和当前 `treasureId`；发送 `message`（去空白后 1–500 字符）或 `event`（`distance`、`arrival`、`gps-lost`、`gps-restored`）二选一 |
-| POST 结果 | 同一向导状态及 `accepted`，接受时另含 `status: ready | degraded`；去重 / 不适用事件返回 `accepted: false` |
-| `context` | `{ gps: available | lost | paused, distanceMeters: number | null, place: null | { id, name, description, courses }, knowledgeReady, roundId }`，无原始坐标 |
-| `messages` | 最多 24 项 `{ id, role: user | assistant, text, source: player | preset | deepseek, kind, at }`，按文本渲染；按登录 / 访客会话、房间 / 轮次隔离 |
+| `GET /api/guide` | 返回 `name`、`providerConfigured`、`context`、`messages`、`csrfToken`、`status` 和 `providerError`。读取向导时无需调用模型。 |
+| `POST /api/guide` | 使用 Origin、JSON、`X-CSRF-Token`，在 `message`（去空白后 1–500 字符）和 `event`（`distance`、`arrival`、`gps-lost`、`gps-restored`）中任选其一。可附带 `entry`、`menu` 或 `camera` 等支持的 `page`。房间内请求还要附带 `roomCode` 和当前 `treasureId`。 |
+| POST 结果 | 返回向导状态和 `accepted`，已接受的回复还返回 `tutorialId` 或 `null`。不适用或重复的事件返回 `accepted: false`。 |
+| 上下文 | 含 `roomRole`（`host`、`guest` 或 `null`）、定位模式、GPS 状态、近似距离、匹配地点及当前轮次。未进房时定位、距离、地点和轮次为空。 |
+| 消息 | 每份对话最多 24 项，含 `id`、`role`、`text`、`source`、`kind`、`at` 及可选 `failureCode`。客户端按纯文本展示。 |
 
-`RemoteTreasureSession.guideRequest(body?, signal?)` 返回向导结果，过期工作返回 null。先等已经排队的 GPS 失效请求，再独立发送，慢模型不阻塞定位 / 瞄准。客户端 12 秒超时、模型 8 秒超时；后端每玩家每分钟最多 20 次 POST，全局最多两个模型并发；同一对话并发返回 429 `GUIDE_BUSY`。建筑 / GPS 事件冷却 60 秒，距离 30 秒。对话仅存内存，最多 256 份、惰性清理 30 分钟未活动项；重启 / 轮次 / 内容变化重置，无持久聊天表。
+`RemoteTreasureSession.guideRequest(body?, signal?)` 与定位和瞄准请求分开。模型、客户端及局域网代理超时分别为 20、25 和 30 秒。后端每个向导身份每分钟最多 20 次 POST，未进房的匿名访客每 IP 每分钟最多八次。模型全局最多两个并发，同一对话最多一个。到楼和 GPS 事件冷却 60 秒，距离冷却 30 秒。内存最多保留 256 份对话，闲置 30 分钟后清理。
 
-距离、GPS 提示和精确 FAQ 使用预设；已配置 DeepSeek 时，其余适用问题 / 建筑主动介绍调用模型。使用 `/chat/completions`、JSON `{ reply }`、400 token 输出限制和有限上下文，不向界面暴露原始提供方错误。空白、格式不合法、超大、未完整、超时或失败响应明确变为预设失败（`status: degraded`、`source: preset`）并提示重试。模型输出仍不可信，JSON 格式不等于语义验证；旧轮次、地点或 GPS 上下文的回复会被拒绝，领取校验保持独立。
+配置 Key 后，手动提问和相机快捷提问发给 DeepSeek。请求提供当前页面、可用教程、近似寻宝状态和筛选后的资料。连接器读取 JSON `{ reply, tutorialId? }`，输出上限为 400 token。当前手动提问返回有效的教程 ID 时，客户端可以发出邀请，由玩家在聊天里确认。GET 轮询不会发出邀请。欢迎语、距离和 GPS 通知用模板，室内距离使用运动估算。模型失败时返回带安全错误代码和 `status: degraded` 的预设提示。
 
-错误包括 400 `INVALID_GUIDE_MESSAGE` / `INVALID_GUIDE_EVENT`、409 `GUIDE_CONTEXT_CHANGED`、429 `GUIDE_BUSY` / `RATE_LIMIT`、503 `GUIDE_CONFIG_INVALID`，以及既有身份 / CSRF / 房间 / 轮次错误。接口不接受客户端提供的角色、建筑事实、坐标或 Key 作为模型上下文。共享配置、`.env` 和私密存储不在静态白名单。
+页面值不支持时返回 `INVALID_GUIDE_PAGE`，访客会话缺失返回 `GUIDE_SESSION_REQUIRED`，并发返回 `GUIDE_BUSY`，上下文过期返回 `GUIDE_CONTEXT_CHANGED`。Origin、CSRF 和当前房间校验继续生效。共享内容文件、`.env` 和私密存储均在静态白名单之外。
 
 ## 3 米模式与 GPS 恢复
 
@@ -67,3 +73,11 @@ CQ-20261104-011 导入 `Campus_Quest_AI_导览预设_v0.1_2026-11-04.md`。第 5
 官方地址认证返回 401，补前缀格式检查也未成功，未保存该变体；原提供 Key 保持私密，不声称有真实生成回答或模型验收。用户确认需要更换有效 Key。80 项测试与构建通过，服务已重启且健康，见 E-20261104-009。
 
 CQ-20261104-012 已解除此前 401 阻碍：替换 Key 认证、可用模型发现（`deepseek-flash`）及一次真实 C 栋 / 示例课程回答通过；未使用 GPS 或相机数据，手机表现仍待验证。
+
+## 提供方失败诊断
+
+CQ-20261104-015：区分 `AI_TIMEOUT`、`AI_NETWORK`、`AI_AUTH`、`AI_RATE_LIMIT`、`AI_UPSTREAM`、`AI_REPLY_TOO_LARGE`、`AI_REPLY_INCOMPLETE`、`AI_REPLY_INVALID`。标题显示可读原因，失败回答保留 `failureCode`，后台轮询不会把该次失败重标为模型已启用 / 成功；后续成功回答解除 degraded。后端仅向已有私密日志写入 `{ event, code, upstreamStatus, elapsedMs }`，不记录提问、回复、原始错误、身份、坐标或凭据。旧失败没有日志，无法追溯：用户截图确认了备用回复，但没有记录当时具体原因。C 栋点名检索和真实重试成功，不代表提供方持续稳定或手机验收；没有添加自动付费重试。
+
+室内 RoNIN 返回 `context.positionMode` 为 `indoor-ronin`，以及 `gps: not-used`、`place: null`。`distanceLabel` 标明距离来自 RoNIN 估算。室内流程抑制 GPS 和到楼主动提示。[室内契约](indoor-demo.md)
+
+CQ-20261111-007 将历史成功回复统一为 JSON，并从模型上下文移除预设通知和失败回复。收到 HTTP 200 且已完成的回复正文只有空白时，用较短的历史重试一次，两次共用原有 20 秒期限。第二次仍为空时标记 `AI_REPLY_EMPTY`。格式无效的回复使用独立的无法读取提示。[DeepSeek JSON 输出](https://api-docs.deepseek.com/guides/json_mode/)

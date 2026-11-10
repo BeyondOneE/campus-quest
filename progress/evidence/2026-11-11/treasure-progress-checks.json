@@ -1,0 +1,31 @@
+{
+  "id": "E-20261111-001",
+  "record": "CQ-20261111-001",
+  "date": "2026-11-11",
+  "timeZone": "Asia/Shanghai",
+  "catalogCards": 6,
+  "automated": {
+    "install": "passed offline",
+    "testsPassed": 119,
+    "build": "passed",
+    "domContractElementsMatched": 160,
+    "claimCreditAndRollback": "passed",
+    "rankingAndUniqueCardCounts": "passed",
+    "disbandAndRestartPersistence": "passed"
+  },
+  "desktop": {
+    "viewports": ["320x500", "390x780"],
+    "isolatedDatabase": true,
+    "homeAndRoomProgressViews": "passed",
+    "collectionVisibilityAndLongUsername": "passed"
+  },
+  "lan": {
+    "healthChecksPassed": true,
+    "matchingGameFiles": 4,
+    "progressAccountRequirementChecked": true,
+    "privateBackupVerified": true,
+    "existingRecordsVerified": true,
+    "caUnchanged": true
+  },
+  "updatedInGameARValidated": false
+}

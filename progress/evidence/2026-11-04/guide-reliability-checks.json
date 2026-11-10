@@ -1,0 +1,60 @@
+{
+  "id": "E-20261104-011",
+  "checkedOn": "2026-11-04",
+  "type": "guide-provider-failure-reliability-check",
+  "tests": {
+    "passed": 83,
+    "failed": 0,
+    "buildPassed": true
+  },
+  "originalFailureCause": "not recorded; cannot reconstruct",
+  "namedBuildingRetrieval": [
+    "CAMPUS_TAICANG",
+    "PROG_CHIPS",
+    "BLDG_C"
+  ],
+  "liveRepeats": [
+    {
+      "httpStatus": 200,
+      "elapsedMs": 1387,
+      "finishReason": "stop",
+      "source": "deepseek",
+      "status": "ready"
+    },
+    {
+      "httpStatus": 200,
+      "elapsedMs": 1715,
+      "finishReason": "stop",
+      "source": "deepseek",
+      "status": "ready"
+    }
+  ],
+  "liveRepeatContext": {
+    "inMemoryRoom": true,
+    "gpsOrCameraUsed": false,
+    "liveDatabaseTestRowsAdded": false
+  },
+  "deadlinesMs": {
+    "provider": 20000,
+    "client": 25000,
+    "guidePostProxy": 30000,
+    "otherProxy": 15000
+  },
+  "diagnosticFields": [
+    "event",
+    "code",
+    "upstreamStatus",
+    "elapsedMs"
+  ],
+  "failureStateSurvivesPolling": true,
+  "automaticPaidRetryAdded": false,
+  "credentialsOrChatExported": false,
+  "physicalSafariAcceptance": false,
+  "runtime": {
+    "restarted": true,
+    "backendHealth": true,
+    "trustedLanHttpsHealth": true,
+    "setupHealth": true,
+    "servedGuideAndClientMatchSource": true
+  }
+}
